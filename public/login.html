@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Login</title>
+  <meta name="description" content="Secure admin panel with Telegram OTP authentication." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .login-wrap { position: relative; z-index: 1; width: 100%; max-width: 420px; }
+    .login-logo {
+      text-align: center; margin-bottom: 36px;
+    }
+    .login-logo .logo-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 20px;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 8px 30px var(--accent-glow), 0 0 0 1px rgba(59,130,246,0.3);
+    }
+    .login-logo h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .login-logo p  { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+    .login-card { padding: 32px; }
+    .step { display: none; }
+    .step.active { display: block; animation: fadeInSlide 0.3s ease; }
+    .step-indicator {
+      display: flex; gap: 8px; margin-bottom: 28px;
+    }
+    .step-dot {
+      flex: 1; height: 3px; border-radius: 99px;
+      background: var(--border);
+      transition: background var(--transition);
+    }
+    .step-dot.done { background: var(--accent); }
+    .step-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .step-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .back-btn {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 13px; cursor: pointer; display: inline-flex;
+      align-items: center; gap: 6px; margin-bottom: 20px;
+      transition: color var(--transition); font-family: inherit;
+    }
+    .back-btn:hover { color: var(--text-primary); }
+    .otp-inputs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    .otp-digit {
+      width: 52px; height: 60px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 24px; font-weight: 700;
+      text-align: center;
+      font-family: inherit;
+      outline: none;
+      transition: all var(--transition);
+    }
+    .otp-digit:focus {
+      border-color: var(--accent);
+      background: rgba(59,130,246,0.08);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .resend-row { text-align: center; margin-top: 14px; }
+    .resend-btn {
+      background: none; border: none; color: var(--accent-light);
+      font-size: 13px; cursor: pointer; font-family: inherit;
+      transition: color var(--transition);
+    }
+    .resend-btn:hover { color: var(--accent); }
+    .footer { text-align: center; margin-top: 24px; color: var(--text-muted); font-size: 12px; }
+    .tg-icon { color: #2AABEE; }
+  </style>
+</head>
+<body>
+  <div class="bg-mesh"></div>
+
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-icon">🔐</div>
+      <h1>Admin Panel</h1>
+      <p>Secure access via Telegram OTP</p>
+    </div>
+
+    <div class="login-card glass">
+      <div class="step-indicator">
+        <div class="step-dot done" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+      </div>
+
+      <!-- Step 1: Enter Telegram ID -->
+      <div class="step active" id="step1">
+        <div class="step-title">Enter Telegram ID</div>
+        <div class="step-sub">An OTP will be sent to your Telegram account.</div>
+
+        <div class="form-group">
+          <label class="form-label" for="tgId">Telegram User ID</label>
+          <input id="tgId" type="text" class="form-input" placeholder="e.g. 123456789"
+            inputmode="numeric" autocomplete="off" />
+        </div>
+
+        <button class="btn btn-primary btn-full" id="sendOtpBtn" onclick="requestOTP()">
+          <span class="tg-icon">✈</span> Send OTP via Telegram
+        </button>
+
+        <div class="alert alert-error" id="step1Error"></div>
+
+        <div class="otp-demo-box" id="demoBanner">
+          <div class="text-muted text-sm" style="text-align:center">🧪 DEMO MODE — Your OTP</div>
+          <div class="otp-code" id="demoOtpDisplay">------</div>
+          <div class="text-muted text-sm" style="text-align:center">Copy this OTP to the next step</div>
+        </div>
+      </div>
+
+      <!-- Step 2: Enter OTP -->
+      <div class="step" id="step2">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <div class="step-title">Enter OTP</div>
+        <div class="step-sub" id="otpSubText">Check your Telegram for the 6-digit code.</div>
+
+        <div class="otp-inputs">
+          <input class="otp-digit" id="d1" maxlength="1" inputmode="numeric" />
+          <input class="otp-digit" id="d2" maxlength="1" inputmode="numeric" />
+          <input class="otp-digit" id="d3" maxlength="1" inputmode="numeric" />
+          <input class="otp-digit" id="d4" maxlength="1" inputmode="numeric" />
+          <input class="otp-digit" id="d5" maxlength="1" inputmode="numeric" />
+          <input class="otp-digit" id="d6" maxlength="1" inputmode="numeric" />
+        </div>
+
+        <button class="btn btn-primary btn-full" id="verifyOtpBtn" onclick="verifyOTP()">
+          Verify & Login
+        </button>
+
+        <div class="alert alert-error" id="step2Error"></div>
+
+        <div class="resend-row">
+          <button class="resend-btn" onclick="requestOTP(true)">Didn't receive? Resend OTP</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Secured with end-to-end Telegram authentication &nbsp;·&nbsp;
+      <span class="tg-icon">Telegram</span>
+    </div>
+  </div>
+
+  <script src="/js/login.js"></script>
+</body>
+</html>

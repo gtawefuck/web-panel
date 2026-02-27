@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            padding: 28px 16px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            background: rgba(6, 11, 20, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 8px 24px;
+        }
+
+        .sidebar-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo .logo-text {
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .sidebar-logo .logo-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            padding: 0 8px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            border: 1px solid transparent;
+            background: none;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-glow);
+            color: var(--accent-light);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-item .icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 10px;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-info .uid {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-info .role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeInSlide 0.25s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h2 {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: var(--radius);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* Section card */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .section-head {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-head .flex-between {
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-head h3 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .section-body {
+            padding: 0;
+        }
+
+        /* Access card (user view) */
+        .access-card {
+            padding: 32px;
+            text-align: center;
+        }
+
+        .access-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .access-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .access-sub {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .expiry-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--success-glow);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: var(--success);
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">🔐</div>
+            <div>
+                <div class="logo-text">Admin Panel</div>
+                <div class="logo-sub">Secure Access</div>
+            </div>
+        </div>
+
+        <!-- User nav items -->
+        <div class="nav-section" id="navUser">
+            <div class="nav-label">My Account</div>
+            <button class="nav-item active" onclick="showPage('dashboard')">
+                <span class="icon">🏠</span> Dashboard
+            </button>
+        </div>
+
+        <!-- Admin nav items (hidden for regular users) -->
+        <div class="nav-section" id="navAdmin" style="display:none">
+            <div class="nav-label">Management</div>
+            <button class="nav-item" onclick="showPage('users')">
+                <span class="icon">👤</span> Users
+            </button>
+            <button class="nav-item" onclick="showPage('logs')">
+                <span class="icon">📋</span> Action Logs
+            </button>
+        </div>
+
+        <!-- Super Admin nav items -->
+        <div class="nav-section" id="navSuperAdmin" style="display:none">
+            <div class="nav-label">Super Admin</div>
+            <button class="nav-item" onclick="showPage('admins')">
+                <span class="icon">🛡️</span> Admins
+            </button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-pill" id="userPill">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div class="user-info">
+                    <div class="uid" id="userTgId">Loading...</div>
+                    <div class="role" id="userRoleLabel">—</div>
+                </div>
+            </div>
+            <button class="btn btn-danger btn-full btn-sm" onclick="logout()">🚪 Sign Out</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Dashboard Page -->
+        <div class="page active" id="page-dashboard">
+            <div class="page-header">
+                <h2 id="dashTitle">Dashboard</h2>
+                <p id="dashSub">Welcome back.</p>
+            </div>
+
+            <!-- Stats (admin only) -->
+            <div id="adminStats" style="display:none">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value" id="statTotalUsers">—</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="statActiveUsers">—</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-value" id="statExpiredUsers">—</div>
+                        <div class="stat-label">Expired Users</div>
+                    </div>
+                    <div class="stat-card" id="statAdminCard" style="display:none">
+                        <div class="stat-icon">🛡️</div>
+                        <div class="stat-value" id="statAdmins">—</div>
+                        <div class="stat-label">Admins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Access Card -->
+            <div id="userAccessCard" style="display:none">
+                <div class="section-card">
+                    <div class="access-card">
+                        <div class="access-icon">✅</div>
+                        <div class="access-title">Access Granted</div>
+                        <div class="access-sub">Your account is active and verified.</div>
+                        <div class="expiry-badge" id="expiryBadge">
+                            📅 Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Logs preview (admin) -->
+            <div id="recentLogsCard" style="display:none">
+                <div class="section-card">
+                    <div class="section-head">
+                        <div class="flex-between">
+                            <h3>Recent Activity</h3>
+                            <button class="btn btn-secondary btn-sm" onclick="showPage('logs')">View all →</button>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Telegram ID</th>
+                                        <th>Action</th>
+                                        <th>Role</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentLogsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Page -->
+        <div class="page" id="page-users">
+            <div class="page-header">
+                <h2>User Management</h2>
+                <p>Add, remove, and manage access for users.</p>
+            </div>
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="flex-between">
+                        <h3>All Users</h3>
+                        <button class="btn btn-primary btn-sm" onclick="openModal('addUserModal')">
+                            + Add User
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Telegram ID</th>
+                                    <th>Username</th>
+                                    <th>Added By</th>
+                                    <th>Activated</th>
+                                    <th>Expires</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state">
+                                            <div class="icon">👥</div>No users yet
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admins Page -->
+        <div class="page" id="page-admins">
+            <div class="page-header">
+                <h2>Admin Management</h2>
+                <p>Only the Super Admin can add or remove admins.</p>
+            </div>
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="flex-between">
+                        <h3>All Admins</h3>
+                        <button class="btn btn-primary btn-sm" onclick="openModal('addAdminModal')">
+                            + Add Admin
+                        </button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Telegram ID</th>
+                                    <th>Added By</th>
+                                    <th>Added At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminsTableBody">
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="empty-state">
+                                            <div class="icon">🛡️</div>No admins yet
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Page -->
+        <div class="page" id="page-logs">
+            <div class="page-header">
+                <h2>Action Logs</h2>
+                <p>Audit trail of all admin actions and logins.</p>
+            </div>
+            <div class="section-card">
+                <div class="section-head">
+                    <h3>Recent 100 Events</h3>
+                </div>
+                <div class="section-body">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Telegram ID</th>
+                                    <th>Action</th>
+                                    <th>Role</th>
+                                    <th>Details</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty-state">
+                                            <div class="icon">📋</div>No logs yet
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Add User Modal -->
+    <div class="modal-overlay" id="addUserModal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <div class="modal-title">Add New User</div>
+                <button class="modal-close" onclick="closeModal('addUserModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="newUserTgId">Telegram User ID</label>
+                <input id="newUserTgId" type="text" class="form-input" placeholder="e.g. 123456789"
+                    inputmode="numeric" />
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="newUserName">Username (optional)</label>
+                <input id="newUserName" type="text" class="form-input" placeholder="e.g. john_doe" />
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="newUserDays">Access Duration (days)</label>
+                <input id="newUserDays" type="number" class="form-input" placeholder="e.g. 30" min="1" />
+            </div>
+            <div class="alert" id="addUserAlert"></div>
+            <button class="btn btn-primary btn-full" onclick="addUser()">Add User</button>
+        </div>
+    </div>
+
+    <!-- Extend User Modal -->
+    <div class="modal-overlay" id="extendUserModal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <div class="modal-title">Extend Access</div>
+                <button class="modal-close" onclick="closeModal('extendUserModal')">×</button>
+            </div>
+            <p class="text-muted text-sm" id="extendUserInfo"></p>
+            <div class="form-group mt-4">
+                <label class="form-label" for="extendDays">Additional Days</label>
+                <input id="extendDays" type="number" class="form-input" placeholder="e.g. 30" min="1" />
+            </div>
+            <div class="alert" id="extendAlert"></div>
+            <button class="btn btn-success btn-full" onclick="extendUser()">Extend Access</button>
+        </div>
+    </div>
+
+    <!-- Add Admin Modal -->
+    <div class="modal-overlay" id="addAdminModal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <div class="modal-title">Add New Admin</div>
+                <button class="modal-close" onclick="closeModal('addAdminModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="newAdminTgId">Telegram User ID</label>
+                <input id="newAdminTgId" type="text" class="form-input" placeholder="e.g. 987654321"
+                    inputmode="numeric" />
+            </div>
+            <div class="alert" id="addAdminAlert"></div>
+            <button class="btn btn-primary btn-full" onclick="addAdmin()">Add Admin</button>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+
+</html>
