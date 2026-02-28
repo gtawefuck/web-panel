@@ -189,9 +189,7 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
-                '--disable-blink-features=AutomationControlled',
-                '--disable-web-security',
-                '--disable-features=IsolateOrigins,site-per-process'
+                '--disable-blink-features=AutomationControlled'
             ]
         });
 
@@ -289,8 +287,7 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         // Original Price
         let origPriceStr = '';
         const origPriceSelectors = [
-            'div.yRaY8j.A6\\+E6v',   // New original price (strikethrough)
-            'div.yRaY8j.A6+E6v',     // Without escape
+            'div.yRaY8j.A6+E6v',     // New original price (strikethrough)
             'div._3I9_wc._2p6lqe',   // Legacy
             'div.yRaY8j',            // Alternative
             'div._2p6lqe'            // Legacy alternative
