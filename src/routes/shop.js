@@ -105,15 +105,29 @@ router.patch('/products/:id', requireAuth, (req, res) => {
     res.json({ success: true, product: { ...updated, reviews: JSON.parse(updated.reviews) } });
 });
 
-// PATCH /api/shop/settings — update shop name / banner
+// PATCH /api/shop/settings — update shop name / banner / payment
 router.patch('/settings', requireAuth, (req, res) => {
     const { tgId } = req.session.user;
-    const { shop_name, banner_text } = req.body;
+    const { shop_name, banner_text, upi_id, payment_qr } = req.body;
     const shop = db.prepare('SELECT * FROM shops WHERE tg_id = ?').get(tgId);
     if (!shop) return res.status(404).json({ error: 'No shop found.' });
+
+    // Migrate columns if they don't exist (for existing DBs)
+    try { db.exec(`ALTER TABLE shops ADD COLUMN upi_id TEXT DEFAULT ''`); } catch { }
+    try { db.exec(`ALTER TABLE shops ADD COLUMN payment_qr TEXT DEFAULT ''`); } catch { }
+
     if (shop_name) db.prepare('UPDATE shops SET shop_name = ? WHERE tg_id = ?').run(shop_name, tgId);
     if (banner_text) db.prepare('UPDATE shops SET banner_text = ? WHERE tg_id = ?').run(banner_text, tgId);
+    if (upi_id !== undefined) db.prepare('UPDATE shops SET upi_id = ? WHERE tg_id = ?').run(upi_id, tgId);
+    if (payment_qr !== undefined) db.prepare('UPDATE shops SET payment_qr = ? WHERE tg_id = ?').run(payment_qr, tgId);
     res.json({ success: true });
+});
+
+// POST /api/shop/upload-qr — upload payment QR image
+router.post('/upload-qr', requireAuth, upload.single('qr'), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No image uploaded.' });
+    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    res.json({ success: true, url: `${baseUrl}/uploads/${req.file.filename}` });
 });
 
 // GET /api/shop/link

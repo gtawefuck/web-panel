@@ -1,449 +1,390 @@
-const crypto = require('crypto');
 const db = require('./db');
+const crypto = require('crypto');
 
-const DEFAULT_PRODUCTS = [
-    // Electronics
+// 30 realistic products exported for reseeding
+const PRODUCTS = [
+    // Electronics (8)
     {
         name: 'Samsung Galaxy S24 Ultra 5G',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=90',
         price: 89999, original_price: 134999, discount: 33,
         description: '12GB RAM | 256GB Storage | 200MP Camera | 5000mAh Battery | S Pen Included | IP68 Water Resistant | Snapdragon 8 Gen 3',
-        rating: 4.6, review_count: 12847,
-        reviews: JSON.stringify([
+        reviews: [
             { user: 'Rahul M.', rating: 5, text: 'Absolutely stunning phone! Camera quality is unreal.', date: '2024-12-10' },
             { user: 'Priya S.', rating: 4, text: 'Best Android phone right now. Battery could be better.', date: '2024-11-28' },
             { user: 'Arun K.', rating: 5, text: 'Worth every penny. S Pen is so useful!', date: '2024-11-15' }
-        ])
+        ], rating: 4.6, review_count: 12847
     },
     {
         name: 'Apple iPhone 15 Pro Max 256GB',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=90',
         price: 134900, original_price: 159900, discount: 16,
-        description: 'A17 Pro Chip | Titanium Design | 48MP Main Camera | USB-C | Action Button | ProRes Video Recording',
-        rating: 4.7, review_count: 23541,
-        reviews: JSON.stringify([
-            { user: 'Neha R.', rating: 5, text: 'Titanium build feels incredibly premium.', date: '2024-12-05' },
-            { user: 'Vikas T.', rating: 5, text: 'Best iPhone ever made. Cameras are insane.', date: '2024-11-22' },
-            { user: 'Sonal P.', rating: 4, text: 'Great phone but very expensive.', date: '2024-11-10' }
-        ])
+        description: 'A17 Pro Chip | Titanium Design | 48MP Main Camera | USB-C | Action Button | ProRes Video | Always-On Display',
+        reviews: [
+            { user: 'Sneha R.', rating: 5, text: 'Best iPhone ever. Titanium build feels premium.', date: '2025-01-05' },
+            { user: 'Vikram T.', rating: 4, text: 'Camera is insane. ProRes video is a game changer.', date: '2024-12-20' },
+            { user: 'Ananya D.', rating: 5, text: 'Switched from Android and never looking back.', date: '2024-12-08' }
+        ], rating: 4.7, review_count: 23541
     },
     {
         name: 'Sony WH-1000XM5 Wireless Headphones',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=600&q=90',
         price: 24990, original_price: 34990, discount: 29,
         description: 'Industry-Leading ANC | 30hr Battery | Hi-Res Audio | Multipoint Connection | Speak-to-Chat | Foldable Design',
-        rating: 4.5, review_count: 8932,
-        reviews: JSON.stringify([
-            { user: 'Amit B.', rating: 5, text: 'ANC is absolutely godlike. No sound passes through!', date: '2024-12-01' },
-            { user: 'Deepa L.', rating: 4, text: 'Comfortable for long hours. Sound quality is superb.', date: '2024-11-20' },
-            { user: 'Rohit S.', rating: 5, text: 'Best headphones I have ever owned.', date: '2024-10-30' }
-        ])
+        reviews: [
+            { user: 'Mohan L.', rating: 5, text: 'Best noise cancellation headphones in the market.', date: '2024-12-15' },
+            { user: 'Kritika S.', rating: 4, text: 'Sound quality is amazing. Very comfortable.', date: '2024-11-30' },
+            { user: 'Arjun P.', rating: 5, text: 'Worth every rupee. Love the speak-to-chat feature.', date: '2024-11-18' }
+        ], rating: 4.5, review_count: 8932
     },
     {
         name: 'LG 55-inch 4K OLED Smart TV',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=90',
         price: 79990, original_price: 129990, discount: 38,
-        description: 'Self-Lit OLED | α9 Gen6 Processor | Dolby Vision IQ | AirPlay 2 | ThinQ AI | 120Hz Refresh Rate | HDMI 2.1',
-        rating: 4.8, review_count: 5621,
-        reviews: JSON.stringify([
-            { user: 'Suresh N.', rating: 5, text: 'Picture quality will make your jaw drop. Pure blacks!', date: '2024-11-30' },
-            { user: 'Meena V.', rating: 5, text: 'Streaming movies on this is a completely different experience.', date: '2024-11-18' },
-            { user: 'Kartik J.', rating: 4, text: 'Excellent TV. WebOS is smooth and intuitive.', date: '2024-10-25' }
-        ])
+        description: 'Self-Lit OLED | α9 Gen6 Processor | Dolby Vision IQ | AirPlay 2 | ThinQ AI | WebOS | Magic Remote Included',
+        reviews: [
+            { user: 'Suresh N.', rating: 5, text: 'Picture quality is out of this world. OLED is worth it.', date: '2025-01-02' },
+            { user: 'Pooja M.', rating: 4, text: 'Stunning TV but took time to set up smart features.', date: '2024-12-18' },
+            { user: 'Karthik R.', rating: 5, text: 'Best investment for home theater.', date: '2024-12-01' }
+        ], rating: 4.8, review_count: 5621
     },
     {
         name: 'MacBook Air 15" M3 Chip 8GB/256GB',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=90',
         price: 114900, original_price: 134900, discount: 15,
-        description: 'Apple M3 Chip | 15.3" Liquid Retina Display | 18hr Battery | MagSafe Charging | Midnight Color | Wi-Fi 6E',
-        rating: 4.7, review_count: 9823,
-        reviews: JSON.stringify([
-            { user: 'Ananya R.', rating: 5, text: 'Insane battery life. Goes all day without charging!', date: '2024-12-08' },
-            { user: 'Mukesh D.', rating: 5, text: 'M3 chip is blazing fast for everything.', date: '2024-11-25' },
-            { user: 'Pooja T.', rating: 4, text: 'Beautiful machine. The display is gorgeous.', date: '2024-11-10' }
-        ])
+        description: 'Apple M3 Chip | 15.3" Liquid Retina Display | 18hr Battery | MagSafe Charging | Fanless Design | 35W Dual USB-C',
+        reviews: [
+            { user: 'Nisha T.', rating: 5, text: 'Incredibly fast and silent. Battery lasts all day.', date: '2025-01-10' },
+            { user: 'DevR.', rating: 4, text: 'M3 is blazing fast. Only 8GB RAM feels limiting.', date: '2024-12-22' },
+            { user: 'Meera J.', rating: 5, text: 'Perfect for students and professionals alike.', date: '2024-12-05' }
+        ], rating: 4.7, review_count: 9823
     },
     {
         name: 'Canon EOS R50 Mirrorless Camera Kit',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&q=90',
         price: 64990, original_price: 89990, discount: 28,
-        description: '24.2MP APS-C Sensor | 4K Video | Dual Pixel AF | Wi-Fi & Bluetooth | 15fps Burst | Vari-angle Touchscreen',
-        rating: 4.4, review_count: 3241,
-        reviews: JSON.stringify([
-            { user: 'Varun K.', rating: 5, text: 'Perfect beginner mirrorless camera. AF is lightning fast!', date: '2024-11-28' },
-            { user: 'Ritu M.', rating: 4, text: 'Great image quality, very compact and light.', date: '2024-11-12' },
-            { user: 'Sanjay P.', rating: 4, text: 'Video quality is impressive. Battery life is ok.', date: '2024-10-20' }
-        ])
+        description: '24.2MP APS-C Sensor | 4K Video | Dual Pixel AF | Wi-Fi & Bluetooth | 15-45mm Kit Lens | Compact & Lightweight',
+        reviews: [
+            { user: 'Rohit V.', rating: 5, text: 'Best mirrorless for beginners. Autofocus is incredible.', date: '2024-12-12' },
+            { user: 'Sunita K.', rating: 4, text: 'Great camera. 4K video is very smooth.', date: '2024-11-25' },
+            { user: 'Amit G.', rating: 4, text: 'Compact and powerful. Perfect travel camera.', date: '2024-11-10' }
+        ], rating: 4.4, review_count: 3241
     },
     {
         name: 'Bose SoundLink Max Portable Speaker',
         category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=90',
         price: 29900, original_price: 39900, discount: 25,
-        description: '20hr Playtime | IP67 Waterproof | Stereoscopic Sound | PartyMode Up to 2 Speakers | USB-C Fast Charge',
-        rating: 4.5, review_count: 4512,
-        reviews: JSON.stringify([
-            { user: 'Harish B.', rating: 5, text: 'Sound is massive for its size. Party mode is a game changer!', date: '2024-12-03' },
-            { user: 'Nandini A.', rating: 4, text: 'Great build quality, IP67 is a plus for outdoor use.', date: '2024-11-17' },
-            { user: 'Tarun G.', rating: 5, text: 'Best wireless speaker I have ever tried.', date: '2024-10-30' }
-        ])
+        description: '20hr Playtime | IP67 Waterproof | PartyMode Up to 100 Speakers | Stereo Sound | USB-C Fast Charging | Fabric Strap',
+        reviews: [
+            { user: 'Deepak M.', rating: 5, text: 'Incredible bass. Works perfectly at parties.', date: '2024-12-08' },
+            { user: 'Riya P.', rating: 4, text: 'Sound quality justifies the price. IP67 is great.', date: '2024-11-28' },
+            { user: 'Lokesh S.', rating: 5, text: 'Battery life is insane. Highly recommended!', date: '2024-11-15' }
+        ], rating: 4.5, review_count: 4512
     },
-    // Home Appliances
+    {
+        name: 'OnePlus 12 5G 16GB RAM 512GB',
+        category: 'Electronics',
+        image_url: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600&q=90',
+        price: 54999, original_price: 69999, discount: 21,
+        description: 'Snapdragon 8 Gen 3 | 50MP Hasselblad Camera | 100W SuperVOOC | LTPO AMOLED | 5400mAh Battery | Alert Slider',
+        reviews: [
+            { user: 'Varun S.', rating: 5, text: 'Fastest charging phone I have ever used. 100W!', date: '2025-01-08' },
+            { user: 'Kavitha R.', rating: 4, text: 'Great performance. Hasselblad camera is excellent.', date: '2024-12-25' },
+            { user: 'Sanjay T.', rating: 5, text: 'Value for money king. Nothing beats this at this price.', date: '2024-12-10' }
+        ], rating: 4.5, review_count: 15632
+    },
+
+    // Home Appliances (5)
     {
         name: 'Dyson V15 Detect Absolute Cordless Vacuum',
         category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80',
-        price: 52900, original_price: 64900, discount: 18,
-        description: 'Laser Dust Detection | HEPA Filtration | 60min Runtime | LCD Screen | Auto-Adjust Suction | 14 Accessories',
-        rating: 4.6, review_count: 6732,
-        reviews: JSON.stringify([
-            { user: 'Swati R.', rating: 5, text: 'The laser detection is surprisingly useful! Picks up everything.', date: '2024-11-30' },
-            { user: 'Manoj V.', rating: 5, text: 'Worth the premium price. House has never been this clean.', date: '2024-11-14' },
-            { user: 'Kavya S.', rating: 4, text: 'Powerful suction. Dustbin is a bit small though.', date: '2024-10-22' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=90',
+        price: 51900, original_price: 64900, discount: 20,
+        description: 'Laser Dust Detection | HEPA Filtration | 60min Runtime | LCD Screen | Auto-boost Mode | 14 Accessories Included',
+        reviews: [
+            { user: 'Preeti L.', rating: 5, text: 'The laser detection shows every speck of dust. Amazing!', date: '2024-12-20' },
+            { user: 'Nikhil M.', rating: 4, text: 'Powerful suction. 60 min runtime is impressive.', date: '2024-12-05' },
+            { user: 'Anita R.', rating: 5, text: 'No more dirty floors. Best vacuum cleaner ever.', date: '2024-11-20' }
+        ], rating: 4.3, review_count: 6732
     },
     {
         name: 'Samsung 253L Convertible 5-in-1 Refrigerator',
         category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&q=90',
         price: 24990, original_price: 36990, discount: 32,
-        description: '5-in-1 Convertible Modes | Digital Inverter | Anti-Bacterial | SpaceMax Technology | Twin Cooling | 3 Star Rating',
-        rating: 4.3, review_count: 11234,
-        reviews: JSON.stringify([
-            { user: 'Lalitha P.', rating: 4, text: 'Convertible feature is very practical. Saves electricity!', date: '2024-12-01' },
-            { user: 'Dinesh M.', rating: 4, text: 'Great value for money. Cooling is uniform throughout.', date: '2024-11-19' },
-            { user: 'Usha K.', rating: 5, text: 'Very quiet and efficient. Happy with this purchase.', date: '2024-10-28' }
-        ])
+        description: '5-in-1 Convertible Modes | Digital Inverter | Anti-Bacterial | SpaceMax Technology | Moist Fresh Zone | 5 Star Rating',
+        reviews: [
+            { user: 'Radha S.', rating: 5, text: 'The convertible modes are genius. Great for parties.', date: '2024-12-18' },
+            { user: 'Pranav K.', rating: 4, text: 'Energy efficient and spacious. Perfect for family.', date: '2024-12-01' },
+            { user: 'Sudha M.', rating: 4, text: 'Good refrigerator. Quiet operation.', date: '2024-11-15' }
+        ], rating: 4.3, review_count: 11234
     },
     {
         name: 'LG 8Kg 5 Star Inverter Washing Machine',
         category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1626806787461-102c1a7f1d67?w=400&q=80',
+        image_url: 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&q=90',
         price: 31490, original_price: 45990, discount: 32,
-        description: 'AI Direct Drive | Steam Wash | ThinQ App Control | 5 Star BEE | 6 Motion Wash | Built-in WiFi | 10yr Motor Warranty',
-        rating: 4.5, review_count: 8921,
-        reviews: JSON.stringify([
-            { user: 'Bhavna S.', rating: 5, text: 'ThinQ app control is brilliant. Can start wash from office!', date: '2024-11-28' },
-            { user: 'Rajeev N.', rating: 4, text: 'Very quiet washer. Clothes come out super clean.', date: '2024-11-10' },
-            { user: 'Sunita T.', rating: 5, text: 'Best purchase this year. Steam wash gets rid of all odors!', date: '2024-10-18' }
-        ])
+        description: 'AI Direct Drive | Steam Wash | ThinQ App Control | 6 Motion Technology | Turbowash | Anti-Crease | 5 Star BEE',
+        reviews: [
+            { user: 'Kumari J.', rating: 5, text: 'ThinQ app is incredible. Controls wash from phone.', date: '2024-12-15' },
+            { user: 'Manoj T.', rating: 4, text: 'Very quiet wash. Clothes feel fresh and clean.', date: '2024-11-28' },
+            { user: 'Leela R.', rating: 5, text: 'Best washing machine. Steam wash removes all stains.', date: '2024-11-12' }
+        ], rating: 4.5, review_count: 8921
     },
     {
-        name: 'Philips Air Fryer HD9252 4.1L',
+        name: 'Philips HL7777 Mixer Grinder 1000W',
         category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=80',
-        price: 7995, original_price: 13995, discount: 43,
-        description: 'RapidAir Technology | 90% Less Fat | Digital Display | 7 Presets | 4.1L Capacity | Dishwasher Safe Parts',
-        rating: 4.4, review_count: 24512,
-        reviews: JSON.stringify([
-            { user: 'Asha M.', rating: 5, text: 'Changed how we cook at home. French fries are amazing!', date: '2024-12-10' },
-            { user: 'Nitin B.', rating: 4, text: 'Great for healthy cooking. Easy to clean too.', date: '2024-11-24' },
-            { user: 'Rekha G.', rating: 5, text: 'Using every single day. Chicken comes out perfectly crispy.', date: '2024-11-08' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&q=90',
+        price: 2999, original_price: 5299, discount: 43,
+        description: '1000W Motor | 3 Jars | Stainless Steel Blades | Dry & Wet Grinding | Liquidizing | 5 Year Motor Warranty',
+        reviews: [
+            { user: 'Geetha S.', rating: 5, text: 'Powerful grinder. Makes perfect chutneys!', date: '2024-12-10' },
+            { user: 'Rahul P.', rating: 4, text: 'Good for daily use. Easy to clean.', date: '2024-11-25' },
+            { user: 'Savita D.', rating: 4, text: 'Works great. Good quality jars.', date: '2024-11-08' }
+        ], rating: 4.2, review_count: 4521
     },
     {
-        name: 'Whirlpool 1.5 Ton 5 Star Split AC',
+        name: 'Voltas 1.5 Ton 5 Star Split AC',
         category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&q=80',
-        price: 34490, original_price: 52990, discount: 35,
-        description: 'MAGICOOL Pro | 6th Sense FastCool | 5 Star BEE | PM 2.5 Filter | Auto Restart | Wi-Fi Enabled | R32 Gas',
-        rating: 4.3, review_count: 7823,
-        reviews: JSON.stringify([
-            { user: 'Prakash V.', rating: 4, text: 'Cools very fast. WiFi control is very convenient.', date: '2024-11-30' },
-            { user: 'Geetha R.', rating: 5, text: 'Very energy efficient. Electricity bills barely changed!', date: '2024-11-14' },
-            { user: 'Kiran S.', rating: 4, text: 'Quiet and effective. Installation was smooth too.', date: '2024-10-25' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1558618047-f5e3a5ef5fe5?w=600&q=90',
+        price: 35990, original_price: 54990, discount: 35,
+        description: '5 Star Rated | Inverter Compressor | Auto-Restart | Sleep Mode | 100% Copper | Anti-Dust Filter | WiFi Ready',
+        reviews: [
+            { user: 'Santhosh R.', rating: 5, text: 'Best AC for Indian summers. Cools room in 5 minutes!', date: '2024-12-20' },
+            { user: 'Vanitha M.', rating: 4, text: 'Very energy efficient. Low electricity bills.', date: '2024-12-05' },
+            { user: 'Babu K.', rating: 4, text: 'Silent operation. Good value.', date: '2024-11-20' }
+        ], rating: 4.3, review_count: 7834
     },
+
+    // Fashion (4)
     {
-        name: 'Instant Pot Duo 7-in-1 Electric Pressure Cooker',
-        category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=400&q=80',
-        price: 8999, original_price: 14999, discount: 40,
-        description: '7 Appliances in 1 | Pressure Cooker | Slow Cooker | Rice Cooker | Steamer | Sauté Pan | 14 Smart Programs | 6L',
-        rating: 4.5, review_count: 18234,
-        reviews: JSON.stringify([
-            { user: 'Preeti A.', rating: 5, text: 'Game changer for cooking! Dal in 15 minutes is incredible.', date: '2024-12-08' },
-            { user: 'Ramesh C.', rating: 5, text: 'Best kitchen gadget ever bought. Using it daily.', date: '2024-11-22' },
-            { user: 'Shobha N.', rating: 4, text: 'Excellent pressure cooker. Takes some learning but worth it.', date: '2024-11-05' }
-        ])
-    },
-    // Fashion & Lifestyle
-    {
-        name: 'Titan Analog Watch Edge Collection',
+        name: 'Levi\'s 511 Slim Fit Men\'s Jeans',
         category: 'Fashion',
-        image_url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80',
-        price: 7495, original_price: 12995, discount: 42,
-        description: 'Ultra-Slim 5.8mm | Sapphire Glass | Stainless Steel Case | Genuine Leather Strap | 3ATM Water Resistant',
-        rating: 4.4, review_count: 9823,
-        reviews: JSON.stringify([
-            { user: 'Vivek P.', rating: 5, text: 'Stunning watch! Gets so many compliments at work.', date: '2024-11-28' },
-            { user: 'Anitha R.', rating: 4, text: 'Great quality for the price. Slim profile is very elegant.', date: '2024-11-12' },
-            { user: 'Mohan L.', rating: 4, text: 'Perfect gifting option. Packaging is also premium.', date: '2024-10-20' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=90',
+        price: 1999, original_price: 3999, discount: 50,
+        description: 'Slim Fit | Stretch Denim | 98% Cotton 2% Elastane | Button Fly | 5 Pocket Styling | Available in multiple washes',
+        reviews: [
+            { user: 'Aryan S.', rating: 5, text: 'Perfect fit. Denim quality is excellent.', date: '2024-12-12' },
+            { user: 'Kabir M.', rating: 4, text: 'Nice jeans. Comfortable for all-day wear.', date: '2024-11-28' },
+            { user: 'Rohan V.', rating: 4, text: 'Good stretch. Easy to move in.', date: '2024-11-10' }
+        ], rating: 4.3, review_count: 18421
+    },
+    {
+        name: 'Adidas Running Shoes Ultraboost 22',
+        category: 'Fashion',
+        image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=90',
+        price: 5499, original_price: 12999, discount: 58,
+        description: 'Boost Midsole | Primeknit Upper | Continental Rubber Outsole | Linear Energy Push System | Lightweight & Breathable',
+        reviews: [
+            { user: 'Mohit J.', rating: 5, text: 'Best running shoes I have ever worn. Pure comfort.', date: '2024-12-18' },
+            { user: 'Tanya K.', rating: 4, text: 'Love the boost cushioning. Great for marathons.', date: '2024-12-02' },
+            { user: 'Raj S.', rating: 5, text: 'Extremely comfortable and light. A++', date: '2024-11-18' }
+        ], rating: 4.6, review_count: 9871
+    },
+    {
+        name: 'H&M Women\'s Floral Midi Dress',
+        category: 'Fashion',
+        image_url: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&q=90',
+        price: 1299, original_price: 2199, discount: 41,
+        description: 'Floral Print | Viscose Fabric | V-neck | Short Sleeves | Flared Skirt | Regular fit | Knee-length | Machine washable',
+        reviews: [
+            { user: 'Nandini P.', rating: 5, text: 'Beautiful dress! Fabric quality is great.', date: '2024-12-14' },
+            { user: 'Shruti D.', rating: 4, text: 'Runs a bit large but looks gorgeous.', date: '2024-11-30' },
+            { user: 'Pallavi M.', rating: 5, text: 'Perfect for parties and casual outings.', date: '2024-11-15' }
+        ], rating: 4.2, review_count: 5641
     },
     {
         name: 'Ray-Ban Aviator Classic Sunglasses',
         category: 'Fashion',
-        image_url: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80',
-        price: 8490, original_price: 13490, discount: 37,
-        description: 'Crystal Green G-15 Lens | Gold Frame | UV400 Protection | Polarized | Metal Frame | Includes Case & Cloth',
-        rating: 4.6, review_count: 15234,
-        reviews: JSON.stringify([
-            { user: 'Arjun M.', rating: 5, text: 'Timeless classic! These never go out of style.', date: '2024-12-04' },
-            { user: 'Divya K.', rating: 5, text: 'Build quality is phenomenal. Lens clarity is top notch.', date: '2024-11-19' },
-            { user: 'Suresh B.', rating: 4, text: 'Authentic product. Worth the price for sure.', date: '2024-10-28' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=90',
+        price: 4500, original_price: 7800, discount: 42,
+        description: 'UV400 Protection | Metal Frame | Crystal Green G-15 Lens | Iconic Aviator Shape | Includes Case & Cleaning Cloth',
+        reviews: [
+            { user: 'Vivek K.', rating: 5, text: 'Classic sunglasses. Build quality is top-notch.', date: '2024-12-10' },
+            { user: 'Ishaan R.', rating: 4, text: 'Looks amazing. UV protection is great.', date: '2024-11-25' },
+            { user: 'Vaidehi S.', rating: 5, text: 'Timeless design. Worth every penny.', date: '2024-11-08' }
+        ], rating: 4.5, review_count: 12983
     },
-    // Sports & Fitness
+
+    // Sports & Fitness (3)
     {
-        name: 'Apple Watch Series 9 GPS 45mm',
+        name: 'Decathlon Domyos Weight Training Dumbbell Set 20kg',
         category: 'Sports & Fitness',
-        image_url: 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=400&q=80',
-        price: 41900, original_price: 49990, discount: 16,
-        description: 'S9 SiP Chip | Double Tap Gesture | Always-On Retina | ECG & Blood Oxygen | Crash Detection | 18hr Battery',
-        rating: 4.7, review_count: 21023,
-        reviews: JSON.stringify([
-            { user: 'Tejal S.', rating: 5, text: 'Best smartwatch on the market, period!', date: '2024-12-09' },
-            { user: 'Hari V.', rating: 5, text: 'Double Tap gesture is so handy. Health features are great.', date: '2024-11-23' },
-            { user: 'Shruti P.', rating: 4, text: 'Excellent watch but battery life could be better.', date: '2024-11-11' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=90',
+        price: 2999, original_price: 5199, discount: 42,
+        description: 'Fixed Weight | Hexagonal Shape | Anti-Roll Design | Rubber Coated | Ergonomic Grip | Durable Cast Iron Core',
+        reviews: [
+            { user: 'Gaurav T.', rating: 5, text: 'Great quality dumbbells. Rubber coating is durable.', date: '2024-12-16' },
+            { user: 'Krish P.', rating: 4, text: 'Good grip. Hex design prevents rolling.', date: '2024-12-01' },
+            { user: 'Aman S.', rating: 4, text: 'Perfect for home workouts. Great value.', date: '2024-11-14' }
+        ], rating: 4.3, review_count: 3241
     },
     {
-        name: 'Nike Air Max 270 Running Shoes',
+        name: 'Fitbit Charge 6 Advanced Fitness Tracker',
         category: 'Sports & Fitness',
-        image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
-        price: 8995, original_price: 14995, discount: 40,
-        description: 'Max Air Unit | Mesh Upper | React Foam Midsole | Rubber Outsole | Available in 8 Colors | Sizes 6-12',
-        rating: 4.4, review_count: 32012,
-        reviews: JSON.stringify([
-            { user: 'Rajan T.', rating: 5, text: 'Incredibly comfortable! Walk for hours without fatigue.', date: '2024-12-06' },
-            { user: 'Priya N.', rating: 4, text: 'Great cushioning. Looks amazing too!', date: '2024-11-20' },
-            { user: 'Aditya B.', rating: 4, text: 'Good quality, runs true to size.', date: '2024-10-30' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=600&q=90',
+        price: 12999, original_price: 18999, discount: 32,
+        description: 'Built-in GPS | Heart Rate Monitor | SpO2 Sensor | Stress Score | Sleep Tracking | 7-Day Battery | Water Resistant',
+        reviews: [
+            { user: 'Divya R.', rating: 5, text: 'Best fitness tracker. GPS accuracy is excellent.', date: '2024-12-20' },
+            { user: 'Siddharth M.', rating: 4, text: 'Love the sleep tracking. Battery lasts a week.', date: '2024-12-05' },
+            { user: 'Neha K.', rating: 4, text: 'Heart rate monitoring is very accurate.', date: '2024-11-18' }
+        ], rating: 4.3, review_count: 7841
     },
     {
-        name: 'Whey Protein Gold Standard 5lb',
+        name: 'Nivia Storm Football Size 5',
         category: 'Sports & Fitness',
-        image_url: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&q=80',
-        price: 5299, original_price: 8499, discount: 38,
-        description: '24g Protein Per Serving | 5.5g BCAAs | Gluten Free | 74 Servings | Double Rich Chocolate | Lab Tested',
-        rating: 4.5, review_count: 45123,
-        reviews: JSON.stringify([
-            { user: 'Kundan B.', rating: 5, text: 'Best tasting protein powder. Mixes perfectly!', date: '2024-12-07' },
-            { user: 'Sachin V.', rating: 5, text: 'Using for 2 years. Consistent quality always.', date: '2024-11-21' },
-            { user: 'Manish R.', rating: 4, text: 'Great protein. Slightly expensive but worth it.', date: '2024-11-05' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&q=90',
+        price: 799, original_price: 1299, discount: 38,
+        description: '32 Panel | TPU Material | Air Retention Bladder | Hand Stitched | FIFA Approved | Suitable for All Surfaces',
+        reviews: [
+            { user: 'Sachin B.', rating: 4, text: 'Good ball for price. Durable and well-made.', date: '2024-12-08' },
+            { user: 'Ravi S.', rating: 4, text: 'Kids love it. Air retention is good.', date: '2024-11-22' },
+            { user: 'Mohan D.', rating: 5, text: 'Perfect for playground. Great quality.', date: '2024-11-05' }
+        ], rating: 4.0, review_count: 2841
     },
-    // Books & Education
+
+    // Furniture (2)
     {
-        name: 'Atomic Habits by James Clear (Hardcover)',
-        category: 'Books',
-        image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80',
-        price: 499, original_price: 799, discount: 38,
-        description: 'Bestseller | 306 Pages | Proven Framework for Habits | #1 NYT Bestseller | Used by NFL, NBA, Fortune 500',
-        rating: 4.8, review_count: 89234,
-        reviews: JSON.stringify([
-            { user: 'Vikram S.', rating: 5, text: 'Life changing book! Apply one chapter and see results.', date: '2024-12-10' },
-            { user: 'Lakshmi N.', rating: 5, text: 'Simple, practical, and incredibly powerful advice.', date: '2024-11-25' },
-            { user: 'Gaurav M.', rating: 5, text: 'Must read for everyone. Should be taught in schools.', date: '2024-11-09' }
-        ])
-    },
-    // Furniture & Home Decor
-    {
-        name: 'IKEA MALM Queen Bed Frame with Storage',
+        name: 'Wakefit Orthopaedic Memory Foam Mattress – Queen',
         category: 'Furniture',
-        image_url: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80',
-        price: 24990, original_price: 34990, discount: 29,
-        description: '4 Storage Drawers | Queen Size | White/Oak Finish | Slatted Base Included | max load 250kg | Easy Assembly',
-        rating: 4.3, review_count: 5821,
-        reviews: JSON.stringify([
-            { user: 'Ananya V.', rating: 4, text: 'Great storage solution. Assembly took 3 hours but worth it!', date: '2024-11-27' },
-            { user: 'Rohit C.', rating: 4, text: 'Solid and sturdy. Drawers slide smoothly.', date: '2024-11-12' },
-            { user: 'Nisha T.', rating: 5, text: 'Beautiful design. Completely transformed our bedroom.', date: '2024-10-22' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=90',
+        price: 12999, original_price: 22490, discount: 42,
+        description: '6-inch Queen | Medium Firm | Memory Foam + HR Foam | Breathable Knit Fabric | 100 Night Trial | 10 Year Warranty',
+        reviews: [
+            { user: 'Anand R.', rating: 5, text: 'Changed my sleep quality completely. 100 nights trial is great.', date: '2024-12-15' },
+            { user: 'Priya M.', rating: 4, text: 'Very comfortable. Good back support.', date: '2024-12-01' },
+            { user: 'Ramesh T.', rating: 5, text: 'Best mattress for the price. Highly recommended.', date: '2024-11-18' }
+        ], rating: 4.4, review_count: 9832
     },
     {
-        name: 'Pepper Table Top Gas Stove 4 Burner',
-        category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1556909079-1f8ece8e3f40?w=400&q=80',
-        price: 5499, original_price: 8999, discount: 39,
-        description: 'Toughened Glass | 4 Brass Burners | Auto Ignition | Powder Coated Pan Supports | ISI Marked | 2yr Warranty',
-        rating: 4.2, review_count: 12834,
-        reviews: JSON.stringify([
-            { user: 'Usha M.', rating: 4, text: 'Sturdy and reliable. Flame is very even.', date: '2024-11-29' },
-            { user: 'Girish P.', rating: 4, text: 'Good quality burners. Easy to clean glass top.', date: '2024-11-13' },
-            { user: 'Meera A.', rating: 5, text: 'Works perfectly. Great value for money.', date: '2024-10-26' }
-        ])
+        name: 'Nilkamal Elgin Premium Office Chair',
+        category: 'Furniture',
+        image_url: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=90',
+        price: 8999, original_price: 15999, discount: 44,
+        description: 'Lumbar Support | Adjustable Armrests | Breathable Mesh Back | Height Adjustable | 360° Swivel | 150kg Load Capacity',
+        reviews: [
+            { user: 'Vijay K.', rating: 5, text: 'Perfect office chair. Lumbar support is amazing.', date: '2024-12-18' },
+            { user: 'Seema L.', rating: 4, text: 'Good quality. Assembly was easy.', date: '2024-12-02' },
+            { user: 'Harish M.', rating: 4, text: 'Comfortable for long hours. Great value.', date: '2024-11-15' }
+        ], rating: 4.2, review_count: 5213
     },
-    // Personal Care & Beauty
+
+    // Books (2)
     {
-        name: 'Philips Series 9000 Wet & Dry Electric Shaver',
+        name: 'Atomic Habits by James Clear (Paperback)',
+        category: 'Books',
+        image_url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=90',
+        price: 399, original_price: 599, discount: 33,
+        description: '#1 NYT Bestseller | 320 Pages | Paperback | Proven system for building good habits | Avery Publisher | English',
+        reviews: [
+            { user: 'Shweta V.', rating: 5, text: 'Life changing book. Must read for everyone.', date: '2024-12-20' },
+            { user: 'Kiran M.', rating: 5, text: 'Practical and actionable. Changed my daily routine.', date: '2024-12-10' },
+            { user: 'Ajay T.', rating: 4, text: 'Great insights. Easy to read and implement.', date: '2024-11-25' }
+        ], rating: 4.8, review_count: 31241
+    },
+    {
+        name: 'The Psychology of Money by Morgan Housel',
+        category: 'Books',
+        image_url: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=600&q=90',
+        price: 349, original_price: 499, discount: 30,
+        description: 'Timeless lessons on wealth | 256 Pages | Paperback | International Bestseller | Harriman House | English',
+        reviews: [
+            { user: 'Neha S.', rating: 5, text: 'Best finance book for beginners and experts alike.', date: '2024-12-14' },
+            { user: 'Rohit D.', rating: 4, text: 'Changed my perspective on money. Highly recommended.', date: '2024-11-30' },
+            { user: 'Aisha K.', rating: 5, text: 'Simple language with deep insights.', date: '2024-11-16' }
+        ], rating: 4.7, review_count: 24512
+    },
+
+    // Personal Care (2)
+    {
+        name: 'Philips BT3231 Cordless Beard Trimmer',
         category: 'Personal Care',
-        image_url: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400&q=80',
-        price: 12999, original_price: 19995, discount: 35,
-        description: 'V-Track Blades | Flexing Shaving Heads | 8D SmartClick | 60min Runtime | Fast Charge 5min | App Connected',
-        rating: 4.4, review_count: 7234,
-        reviews: JSON.stringify([
-            { user: 'Abhijeet R.', rating: 5, text: 'Closest shave I have ever got from an electric shaver!', date: '2024-12-05' },
-            { user: 'Vinod M.', rating: 4, text: 'Smart cleaning station is a great addition. Worth the price.', date: '2024-11-18' },
-            { user: 'Suhas V.', rating: 4, text: 'Smooth on skin. Battery life is great too.', date: '2024-10-29' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1621607505117-c87ad2e31b4a?w=600&q=90',
+        price: 1299, original_price: 2099, discount: 38,
+        description: '20 Length Settings | 60min Runtime | Fast Charge | Self-Sharpening Blades | Waterproof | Rounded Blade Tips',
+        reviews: [
+            { user: 'Sameer R.', rating: 5, text: 'Sharp blades. Battery lasts very long.', date: '2024-12-12' },
+            { user: 'Tanvir S.', rating: 4, text: 'Good trimmer for the price. Easy to use.', date: '2024-11-28' },
+            { user: 'Girish P.', rating: 4, text: 'Clean trim every time. Waterproof is useful.', date: '2024-11-10' }
+        ], rating: 4.3, review_count: 15421
     },
     {
-        name: "L'Oreal Paris Revitalift Face Serum",
+        name: 'Mamaearth Vitamin C Face Serum 30ml',
         category: 'Personal Care',
-        image_url: 'https://images.unsplash.com/photo-1556228578-9f8056f4f08e?w=400&q=80',
-        price: 649, original_price: 1199, discount: 46,
-        description: '1.5% Pure Hyaluronic Acid | 2.5% Vitamin C | Anti-Aging | 50ml | All Skin Types | Dermatologist Tested',
-        rating: 4.3, review_count: 28341,
-        reviews: JSON.stringify([
-            { user: 'Pallavi S.', rating: 5, text: 'Skin looks so much more hydrated after just 2 weeks!', date: '2024-12-08' },
-            { user: 'Ritika B.', rating: 4, text: 'Good serum. Non-greasy and absorbs quickly.', date: '2024-11-22' },
-            { user: 'Smita N.', rating: 4, text: 'Visible improvement in skin texture after a month.', date: '2024-11-06' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=90',
+        price: 399, original_price: 699, discount: 43,
+        description: 'Vitamin C & Turmeric | Brightening | Reduces Dark Spots | Hyaluronic Acid | Paraben Free | Dermatologically Tested',
+        reviews: [
+            { user: 'Madhuri S.', rating: 5, text: 'Skin looks visibly brighter. Love this serum!', date: '2024-12-18' },
+            { user: 'Roshni K.', rating: 4, text: 'Reduced dark spots in 2 weeks. Good product.', date: '2024-12-04' },
+            { user: 'Devika R.', rating: 4, text: 'Light texture. Absorbs fast. No stickiness.', date: '2024-11-20' }
+        ], rating: 4.2, review_count: 18732
     },
-    // Toys & Baby
+
+    // Gaming (2)
     {
-        name: 'LEGO Technic Formula E Car 42166',
+        name: 'Sony DualSense Wireless Controller PS5',
+        category: 'Gaming',
+        image_url: 'https://images.unsplash.com/photo-1635693425019-a386bdc68ed7?w=600&q=90',
+        price: 5690, original_price: 7190, discount: 21,
+        description: 'Haptic Feedback | Adaptive Triggers | Built-in Mic | USB-C Charging | 12hr Battery | Create Button | Touch Pad',
+        reviews: [
+            { user: 'Naveen G.', rating: 5, text: 'Haptic feedback is mind-blowing. Best controller ever.', date: '2024-12-15' },
+            { user: 'Akash T.', rating: 5, text: 'Adaptive triggers change gaming forever.', date: '2024-12-01' },
+            { user: 'Sujith R.', rating: 4, text: 'Great controller. Battery life could be longer.', date: '2024-11-15' }
+        ], rating: 4.7, review_count: 21432
+    },
+    {
+        name: 'boAt Rockerz 450 Wireless Headphones',
+        category: 'Gaming',
+        image_url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=90',
+        price: 1299, original_price: 3990, discount: 67,
+        description: '15hr Playback | 40mm Drivers | Padded Earcups | Foldable Design | Voice Assistant | Dual Mode (BT + Wired)',
+        reviews: [
+            { user: 'Navdeep K.', rating: 4, text: 'Bass is great. Good for gaming and music.', date: '2024-12-10' },
+            { user: 'Pawan S.', rating: 4, text: 'Best budget gaming headphones available.', date: '2024-11-25' },
+            { user: 'Suresh M.', rating: 4, text: 'Comfortable fit. Clear audio quality.', date: '2024-11-08' }
+        ], rating: 4.1, review_count: 45921
+    },
+
+    // Toys (2)
+    {
+        name: 'LEGO Technic Bugatti Chiron Building Set',
         category: 'Toys & Games',
-        image_url: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=80',
-        price: 3499, original_price: 5499, discount: 36,
-        description: '240 Pieces | Authentic F1 Car | Moving Engine | Ages 8+ | Compatible with all LEGO Sets | Collector Edition',
-        rating: 4.7, review_count: 4523,
-        reviews: JSON.stringify([
-            { user: 'Siddharth K.', rating: 5, text: 'My 9-yr-old built it all by himself! Great bonding activity.', date: '2024-12-03' },
-            { user: 'Prathima V.', rating: 5, text: 'LEGO quality is always top-notch. Kid loves it!', date: '2024-11-16' },
-            { user: 'Gopal N.', rating: 4, text: 'Challenging but rewarding build. Looks great on display.', date: '2024-10-27' }
-        ])
-    },
-    // Gaming
-    {
-        name: 'Sony PlayStation 5 Slim Disc Edition',
-        category: 'Gaming',
-        image_url: 'https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=400&q=80',
-        price: 44990, original_price: 54990, discount: 18,
-        description: 'Custom AMD CPU/GPU | Ray Tracing | 4K 120fps | 1TB NVMe SSD | DualSense Controller | Haptic Feedback',
-        rating: 4.8, review_count: 34521,
-        reviews: JSON.stringify([
-            { user: 'Saurav D.', rating: 5, text: 'The DualSense haptic feedback is mind-blowing. Gaming is next level!', date: '2024-12-09' },
-            { user: 'Akash T.', rating: 5, text: 'PS5 is incredible. Loading times are effectively zero.', date: '2024-11-24' },
-            { user: 'Deepak N.', rating: 5, text: 'Best gaming console ever made. Graphics are stunning!', date: '2024-11-08' }
-        ])
-    },
-    {
-        name: 'Logitech G Pro X Superlight 2 Gaming Mouse',
-        category: 'Gaming',
-        image_url: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80',
-        price: 14995, original_price: 19995, discount: 25,
-        description: 'HERO 25K Sensor | 60g Ultra-Light | 95hr Battery | 5 Programmable Buttons | PTFE Feet | LIGHTSPEED Wireless',
-        rating: 4.6, review_count: 8921,
-        reviews: JSON.stringify([
-            { user: 'Rohan P.', rating: 5, text: 'This mouse is butter smooth. Zero latency!', date: '2024-12-07' },
-            { user: 'Tanish S.', rating: 5, text: 'Pro gamers use it for a reason. Worth every rupee.', date: '2024-11-21' },
-            { user: 'Mihir V.', rating: 4, text: 'Great sensor, incredibly light. Battery life is amazing.', date: '2024-11-05' }
-        ])
-    },
-    // Kitchen
-    {
-        name: 'Morphy Richards OTG 60L Besta',
-        category: 'Home Appliances',
-        image_url: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=400&q=80',
-        price: 8495, original_price: 13995, discount: 39,
-        description: '60L Capacity | 6 Heating Modes | 3 Heating Elements | Convection Fan | Motorized Rotisserie | 2yr Warranty',
-        rating: 4.3, review_count: 9823,
-        reviews: JSON.stringify([
-            { user: 'Geeta S.', rating: 5, text: 'Bakes perfectly even! Pizza comes out restaurant quality.', date: '2024-11-30' },
-            { user: 'Pradeep R.', rating: 4, text: 'Good OTG. Temperature is accurate and consistent.', date: '2024-11-14' },
-            { user: 'Amruta K.', rating: 4, text: 'Great capacity for a family. Rotisserie works wonderfully.', date: '2024-10-23' }
-        ])
-    },
-    // Additional
-    {
-        name: 'DJI Mini 4 Pro Drone Combo',
-        category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80',
-        price: 74999, original_price: 94999, discount: 21,
-        description: '4K/60fps HDR Video | 48MP Camera | Omnidirectional Obstacle Sensing | 34min Flight | 20km Range | Under 249g',
-        rating: 4.6, review_count: 3241,
-        reviews: JSON.stringify([
-            { user: 'Pradeep S.', rating: 5, text: 'Incredible footage quality. Obstacle avoidance works perfectly.', date: '2024-12-04' },
-            { user: 'Riya M.', rating: 5, text: 'So easy to fly. Videos look absolutely cinematic!', date: '2024-11-18' },
-            { user: 'Chetan V.', rating: 4, text: 'Best compact drone available. Range is impressive.', date: '2024-10-30' }
-        ])
-    },
-    {
-        name: 'Weber Original Kettle Premium BBQ Grill',
-        category: 'Garden & Outdoors',
-        image_url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80',
-        price: 19999, original_price: 29999, discount: 33,
-        description: '57cm Cooking Grate | Porcelain-Enameled Bowl | One-Touch Cleaning | Tuck-Away Lid Holder | 10yr Warranty',
-        rating: 4.5, review_count: 4123,
-        reviews: JSON.stringify([
-            { user: 'Mahesh B.', rating: 5, text: 'Weber quality is legendary. BBQ parties are next level!', date: '2024-12-01' },
-            { user: 'Sanket R.', rating: 4, text: 'Great heat retention. Even cooking every time.', date: '2024-11-15' },
-            { user: 'Neelam A.', rating: 5, text: 'Solid built to last a lifetime. Weekend BBQs sorted!', date: '2024-10-24' }
-        ])
-    },
-    {
-        name: 'Fossil Gen 6 Smartwatch 44mm',
-        category: 'Electronics',
-        image_url: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400&q=80',
-        price: 14995, original_price: 22995, discount: 35,
-        description: 'Wear OS by Google | Snapdragon 4100+ | Heart Rate | SpO2 | GPS | NFC Pay | Rapid Charging | AMOLED Display',
-        rating: 4.2, review_count: 8421,
-        reviews: JSON.stringify([
-            { user: 'Aakash L.', rating: 4, text: 'Looks stunning! Wear OS works smoothly.', date: '2024-11-28' },
-            { user: 'Payal M.', rating: 4, text: 'Great classic watch look with smart features.', date: '2024-11-12' },
-            { user: 'Sunil K.', rating: 5, text: 'Best Android compatible smartwatch out there.', date: '2024-10-21' }
-        ])
+        image_url: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600&q=90',
+        price: 12999, original_price: 19999, discount: 35,
+        description: '3599 Pieces | 1:8 Scale | Moving Engine | Spoiler | Gearbox | For Ages 16+ | Includes Chiron collectible book',
+        reviews: [
+            { user: 'Ratan M.', rating: 5, text: 'Building experience is incredible. Display piece!', date: '2024-12-18' },
+            { user: 'Arjun L.', rating: 5, text: 'Complex and rewarding build. Kids love it.', date: '2024-12-04' },
+            { user: 'Meenakshi S.', rating: 4, text: 'Premium quality. Worth the investment.', date: '2024-11-20' }
+        ], rating: 4.8, review_count: 3421
     }
 ];
 
-/**
- * Generate a random slug for a shop
- */
 function generateSlug(tgId) {
-    const rand = crypto.randomBytes(4).toString('hex');
-    return `shop-${rand}`;
+    return 'shop-' + crypto.createHash('md5').update(String(tgId)).digest('hex').slice(0, 8);
 }
 
-/**
- * Create a shop + seed 30 products for a new user
- */
 function createShopForUser(tgId) {
+    const existing = db.prepare('SELECT slug FROM shops WHERE tg_id = ?').get(tgId);
+    if (existing) return existing.slug;
     const slug = generateSlug(tgId);
-
-    const shopId = db.prepare(`
-    INSERT INTO shops (tg_id, slug) VALUES (?, ?)
-    ON CONFLICT(tg_id) DO UPDATE SET slug = slug
-    RETURNING id
-  `).get(tgId, slug);
-
-    if (!shopId) return;
-
-    // Check if products already seeded
-    const count = db.prepare('SELECT COUNT(*) as c FROM products WHERE shop_id = ?').get(shopId.id);
-    if (count.c > 0) return;
-
-    const insertProduct = db.prepare(`
-    INSERT INTO products (shop_id, name, category, image_url, price, original_price, discount, description, rating, review_count, reviews)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-    const insertMany = db.transaction((products) => {
-        for (const p of products) {
-            insertProduct.run(shopId.id, p.name, p.category, p.image_url, p.price, p.original_price, p.discount, p.description, p.rating, p.review_count, p.reviews);
-        }
-    });
-
-    insertMany(DEFAULT_PRODUCTS);
+    db.prepare('INSERT OR IGNORE INTO shops (tg_id, slug) VALUES (?, ?)').run(String(tgId), slug);
+    const shop = db.prepare('SELECT id FROM shops WHERE tg_id = ?').get(String(tgId));
+    const insert = db.prepare('INSERT INTO products (shop_id, name, category, image_url, price, original_price, discount, description, rating, review_count, reviews) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+    for (const p of PRODUCTS) {
+        insert.run(shop.id, p.name, p.category, p.image_url, p.price, p.original_price, p.discount, p.description, p.rating, p.review_count, JSON.stringify(p.reviews));
+    }
     return slug;
 }
 
-module.exports = { createShopForUser, generateSlug };
+module.exports = { createShopForUser, generateSlug, PRODUCTS };

@@ -1111,6 +1111,114 @@
             }
         }
 
+        /* Payment method tabs */
+        .pm-tab {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--fk-border);
+            transition: background 0.15s;
+            font-size: 13px;
+        }
+
+        .pm-tab:hover {
+            background: #f5f7ff;
+        }
+
+        .pm-tab.active {
+            background: #e8f0fe;
+            border-right: 3px solid var(--fk-blue);
+        }
+
+        .pm-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .pm-name {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .pm-sub {
+            font-size: 11px;
+            color: var(--fk-gray);
+            margin-top: 1px;
+        }
+
+        .pm-app-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid var(--fk-border);
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .pm-app-btn:hover {
+            border-color: var(--fk-blue);
+        }
+
+        .wallet-opt {
+            border: 2px solid var(--fk-border);
+            border-radius: 8px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .wallet-opt:hover,
+        .wallet-opt.active-wallet {
+            border-color: var(--fk-blue);
+            background: #f0f6ff;
+        }
+
+        /* Payment processing overlay */
+        .pay-processing {
+            position: fixed;
+            inset: 0;
+            z-index: 400;
+            background: rgba(255, 255, 255, 0.96);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .pay-processing.show {
+            display: flex;
+        }
+
+        .pay-spinner {
+            width: 64px;
+            height: 64px;
+            border: 5px solid #e0e0e0;
+            border-top-color: var(--fk-blue);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .pay-proc-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--fk-dark);
+        }
+
+        .pay-proc-sub {
+            font-size: 13px;
+            color: var(--fk-gray);
+        }
+
         /* Footer */
         .fk-footer {
             background: #172337;
@@ -1332,48 +1440,217 @@
             </div>
         </main>
 
-        <!-- CHECKOUT PAGE (shown instead of main) -->
+        <!-- CHECKOUT PAGE -->
         <div class="checkout-page" id="checkoutPage">
             <button class="ck-back" onclick="exitCheckout()">← Continue Shopping</button>
             <h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Checkout</h2>
 
-            <div class="ck-card">
-                <div class="ck-head"><span class="ck-step">1</span> Delivery Address</div>
-                <div class="ck-body">
-                    <div id="locationDetected" class="ck-detected" style="display:none">📍 Location detected: <strong
-                            id="detectedCity"></strong></div>
-                    <div class="ck-row">
-                        <div class="ck-group"><label class="ck-label">Full Name</label><input class="ck-input"
-                                id="ckName" type="text" placeholder="John Doe" /></div>
-                        <div class="ck-group"><label class="ck-label">Mobile Number</label><input class="ck-input"
-                                id="ckPhone" type="tel" placeholder="+91 98765 43210" /></div>
+            <!-- Step 1 & 2: Address + Order -->
+            <div id="ckStepAddress">
+                <div class="ck-card">
+                    <div class="ck-head"><span class="ck-step">1</span> Delivery Address</div>
+                    <div class="ck-body">
+                        <div id="locationDetected" class="ck-detected" style="display:none">📍 Location detected:
+                            <strong id="detectedCity"></strong>
+                        </div>
+                        <div class="ck-row">
+                            <div class="ck-group"><label class="ck-label">Full Name</label><input class="ck-input"
+                                    id="ckName" type="text" placeholder="John Doe" /></div>
+                            <div class="ck-group"><label class="ck-label">Mobile Number</label><input class="ck-input"
+                                    id="ckPhone" type="tel" placeholder="+91 98765 43210" /></div>
+                        </div>
+                        <div class="ck-group"><label class="ck-label">Email Address</label><input class="ck-input"
+                                id="ckEmail" type="email" placeholder="john@example.com" /></div>
+                        <div class="ck-group"><label class="ck-label">Full Address</label><textarea
+                                class="ck-input ck-textarea" id="ckAddress"
+                                placeholder="House No, Street, Colony, Landmark"></textarea></div>
+                        <div class="ck-row">
+                            <div class="ck-group"><label class="ck-label">Pincode</label><input class="ck-input"
+                                    id="ckPincode" type="text" placeholder="110001" maxlength="6" /></div>
+                            <div class="ck-group"><label class="ck-label">City / State</label><input class="ck-input"
+                                    id="ckCity" type="text" placeholder="New Delhi" /></div>
+                        </div>
                     </div>
-                    <div class="ck-group"><label class="ck-label">Email Address</label><input class="ck-input"
-                            id="ckEmail" type="email" placeholder="john@example.com" /></div>
-                    <div class="ck-group"><label class="ck-label">Full Address</label><textarea
-                            class="ck-input ck-textarea" id="ckAddress"
-                            placeholder="House No, Street, Colony, Landmark"></textarea></div>
-                    <div class="ck-row">
-                        <div class="ck-group"><label class="ck-label">Pincode</label><input class="ck-input"
-                                id="ckPincode" type="text" placeholder="110001" maxlength="6" /></div>
-                        <div class="ck-group"><label class="ck-label">City / State</label><input class="ck-input"
-                                id="ckCity" type="text" placeholder="New Delhi" /></div>
+                </div>
+                <div class="ck-card">
+                    <div class="ck-head"><span class="ck-step">2</span> Order Summary</div>
+                    <div class="ck-body" id="ckOrderItems"></div>
+                    <div class="ck-summary">
+                        <div class="ck-summary-row"><span>Subtotal</span><span id="ckSubtotal">₹0</span></div>
+                        <div class="ck-summary-row"><span>Delivery</span><span style="color:var(--fk-green)">FREE</span>
+                        </div>
+                        <div class="ck-summary-total"><span>Total Amount</span><span id="ckTotal">₹0</span></div>
+                    </div>
+                </div>
+                <button class="ck-place-btn" onclick="goToPayment()">CONTINUE TO PAYMENT →</button>
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div id="ckStepPayment" style="display:none">
+                <div class="ck-card">
+                    <div class="ck-head"><span class="ck-step">3</span> Select Payment Method</div>
+                    <div style="display:flex;gap:0;min-height:380px">
+                        <div style="width:200px;border-right:1px solid var(--fk-border);flex-shrink:0">
+                            <div class="pm-tab active" id="pmUpi" onclick="selectPayMethod('upi')">
+                                <div class="pm-icon">📱</div>
+                                <div>
+                                    <div class="pm-name">UPI</div>
+                                    <div class="pm-sub">PhonePe, GPay, Paytm</div>
+                                </div>
+                            </div>
+                            <div class="pm-tab" id="pmCard" onclick="selectPayMethod('card')">
+                                <div class="pm-icon">💳</div>
+                                <div>
+                                    <div class="pm-name">Credit / Debit Card</div>
+                                    <div class="pm-sub">Visa, Mastercard, Amex</div>
+                                </div>
+                            </div>
+                            <div class="pm-tab" id="pmNetbank" onclick="selectPayMethod('netbank')">
+                                <div class="pm-icon">🏦</div>
+                                <div>
+                                    <div class="pm-name">Net Banking</div>
+                                    <div class="pm-sub">All major banks</div>
+                                </div>
+                            </div>
+                            <div class="pm-tab" id="pmWallet" onclick="selectPayMethod('wallet')">
+                                <div class="pm-icon">👜</div>
+                                <div>
+                                    <div class="pm-name">Wallets</div>
+                                    <div class="pm-sub">Paytm, Mobikwik</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex:1;padding:24px">
+                            <!-- UPI -->
+                            <div id="panelUpi">
+                                <div id="shopQrWrap" style="text-align:center;margin-bottom:20px;display:none">
+                                    <p style="font-size:13px;color:#555;margin-bottom:10px">Scan QR with any UPI app to
+                                        pay</p>
+                                    <img id="shopQrImg" src=""
+                                        style="width:200px;height:200px;border:2px solid var(--fk-border);border-radius:8px;object-fit:contain;padding:8px" />
+                                    <div id="shopUpiIdDisplay"
+                                        style="margin-top:8px;font-size:14px;font-weight:700;color:var(--fk-blue)">
+                                    </div>
+                                </div>
+                                <div class="ck-group">
+                                    <label class="ck-label">Enter your UPI ID</label>
+                                    <input class="ck-input" id="payUpiInput"
+                                        placeholder="yourname@paytm or yourname@okicici" />
+                                </div>
+                                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+                                    <button class="pm-app-btn"
+                                        onclick="document.getElementById('payUpiInput').value='yourname@paytm'">💰
+                                        Paytm</button>
+                                    <button class="pm-app-btn"
+                                        onclick="document.getElementById('payUpiInput').value='yourname@okicici'">🌐
+                                        GPay</button>
+                                    <button class="pm-app-btn"
+                                        onclick="document.getElementById('payUpiInput').value='yourname@ybl'">📲
+                                        PhonePe</button>
+                                </div>
+                            </div>
+                            <!-- Card -->
+                            <div id="panelCard" style="display:none">
+                                <div class="ck-group" style="margin-bottom:14px"><label class="ck-label">Card
+                                        Number</label><input class="ck-input" id="cardNum" type="text"
+                                        placeholder="0000 0000 0000 0000" maxlength="19"
+                                        oninput="this.value=this.value.replace(/\D/g,'').replace(/(\d{4})/g,'$1 ').trim()" />
+                                </div>
+                                <div class="ck-group"><label class="ck-label">Card Holder Name</label><input
+                                        class="ck-input" id="cardName" type="text" placeholder="Name as on card" />
+                                </div>
+                                <div class="ck-row">
+                                    <div class="ck-group"><label class="ck-label">Expiry (MM/YY)</label><input
+                                            class="ck-input" id="cardExp" type="text" placeholder="MM/YY"
+                                            maxlength="5" /></div>
+                                    <div class="ck-group"><label class="ck-label">CVV</label><input class="ck-input"
+                                            id="cardCvv" type="password" placeholder="•••" maxlength="4" /></div>
+                                </div>
+                                <div style="margin-top:12px;font-size:12px;color:#888">🔒 Your card details are
+                                    encrypted and secure</div>
+                            </div>
+                            <!-- NetBanking -->
+                            <div id="panelNetbank" style="display:none">
+                                <div class="ck-group"><label class="ck-label">Select Your Bank</label>
+                                    <select class="ck-input" id="bankSelect">
+                                        <option value="">-- Select Bank --</option>
+                                        <option>State Bank of India</option>
+                                        <option>HDFC Bank</option>
+                                        <option>ICICI Bank</option>
+                                        <option>Axis Bank</option>
+                                        <option>Kotak Mahindra Bank</option>
+                                        <option>Punjab National Bank</option>
+                                        <option>Bank of Baroda</option>
+                                        <option>Canara Bank</option>
+                                        <option>Union Bank of India</option>
+                                        <option>Other Bank</option>
+                                    </select>
+                                </div>
+                                <div
+                                    style="background:#fff8e1;border-radius:6px;padding:12px;font-size:12px;color:#795548;margin-top:8px">
+                                    ⚠️ You will be securely redirected to your bank to complete payment.</div>
+                            </div>
+                            <!-- Wallets -->
+                            <div id="panelWallet" style="display:none">
+                                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+                                    <div class="wallet-opt active-wallet" onclick="selectWallet(this)">
+                                        <div style="font-size:28px">💰</div>
+                                        <div style="font-size:12px;font-weight:700;margin-top:4px">Paytm</div>
+                                    </div>
+                                    <div class="wallet-opt" onclick="selectWallet(this)">
+                                        <div style="font-size:28px">📲</div>
+                                        <div style="font-size:12px;font-weight:700;margin-top:4px">PhonePe</div>
+                                    </div>
+                                    <div class="wallet-opt" onclick="selectWallet(this)">
+                                        <div style="font-size:28px">💼</div>
+                                        <div style="font-size:12px;font-weight:700;margin-top:4px">Mobikwik</div>
+                                    </div>
+                                    <div class="wallet-opt" onclick="selectWallet(this)">
+                                        <div style="font-size:28px">⚡</div>
+                                        <div style="font-size:12px;font-weight:700;margin-top:4px">FreeCharge</div>
+                                    </div>
+                                    <div class="wallet-opt" onclick="selectWallet(this)">
+                                        <div style="font-size:28px">🛒</div>
+                                        <div style="font-size:12px;font-weight:700;margin-top:4px">Amazon Pay</div>
+                                    </div>
+                                    <div class="wallet-opt" onclick="selectWallet(this)">
+                                        <div style="font-size:28px">📡</div>
+                                        <div style="font-size:12px;font-weight:700;margin-top:4px">Airtel Money</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pay button -->
+                            <div style="border-top:1px solid var(--fk-border);margin-top:24px;padding-top:16px">
+                                <div
+                                    style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin-bottom:14px">
+                                    <span>Total</span><span id="payTotal">₹0</span>
+                                </div>
+                                <button class="ck-place-btn" onclick="processPayment()" style="margin-top:0">🔒 PAY
+                                    NOW</button>
+                                <p style="text-align:center;font-size:11px;color:#999;margin-top:10px">🔒 100% Secure |
+                                    SSL Encrypted | Safe Checkout</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="ck-card">
-                <div class="ck-head"><span class="ck-step">2</span> Order Summary</div>
-                <div class="ck-body" id="ckOrderItems"></div>
-                <div class="ck-summary">
-                    <div class="ck-summary-row"><span>Subtotal</span><span id="ckSubtotal">₹0</span></div>
-                    <div class="ck-summary-row"><span>Delivery</span><span style="color:var(--fk-green)">FREE</span>
-                    </div>
-                    <div class="ck-summary-total"><span>Total Amount</span><span id="ckTotal">₹0</span></div>
-                </div>
+            <!-- Success screen -->
+            <div id="ckSuccess" style="display:none;text-align:center;padding:60px 20px">
+                <div style="font-size:80px;margin-bottom:20px">🎉</div>
+                <h2 style="font-size:28px;font-weight:900;color:var(--fk-green);margin-bottom:12px">Order Placed
+                    Successfully!</h2>
+                <p style="color:#666;font-size:16px;margin-bottom:8px">Thank you! Your order has been confirmed.</p>
+                <p style="color:#666;font-size:14px;margin-bottom:28px">Confirmation sent to <strong
+                        id="successEmail"></strong></p>
+                <div
+                    style="background:#f1f8e9;border:1px solid #c5e1a5;border-radius:8px;padding:16px 24px;display:inline-block;margin-bottom:28px">
+                    <div style="font-size:13px;color:#558b2f;font-weight:700">Estimated Delivery: <span
+                            style="font-size:16px">3-5 Business Days 🚚</span></div>
+                </div><br />
+                <button class="ck-place-btn" style="max-width:250px;display:inline-block"
+                    onclick="exitCheckout();cart=[];saveCart()">Continue Shopping →</button>
             </div>
-
-            <button class="ck-place-btn" onclick="placeOrder()">🛒 PROCEED TO PAYMENT</button>
         </div>
 
         <footer class="fk-footer" id="shopFooter">
@@ -1607,9 +1884,14 @@
             document.getElementById('mainShopContent').style.display = 'none';
             document.getElementById('shopFooter').style.display = 'none';
             document.getElementById('checkoutPage').classList.add('active');
-            // fill detected location
-            if (visitorCity) { document.getElementById('locationDetected').style.display = 'block'; document.getElementById('detectedCity').textContent = `${visitorCity}, ${visitorCountry}`; document.getElementById('ckCity').value = visitorCity; }
-            // order items
+            document.getElementById('ckStepAddress').style.display = '';
+            document.getElementById('ckStepPayment').style.display = 'none';
+            document.getElementById('ckSuccess').style.display = 'none';
+            if (visitorCity) {
+                document.getElementById('locationDetected').style.display = 'block';
+                document.getElementById('detectedCity').textContent = `${visitorCity}, ${visitorCountry}`;
+                document.getElementById('ckCity').value = visitorCity;
+            }
             const itemsDiv = document.getElementById('ckOrderItems');
             itemsDiv.innerHTML = cart.map(c => `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0">
     <img src="${c.image_url}" style="width:60px;height:60px;object-fit:cover;border-radius:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
@@ -1621,25 +1903,71 @@
             document.getElementById('ckTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
             window.scrollTo(0, 0);
         }
+
         function exitCheckout() {
             document.getElementById('checkoutPage').classList.remove('active');
             document.getElementById('mainShopContent').style.display = '';
             document.getElementById('shopFooter').style.display = '';
         }
 
-        async function placeOrder() {
+        function goToPayment() {
             const name = document.getElementById('ckName').value.trim();
             const phone = document.getElementById('ckPhone').value.trim();
             const email = document.getElementById('ckEmail').value.trim();
             const address = document.getElementById('ckAddress').value.trim();
             const pincode = document.getElementById('ckPincode').value.trim();
-            if (!name || !phone || !email || !address || !pincode) { showToast('❌ Please fill all fields'); return }
+            if (!name || !phone || !email || !address || !pincode) {
+                showToast('❌ Please fill all address fields'); return;
+            }
+            const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+            document.getElementById('payTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
+            document.getElementById('ckStepAddress').style.display = 'none';
+            document.getElementById('ckStepPayment').style.display = '';
+            // Show shop QR if available
+            if (shopData.payment_qr) {
+                document.getElementById('shopQrWrap').style.display = 'block';
+                document.getElementById('shopQrImg').src = shopData.payment_qr;
+            }
+            if (shopData.upi_id) {
+                document.getElementById('shopUpiIdDisplay').textContent = 'Pay to: ' + shopData.upi_id;
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function selectPayMethod(method) {
+            ['upi', 'card', 'netbank', 'wallet'].forEach(m => {
+                document.getElementById('pm' + m.charAt(0).toUpperCase() + m.slice(1)).classList.toggle('active', m === method);
+                document.getElementById('panel' + m.charAt(0).toUpperCase() + m.slice(1)).style.display = m === method ? '' : 'none';
+            });
+        }
+        function selectWallet(el) {
+            document.querySelectorAll('.wallet-opt').forEach(w => w.classList.remove('active-wallet'));
+            el.classList.add('active-wallet');
+        }
+
+        async function processPayment() {
+            // Show processing spinner
+            document.getElementById('payProcessing').classList.add('show');
+            const name = document.getElementById('ckName').value.trim();
+            const phone = document.getElementById('ckPhone').value.trim();
+            const email = document.getElementById('ckEmail').value.trim();
+            const address = document.getElementById('ckAddress').value.trim();
+            const pincode = document.getElementById('ckPincode').value.trim();
             const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
             try {
-                await fetch('/api/shop/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug, name, email, phone, address, pincode, cart_items: cart, total_amount: total }) });
+                await fetch('/api/shop/checkout', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ slug, name, email, phone, address, pincode, cart_items: cart, total_amount: total })
+                });
             } catch { }
-            showToast('✅ Order placed successfully!');
-            // Will tell user what happens next
+            // Show success after 2.5 seconds
+            setTimeout(() => {
+                document.getElementById('payProcessing').classList.remove('show');
+                document.getElementById('ckStepPayment').style.display = 'none';
+                document.getElementById('successEmail').textContent = email || 'your email';
+                document.getElementById('ckSuccess').style.display = 'block';
+                window.scrollTo(0, 0);
+            }, 2500);
         }
 
         // ── Location Tracking ──
@@ -1665,6 +1993,12 @@
 
         init();
     </script>
+    <!-- Payment Processing Overlay -->
+    <div class="pay-processing" id="payProcessing">
+        <div class="pay-spinner"></div>
+        <div class="pay-proc-text">🔒 Processing your payment...</div>
+        <div class="pay-proc-sub">Please do not close or refresh this page</div>
+    </div>
 </body>
 
 </html>

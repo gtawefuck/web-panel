@@ -247,14 +247,21 @@ async function loadMyShop() {
         shopProducts = data.products;
         shopUrl = data.shopUrl;
 
-        // Update URL banner
         document.getElementById('shopLiveUrl').textContent = shopUrl;
-
-        // Update shop settings inputs
         document.getElementById('shopNameInput').value = data.shop.shop_name || '';
         document.getElementById('bannerTextInput').value = data.shop.banner_text || '';
 
-        // Render product grid
+        // Populate payment fields if elements exist
+        const upiEl = document.getElementById('shopUpiId');
+        const qrPrev = document.getElementById('qrPreview');
+        const qrNo = document.getElementById('qrNoImg');
+        if (upiEl) upiEl.value = data.shop.upi_id || '';
+        if (qrPrev && data.shop.payment_qr) {
+            qrPrev.src = data.shop.payment_qr;
+            qrPrev.style.display = 'block';
+            if (qrNo) qrNo.style.display = 'none';
+        }
+
         renderProductGrid();
     } catch { }
 }
@@ -280,18 +287,41 @@ function renderProductGrid() {
   `).join('');
 }
 
-// ── Shop Settings ──────────────────────────────────────────────────────────────
-async function saveShopSettings() {
-    const shop_name = document.getElementById('shopNameInput').value.trim();
-    const banner_text = document.getElementById('bannerTextInput').value.trim();
-    if (!shop_name && !banner_text) return;
+// ── Payment Settings ─────────────────────────────────────────────────────────
+async function savePaymentSettings() {
+    const upi_id = document.getElementById('shopUpiId').value.trim();
+    const payment_qr = document.getElementById('qrPreview').src.includes('/uploads/') ? document.getElementById('qrPreview').src : '';
     try {
-        await fetch('/api/shop/settings', {
+        const res = await fetch('/api/shop/settings', {
             method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ shop_name, banner_text })
+            body: JSON.stringify({ upi_id, payment_qr })
         });
-        alert('✅ Shop settings saved!');
-    } catch { alert('❌ Failed to save.'); }
+        if (res.ok) alert('✅ Payment settings saved!');
+        else alert('❌ Failed to save.');
+    } catch { alert('❌ Network error.'); }
+}
+
+async function handleQrUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        document.getElementById('qrPreview').src = ev.target.result;
+        document.getElementById('qrPreview').style.display = 'block';
+        document.getElementById('qrNoImg').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append('qr', file);
+    try {
+        const res = await fetch('/api/shop/upload-qr', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (res.ok) {
+            document.getElementById('qrPreview').src = data.url;
+            document.getElementById('qrPreview').style.display = 'block';
+            document.getElementById('qrNoImg').style.display = 'none';
+        }
+    } catch { }
 }
 
 function copyShopLink() {
