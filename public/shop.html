@@ -1404,6 +1404,37 @@
             border-color: var(--fk-green);
             background: #f1f8e9;
         }
+
+        .fk-addr-type input {
+            display: none;
+        }
+
+        .fk-addr-type span {
+            padding: 9px 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #878787;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .fk-addr-type input:checked+span {
+            border-color: var(--fk-blue);
+            background: #f0f5ff;
+            color: var(--fk-blue);
+            font-weight: 600;
+        }
+
+        .fk-addr-type span i {
+            font-style: normal;
+            margin-right: 8px;
+            font-size: 16px;
+        }
     </style>
 </head>
 
@@ -1601,19 +1632,15 @@
                                 oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
                         </div>
                         <div class="ck-group" style="margin-top:4px">
-                            <label class="ck-label">Address Type</label>
-                            <div style="display:flex;gap:20px;margin-top:8px">
-                                <label
-                                    style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:#212121">
-                                    <input type="radio" name="addrType" value="home" checked
-                                        style="accent-color:var(--fk-blue);width:16px;height:16px" /> Home(All day
-                                    delivery)
+                            <label class="ck-label" style="display:block;margin-bottom:12px">Type of Address</label>
+                            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                                <label class="fk-addr-type">
+                                    <input type="radio" name="addrType" value="home" checked />
+                                    <span><i>🏠</i> Home (All day delivery)</span>
                                 </label>
-                                <label
-                                    style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:#212121">
-                                    <input type="radio" name="addrType" value="work"
-                                        style="accent-color:var(--fk-blue);width:16px;height:16px" /> Work(Delivery
-                                    between 10 AM - 5 PM)
+                                <label class="fk-addr-type">
+                                    <input type="radio" name="addrType" value="work" />
+                                    <span><i>🏢</i> Work (Delivery between 10 AM - 5 PM)</span>
                                 </label>
                             </div>
                         </div>
@@ -2029,10 +2056,39 @@
             document.getElementById('mainShopContent').style.display = 'none';
             document.getElementById('shopFooter').style.display = 'none';
             document.getElementById('checkoutPage').classList.add('active');
-            document.getElementById('ckStepAddress').style.display = '';
-            document.getElementById('ckStepPayment').style.display = 'none';
+            
+            // Accordion states
+            document.getElementById('ckStepAddressWrap').style.display = '';
+            document.getElementById('ckStepAddressHead').style.background = '#2874f0';
+            document.getElementById('ckStepAddressHead').style.color = '#fff';
+            document.getElementById('ckStepAddressNum').style.background = '#fff';
+            document.getElementById('ckStepAddressNum').style.color = '#2874f0';
+            document.getElementById('ckStepAddressCheck').style.display = 'none';
+            document.getElementById('ckStepAddressSummary').style.display = 'none';
+            document.getElementById('ckStepAddress').style.display = 'block';
+
+            document.getElementById('ckStepOrderHead').style.background = '#fff';
+            document.getElementById('ckStepOrderHead').style.color = '#878787';
+            document.getElementById('ckStepOrderNum').style.background = '#f0f0f0';
+            document.getElementById('ckStepOrderNum').style.color = '#2874f0';
+            document.getElementById('ckOrderItemsWrap').style.display = 'none';
+            document.getElementById('ckStepOrderCheck').style.display = 'none';
+            document.getElementById('ckStepOrderSummary').style.display = 'none';
+
+            document.getElementById('ckStepPaymentHead').style.background = '#fff';
+            document.getElementById('ckStepPaymentHead').style.color = '#878787';
+            document.getElementById('ckStepPaymentNum').style.background = '#f0f0f0';
+            document.getElementById('ckStepPaymentNum').style.color = '#2874f0';
+            document.querySelector('.ck-layout').style.display = 'none';
+                    document.getElementById('ckStepPayment').style.display = 'none';
+            document.getElementById('payCountdown').style.display = 'none';
+
             document.getElementById('ckPending').style.display = 'none';
             document.getElementById('ckSuccess').style.display = 'none';
+            
+            document.querySelector('.ck-layout').style.display = 'flex';
+            document.getElementById('ckRightSidebar').style.display = 'block';
+
             if (visitorCity) {
                 document.getElementById('locationDetected').style.display = 'block';
                 document.getElementById('detectedCity').textContent = visitorCity + (visitorCountry ? ', ' + visitorCountry : '');
@@ -2046,9 +2102,9 @@
                 const salePrice = parseFloat(c.price) || 0;
                 const disc = origPrice > salePrice ? Math.round(((origPrice - salePrice) / origPrice) * 100) : 0;
                 return `<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
-                    <img src="${c.image_url || ''}" style="width:64px;height:64px;object-fit:cover;border-radius:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
+                    <img src="${c.image_url||''}" style="width:64px;height:64px;object-fit:cover;border-radius:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
                     <div style="flex:1">
-                        <div style="font-size:13px;font-weight:600;margin-bottom:2px">${c.name || 'Product'}</div>
+                        <div style="font-size:13px;font-weight:600;margin-bottom:2px">${c.name||'Product'}</div>
                         ${disc > 0 ? '<span style="font-size:11px;background:#e8f5e9;color:#388e3c;padding:2px 6px;border-radius:3px;font-weight:700">' + disc + '% OFF</span>' : ''}
                         <div style="font-size:11px;color:#878787;margin-top:4px">Qty: ${c.qty} &nbsp;|&nbsp; Delivery by <b>${getDeliveryDate()}</b></div>
                     </div>
@@ -2059,11 +2115,11 @@
                 </div>`;
             }).join('');
             // Calculate totals
-            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty) || 1), 0);
-            const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
+            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty)||1), 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
             const origTotal = cart.reduce((s, c) => {
                 const p = allProducts.find(x => x.id === c.id) || {};
-                return s + (parseFloat(p.original_price) || parseFloat(c.price) || 0) * (parseInt(c.qty) || 1);
+                return s + (parseFloat(p.original_price) || parseFloat(c.price) || 0) * (parseInt(c.qty)||1);
             }, 0);
             const discount = Math.max(0, origTotal - total);
             const el = id => document.getElementById(id);
@@ -2090,7 +2146,8 @@
         // ── UPI Payment State ──
         let currentTxnRef = null, payCountdownInterval = null, currentPayTotal = 0, currentUpiUri = null;
 
-        function goToPayment() {
+        
+        function goToOrderSummary() {
             const gv = id => document.getElementById(id).value.trim();
             if (!gv('ckName')) { showToast('❌ Please enter your name'); return; }
             if (!gv('ckPhone') || gv('ckPhone').length < 10) { showToast('❌ Enter a valid 10-digit mobile number'); return; }
@@ -2099,16 +2156,58 @@
             if (!gv('ckCity')) { showToast('❌ Please enter your city'); return; }
             if (!gv('ckState')) { showToast('❌ Please select your state'); return; }
             if (!gv('ckEmail')) { showToast('❌ Please enter your email'); return; }
+
+            // Collapse Address, show summary
+            document.getElementById('ckStepAddress').style.display = 'none';
+            document.getElementById('ckStepAddressHead').style.background = '#fff';
+            document.getElementById('ckStepAddressHead').style.color = '#878787';
+            document.getElementById('ckStepAddressNum').style.background = '#f0f0f0';
+            document.getElementById('ckStepAddressNum').style.color = '#2874f0';
+            document.getElementById('ckStepAddressCheck').style.display = '';
+            
+            const summary = `<strong style="color:#212121">${gv('ckName')} ${gv('ckPhone')}</strong><br><span style="color:#212121;font-weight:400">${gv('ckAddress')}, ${gv('ckLocality')||''} ${gv('ckCity')}, ${gv('ckState')} - ${gv('ckPincode')}</span>`;
+            document.getElementById('ckStepAddressSummary').innerHTML = summary;
+            document.getElementById('ckStepAddressSummary').style.display = 'block';
+
+            // Open Order Summary
+            document.getElementById('ckStepOrderHead').style.background = '#2874f0';
+            document.getElementById('ckStepOrderHead').style.color = '#fff';
+            document.getElementById('ckStepOrderNum').style.background = '#fff';
+            document.getElementById('ckStepOrderNum').style.color = '#2874f0';
+            document.getElementById('ckOrderItemsWrap').style.display = 'block';
+        }
+
+        function goToPayment() {
             if (!shopData || !shopData.upi_id) { showToast('⚠️ No UPI ID configured. Please contact shop owner.'); }
+            
+            // Collapse Order Summary, show summary text
+            document.getElementById('ckOrderItemsWrap').style.display = 'none';
+            document.getElementById('ckStepOrderHead').style.background = '#fff';
+            document.getElementById('ckStepOrderHead').style.color = '#878787';
+            document.getElementById('ckStepOrderNum').style.background = '#f0f0f0';
+            document.getElementById('ckStepOrderNum').style.color = '#2874f0';
+            document.getElementById('ckStepOrderCheck').style.display = '';
+            
+            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty)||1), 0);
+            document.getElementById('ckStepOrderSummary').innerHTML = `${itemCount} item<span style="font-weight:400">s</span>`;
+            document.getElementById('ckStepOrderSummary').style.display = 'block';
+
             initiateUpiPayment();
         }
 
-        async function initiateUpiPayment() {
+                async function initiateUpiPayment() {
             const gv = id => document.getElementById(id).value.trim();
             const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
             currentPayTotal = total;
-            document.getElementById('ckStepAddress').style.display = 'none';
-            document.getElementById('ckStepPayment').style.display = '';
+            
+            // Open Payment Step
+            document.getElementById('ckStepPaymentHead').style.background = '#2874f0';
+            document.getElementById('ckStepPaymentHead').style.color = '#fff';
+            document.getElementById('ckStepPaymentNum').style.background = '#fff';
+            document.getElementById('ckStepPaymentNum').style.color = '#2874f0';
+            document.getElementById('ckStepPayment').style.display = 'block';
+            document.getElementById('payCountdown').style.display = 'block';
+
             document.getElementById('payTotalDisplay').textContent = '₹' + total.toLocaleString('en-IN');
             document.getElementById('payMerchantName').textContent = shopData.shop_name || 'Shop';
             document.getElementById('payMerchantUpi').textContent = shopData.upi_id;
