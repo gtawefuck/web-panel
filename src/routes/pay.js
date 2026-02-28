@@ -26,7 +26,7 @@ function generateTxnRef() {
     return 'TXN' + Date.now() + crypto.randomBytes(3).toString('hex').toUpperCase();
 }
 function buildUpiUri({ upiId, merchantName, amount, txnRef, note }) {
-    return `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(merchantName || 'FlipDeals')}&am=${amount}&tn=${encodeURIComponent(note || 'Online Order')}&tr=${txnRef}&cu=INR`;
+    return `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(merchantName || 'Flipkart')}&am=${amount}&tn=${encodeURIComponent(note || 'Online Order')}&tr=${txnRef}&cu=INR`;
 }
 function ensureTxnCols() {
     try { db.exec(`ALTER TABLE transactions ADD COLUMN notes TEXT`); } catch { }
