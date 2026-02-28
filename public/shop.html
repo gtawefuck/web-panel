@@ -1817,7 +1817,8 @@
 
         // ── Product Modal ──
         function openProduct(id) {
-            const p = allProducts.find(x => x.id === id); if (!p) return;
+            id = parseInt(id);
+            const p = allProducts.find(x => parseInt(x.id) === id); if (!p) return;
             currentProduct = p;
             document.getElementById('mImg').src = p.image_url;
             document.getElementById('mCategory').textContent = p.category;
@@ -1838,7 +1839,7 @@
         function addToCartFromModal() {
             if (!currentProduct) return;
             const existing = cart.find(c => c.id === currentProduct.id);
-            if (existing) { existing.qty++ } else { cart.push({ id: currentProduct.id, name: currentProduct.name, price: currentProduct.price, image_url: currentProduct.image_url, qty: 1 }) }
+            if (existing) { existing.qty++ } else { cart.push({ id: currentProduct.id, name: currentProduct.name, price: parseFloat(currentProduct.price) || 0, image_url: currentProduct.image_url || "", qty: 1 }) }
             saveCart(); showToast(`✅ ${currentProduct.name} added to cart!`);
         }
 
@@ -1885,7 +1886,7 @@
         <button class="cart-item-remove" onclick="removeFromCart(${i})">REMOVE</button>
       </div>
     </div>`).join('');
-            const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
             document.getElementById('cartTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
         }
         function changeQty(i, d) { cart[i].qty = Math.max(1, cart[i].qty + d); saveCart(); renderCartItems(); }
@@ -1914,7 +1915,7 @@
     <div style="flex:1"><div style="font-size:13px;font-weight:600">${c.name}</div><div style="font-size:11px;color:#878787">Qty: ${c.qty}</div></div>
     <div style="font-weight:800;font-size:14px">₹${(c.price * c.qty).toLocaleString('en-IN')}</div>
   </div>`).join('');
-            const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
             document.getElementById('ckSubtotal').textContent = `₹${total.toLocaleString('en-IN')}`;
             document.getElementById('ckTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
             window.scrollTo(0, 0);
@@ -1934,13 +1935,14 @@
             if (!gv('ckName') || !gv('ckPhone') || !gv('ckEmail') || !gv('ckAddress') || !gv('ckPincode')) {
                 showToast('❌ Please fill all fields'); return;
             }
-            if (!shopData || !shopData.upi_id) { showToast('❌ Shop has not set up UPI payments'); return; }
+            if (!shopData || !shopData.upi_id) { showToast('⚠️ No UPI set. Proceeding with manual payment entry.'); }
+            // Continue to payment even without UPI — customer can contact shop owner
             initiateUpiPayment();
         }
 
         async function initiateUpiPayment() {
             const gv = id => document.getElementById(id).value.trim();
-            const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
             currentPayTotal = total;
             document.getElementById('ckStepAddress').style.display = 'none';
             document.getElementById('ckStepPayment').style.display = '';
@@ -1959,7 +1961,14 @@
                     })
                 });
                 const data = await res.json();
-                if (!res.ok) { showToast('❌ ' + (data.error || 'Init failed')); return; }
+                if (!res.ok) { 
+                showToast('⚠️ ' + (data.error || 'Payment init issue'));
+                if (data.error && data.error.includes('UPI')) {
+                    // Still show payment screen, let customer note the order
+                    document.getElementById('qrLoading').textContent = '⚠️ Shop owner has not set up UPI yet. Please contact them directly.';
+                }
+                return;
+            }
                 currentTxnRef = data.txnRef;
                 currentUpiUri = data.upiUri;
                 fetchQr(data.upiUri);
