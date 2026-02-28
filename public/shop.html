@@ -443,6 +443,7 @@
             margin-bottom: 4px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden
         }
@@ -454,6 +455,7 @@
             margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden
         }
@@ -1498,25 +1500,122 @@
                 <div class="ck-card">
                     <div class="ck-head"><span class="ck-step">1</span> Delivery Address</div>
                     <div class="ck-body">
-                        <div id="locationDetected" class="ck-detected" style="display:none">📍 Location detected:
-                            <strong id="detectedCity"></strong>
+                        <div id="locationDetected" class="ck-detected" style="display:none">📍 <strong
+                                id="detectedCity"></strong></div>
+                        <div class="ck-row">
+                            <div class="ck-group">
+                                <label class="ck-label">Name *</label>
+                                <input class="ck-input" id="ckName" type="text" placeholder="Full Name"
+                                    autocomplete="name" onkeypress="return /[a-zA-Z\s]/.test(event.key)" />
+                            </div>
+                            <div class="ck-group">
+                                <label class="ck-label">10-digit mobile number *</label>
+                                <input class="ck-input" id="ckPhone" type="tel" placeholder="Mobile number"
+                                    maxlength="10" inputmode="numeric" autocomplete="tel"
+                                    onkeypress="return /[0-9]/.test(event.key)"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+                            </div>
                         </div>
                         <div class="ck-row">
-                            <div class="ck-group"><label class="ck-label">Full Name</label><input class="ck-input"
-                                    id="ckName" type="text" placeholder="John Doe" /></div>
-                            <div class="ck-group"><label class="ck-label">Mobile Number</label><input class="ck-input"
-                                    id="ckPhone" type="tel" placeholder="+91 98765 43210" /></div>
+                            <div class="ck-group">
+                                <label class="ck-label">Pincode *</label>
+                                <input class="ck-input" id="ckPincode" type="text" placeholder="6 digits [0-9]"
+                                    maxlength="6" inputmode="numeric" onkeypress="return /[0-9]/.test(event.key)"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+                            </div>
+                            <div class="ck-group">
+                                <label class="ck-label">Locality</label>
+                                <input class="ck-input" id="ckLocality" type="text"
+                                    placeholder="Locality / Town / Block" />
+                            </div>
                         </div>
-                        <div class="ck-group"><label class="ck-label">Email Address</label><input class="ck-input"
-                                id="ckEmail" type="email" placeholder="john@example.com" /></div>
-                        <div class="ck-group"><label class="ck-label">Full Address</label><textarea
-                                class="ck-input ck-textarea" id="ckAddress"
-                                placeholder="House No, Street, Colony, Landmark"></textarea></div>
+                        <div class="ck-group">
+                            <label class="ck-label">Address (Area and Street) *</label>
+                            <textarea class="ck-input ck-textarea" id="ckAddress"
+                                placeholder="Flat no, Building, Street, Area" rows="2"></textarea>
+                        </div>
                         <div class="ck-row">
-                            <div class="ck-group"><label class="ck-label">Pincode</label><input class="ck-input"
-                                    id="ckPincode" type="text" placeholder="110001" maxlength="6" /></div>
-                            <div class="ck-group"><label class="ck-label">City / State</label><input class="ck-input"
-                                    id="ckCity" type="text" placeholder="New Delhi" /></div>
+                            <div class="ck-group">
+                                <label class="ck-label">City / District / Town *</label>
+                                <input class="ck-input" id="ckCity" type="text" placeholder="City" />
+                            </div>
+                            <div class="ck-group">
+                                <label class="ck-label">State *</label>
+                                <select class="ck-input" id="ckState" style="height:44px;cursor:pointer">
+                                    <option value="">-- Select State --</option>
+                                    <option>Andhra Pradesh</option>
+                                    <option>Arunachal Pradesh</option>
+                                    <option>Assam</option>
+                                    <option>Bihar</option>
+                                    <option>Chhattisgarh</option>
+                                    <option>Goa</option>
+                                    <option>Gujarat</option>
+                                    <option>Haryana</option>
+                                    <option>Himachal Pradesh</option>
+                                    <option>Jharkhand</option>
+                                    <option>Karnataka</option>
+                                    <option>Kerala</option>
+                                    <option>Madhya Pradesh</option>
+                                    <option>Maharashtra</option>
+                                    <option>Manipur</option>
+                                    <option>Meghalaya</option>
+                                    <option>Mizoram</option>
+                                    <option>Nagaland</option>
+                                    <option>Odisha</option>
+                                    <option>Punjab</option>
+                                    <option>Rajasthan</option>
+                                    <option>Sikkim</option>
+                                    <option>Tamil Nadu</option>
+                                    <option>Telangana</option>
+                                    <option>Tripura</option>
+                                    <option>Uttar Pradesh</option>
+                                    <option>Uttarakhand</option>
+                                    <option>West Bengal</option>
+                                    <option>Andaman and Nicobar Islands</option>
+                                    <option>Chandigarh</option>
+                                    <option>Dadra and Nagar Haveli and Daman and Diu</option>
+                                    <option>Delhi</option>
+                                    <option>Jammu and Kashmir</option>
+                                    <option>Ladakh</option>
+                                    <option>Lakshadweep</option>
+                                    <option>Puducherry</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ck-row">
+                            <div class="ck-group">
+                                <label class="ck-label">Email Address *</label>
+                                <input class="ck-input" id="ckEmail" type="email" placeholder="you@example.com"
+                                    autocomplete="email" />
+                            </div>
+                            <div class="ck-group">
+                                <label class="ck-label">Landmark (Optional)</label>
+                                <input class="ck-input" id="ckLandmark" type="text"
+                                    placeholder="E.g. Near Apollo Hospital" />
+                            </div>
+                        </div>
+                        <div class="ck-group">
+                            <label class="ck-label">Alternate Phone (Optional)</label>
+                            <input class="ck-input" id="ckAltPhone" type="tel" placeholder="Alternate mobile number"
+                                maxlength="10" inputmode="numeric" onkeypress="return /[0-9]/.test(event.key)"
+                                oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+                        </div>
+                        <div class="ck-group" style="margin-top:4px">
+                            <label class="ck-label">Address Type</label>
+                            <div style="display:flex;gap:20px;margin-top:8px">
+                                <label
+                                    style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:#212121">
+                                    <input type="radio" name="addrType" value="home" checked
+                                        style="accent-color:var(--fk-blue);width:16px;height:16px" /> Home(All day
+                                    delivery)
+                                </label>
+                                <label
+                                    style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:#212121">
+                                    <input type="radio" name="addrType" value="work"
+                                        style="accent-color:var(--fk-blue);width:16px;height:16px" /> Work(Delivery
+                                    between 10 AM - 5 PM)
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1524,14 +1623,21 @@
                     <div class="ck-head"><span class="ck-step">2</span> Order Summary</div>
                     <div class="ck-body" id="ckOrderItems"></div>
                     <div class="ck-summary">
-                        <div class="ck-summary-row"><span>Subtotal</span><span id="ckSubtotal">₹0</span></div>
-                        <div class="ck-summary-row"><span>Delivery</span><span style="color:var(--fk-green)">FREE</span>
-                        </div>
+                        <div class="ck-summary-row"><span>Price (<span id="ckItemCount">0</span> item<span
+                                    id="ckItemCountS">s</span>)</span><span id="ckSubtotal">₹0</span></div>
+                        <div class="ck-summary-row" style="color:var(--fk-green)"><span>Discount</span><span
+                                id="ckDiscount">-₹0</span></div>
+                        <div class="ck-summary-row"><span>Delivery Charges</span><span
+                                style="color:var(--fk-green)">FREE</span></div>
                         <div class="ck-summary-total"><span>Total Amount</span><span id="ckTotal">₹0</span></div>
+                        <div
+                            style="background:#f1f8e9;border-radius:4px;padding:8px 12px;color:var(--fk-green);font-size:13px;font-weight:600;margin-top:8px">
+                            ✅ You will save <span id="ckSavings">₹0</span> on this order!</div>
                     </div>
                 </div>
                 <button class="ck-place-btn" onclick="goToPayment()">CONTINUE TO PAYMENT →</button>
             </div>
+
 
             <!-- Step 3: UPI Payment -->
             <div id="ckStepPayment" style="display:none">
@@ -1726,6 +1832,11 @@
                         <h4>Customer Reviews</h4>
                         <div id="mReviews"></div>
                     </div>
+                    <div class="reviews-section" id="mSimilarWrap" style="margin-top:20px">
+                        <h4 style="font-size:16px;font-weight:800;margin-bottom:12px">Similar Products</h4>
+                        <div id="mSimilar"
+                            style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1832,6 +1943,23 @@
             document.getElementById('mDesc').textContent = p.description;
             const reviews = typeof p.reviews === 'string' ? JSON.parse(p.reviews) : p.reviews;
             document.getElementById('mReviews').innerHTML = reviews.map(r => `<div class="review-card"><div class="review-header"><span class="rating-badge ${r.rating < 4 ? 'low' : ''}">⭐ ${r.rating}</span><span class="reviewer-name">${r.user}</span><span class="review-date">${r.date}</span></div><div class="review-text">${r.text}</div></div>`).join('');
+            // Similar products carousel
+            const similar = allProducts.filter(x => parseInt(x.id) !== id && x.category === p.category).slice(0, 8);
+            const simWrap = document.getElementById('mSimilarWrap');
+            const simDiv = document.getElementById('mSimilar');
+            if (similar.length > 0) {
+                simWrap.style.display = '';
+                simDiv.innerHTML = similar.map(s => `<div onclick="openProduct(${s.id})" style="min-width:130px;cursor:pointer;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;background:#fff;flex-shrink:0;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
+                    <img src="${s.image_url}" alt="${s.name}" style="width:100%;height:100px;object-fit:contain;background:#f9f9f9;padding:6px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'"/>
+                    <div style="padding:8px">
+                        <div style="font-size:11px;font-weight:600;color:#212121;line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${s.name}</div>
+                        <div style="font-size:12px;font-weight:800;color:#212121">₹${parseInt(s.price).toLocaleString('en-IN')}</div>
+                        <div style="font-size:10px;color:#388e3c;font-weight:600">${s.discount}% off</div>
+                    </div>
+                </div>`).join('');
+            } else {
+                simWrap.style.display = 'none';
+            }
             document.getElementById('productModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -1886,7 +2014,7 @@
         <button class="cart-item-remove" onclick="removeFromCart(${i})">REMOVE</button>
       </div>
     </div>`).join('');
-            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
             document.getElementById('cartTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
         }
         function changeQty(i, d) { cart[i].qty = Math.max(1, cart[i].qty + d); saveCart(); renderCartItems(); }
@@ -1903,22 +2031,54 @@
             document.getElementById('checkoutPage').classList.add('active');
             document.getElementById('ckStepAddress').style.display = '';
             document.getElementById('ckStepPayment').style.display = 'none';
+            document.getElementById('ckPending').style.display = 'none';
             document.getElementById('ckSuccess').style.display = 'none';
             if (visitorCity) {
                 document.getElementById('locationDetected').style.display = 'block';
-                document.getElementById('detectedCity').textContent = `${visitorCity}, ${visitorCountry}`;
+                document.getElementById('detectedCity').textContent = visitorCity + (visitorCountry ? ', ' + visitorCountry : '');
                 document.getElementById('ckCity').value = visitorCity;
             }
+            // Render order items
             const itemsDiv = document.getElementById('ckOrderItems');
-            itemsDiv.innerHTML = cart.map(c => `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0">
-    <img src="${c.image_url}" style="width:60px;height:60px;object-fit:cover;border-radius:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
-    <div style="flex:1"><div style="font-size:13px;font-weight:600">${c.name}</div><div style="font-size:11px;color:#878787">Qty: ${c.qty}</div></div>
-    <div style="font-weight:800;font-size:14px">₹${(c.price * c.qty).toLocaleString('en-IN')}</div>
-  </div>`).join('');
-            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
-            document.getElementById('ckSubtotal').textContent = `₹${total.toLocaleString('en-IN')}`;
-            document.getElementById('ckTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
+            itemsDiv.innerHTML = cart.map(c => {
+                const p = allProducts.find(x => x.id === c.id) || {};
+                const origPrice = parseFloat(p.original_price) || parseFloat(c.price) || 0;
+                const salePrice = parseFloat(c.price) || 0;
+                const disc = origPrice > salePrice ? Math.round(((origPrice - salePrice) / origPrice) * 100) : 0;
+                return `<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
+                    <img src="${c.image_url || ''}" style="width:64px;height:64px;object-fit:cover;border-radius:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
+                    <div style="flex:1">
+                        <div style="font-size:13px;font-weight:600;margin-bottom:2px">${c.name || 'Product'}</div>
+                        ${disc > 0 ? '<span style="font-size:11px;background:#e8f5e9;color:#388e3c;padding:2px 6px;border-radius:3px;font-weight:700">' + disc + '% OFF</span>' : ''}
+                        <div style="font-size:11px;color:#878787;margin-top:4px">Qty: ${c.qty} &nbsp;|&nbsp; Delivery by <b>${getDeliveryDate()}</b></div>
+                    </div>
+                    <div style="text-align:right">
+                        <div style="font-weight:800;font-size:14px">₹${(salePrice * c.qty).toLocaleString('en-IN')}</div>
+                        ${origPrice > salePrice ? '<div style="font-size:11px;color:#878787;text-decoration:line-through">₹' + (origPrice * c.qty).toLocaleString('en-IN') + '</div>' : ''}
+                    </div>
+                </div>`;
+            }).join('');
+            // Calculate totals
+            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty) || 1), 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
+            const origTotal = cart.reduce((s, c) => {
+                const p = allProducts.find(x => x.id === c.id) || {};
+                return s + (parseFloat(p.original_price) || parseFloat(c.price) || 0) * (parseInt(c.qty) || 1);
+            }, 0);
+            const discount = Math.max(0, origTotal - total);
+            const el = id => document.getElementById(id);
+            el('ckItemCount').textContent = itemCount;
+            el('ckItemCountS').textContent = itemCount === 1 ? '' : 's';
+            el('ckSubtotal').textContent = '₹' + origTotal.toLocaleString('en-IN');
+            el('ckDiscount').textContent = '-₹' + discount.toLocaleString('en-IN');
+            el('ckTotal').textContent = '₹' + total.toLocaleString('en-IN');
+            el('ckSavings').textContent = '₹' + discount.toLocaleString('en-IN');
             window.scrollTo(0, 0);
+        }
+
+        function getDeliveryDate() {
+            const d = new Date(); d.setDate(d.getDate() + Math.floor(Math.random() * 3) + 3);
+            return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
         }
 
         function exitCheckout() {
@@ -1932,17 +2092,20 @@
 
         function goToPayment() {
             const gv = id => document.getElementById(id).value.trim();
-            if (!gv('ckName') || !gv('ckPhone') || !gv('ckEmail') || !gv('ckAddress') || !gv('ckPincode')) {
-                showToast('❌ Please fill all fields'); return;
-            }
-            if (!shopData || !shopData.upi_id) { showToast('⚠️ No UPI set. Proceeding with manual payment entry.'); }
-            // Continue to payment even without UPI — customer can contact shop owner
+            if (!gv('ckName')) { showToast('❌ Please enter your name'); return; }
+            if (!gv('ckPhone') || gv('ckPhone').length < 10) { showToast('❌ Enter a valid 10-digit mobile number'); return; }
+            if (!gv('ckPincode') || gv('ckPincode').length < 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
+            if (!gv('ckAddress')) { showToast('❌ Please enter your address'); return; }
+            if (!gv('ckCity')) { showToast('❌ Please enter your city'); return; }
+            if (!gv('ckState')) { showToast('❌ Please select your state'); return; }
+            if (!gv('ckEmail')) { showToast('❌ Please enter your email'); return; }
+            if (!shopData || !shopData.upi_id) { showToast('⚠️ No UPI ID configured. Please contact shop owner.'); }
             initiateUpiPayment();
         }
 
         async function initiateUpiPayment() {
             const gv = id => document.getElementById(id).value.trim();
-            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
             currentPayTotal = total;
             document.getElementById('ckStepAddress').style.display = 'none';
             document.getElementById('ckStepPayment').style.display = '';
@@ -1956,19 +2119,21 @@
                         slug, amount: total,
                         customer_name: gv('ckName'), customer_email: gv('ckEmail'),
                         customer_phone: gv('ckPhone'),
-                        delivery_address: [gv('ckAddress'), gv('ckPincode'), gv('ckCity')].filter(Boolean).join(', '),
+                        delivery_address: [gv('ckAddress'), gv('ckLocality') || '', gv('ckCity'), gv('ckState'), gv('ckPincode')].filter(Boolean).join(', '),
+                        address_type: (document.querySelector('input[name="addrType"]:checked') || {}).value || 'home',
+                        landmark: gv('ckLandmark'),
                         cart_items: cart
                     })
                 });
                 const data = await res.json();
-                if (!res.ok) { 
-                showToast('⚠️ ' + (data.error || 'Payment init issue'));
-                if (data.error && data.error.includes('UPI')) {
-                    // Still show payment screen, let customer note the order
-                    document.getElementById('qrLoading').textContent = '⚠️ Shop owner has not set up UPI yet. Please contact them directly.';
+                if (!res.ok) {
+                    showToast('⚠️ ' + (data.error || 'Payment init issue'));
+                    if (data.error && data.error.includes('UPI')) {
+                        // Still show payment screen, let customer note the order
+                        document.getElementById('qrLoading').textContent = '⚠️ Shop owner has not set up UPI yet. Please contact them directly.';
+                    }
+                    return;
                 }
-                return;
-            }
                 currentTxnRef = data.txnRef;
                 currentUpiUri = data.upiUri;
                 fetchQr(data.upiUri);
