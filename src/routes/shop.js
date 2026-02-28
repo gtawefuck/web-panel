@@ -172,34 +172,52 @@ router.get('/visitors', requireAuth, (req, res) => {
 
 // POST /api/shop/fetch-flipkart — fetch details from a given URL
 router.post('/fetch-flipkart', requireAuth, async (req, res) => {
+    let browser = null;
     try {
         const { url } = req.body;
         if (!url || !url.includes('flipkart.com')) {
             return res.status(400).json({ success: false, error: 'Valid Flipkart URL required.' });
         }
 
-        const axios = require('axios');
+        const puppeteer = require('puppeteer-extra');
+        const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+        puppeteer.use(StealthPlugin());
         const cheerio = require('cheerio');
 
-        const response = await axios.get(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.9',
-            },
-            timeout: 10000
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled']
         });
 
-        const $ = cheerio.load(response.data);
+        const page = await browser.newPage();
+
+        await page.setViewport({ width: 1366, height: 768 });
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+
+        // Load page
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
+
+        // Wait briefly for potential redirects or captchas
+        await new Promise(r => setTimeout(r, 1500));
+
+        const html = await page.content();
+        const $ = cheerio.load(html);
 
         // Product Name
         let name = $('span.B_NuCI').text() || $('span.VU-ZEz').text() || $('h1').text() || '';
         name = name.trim();
 
+        if (name.includes('Are you a human')) {
+            return res.status(403).json({
+                success: false,
+                error: 'Flipkart Anti-Bot Captcha blocked the request. Try pasting the URL again later.'
+            });
+        }
+
         // Image
         let imageUrl = $('img._396cs4').attr('src') || $('img.v2bfbI').attr('src') || $('img.DByuf4').first().attr('src') || $('meta[property="og:image"]').attr('content') || '';
         if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
-        if (imageUrl && imageUrl.includes('?q=')) imageUrl = imageUrl.split('?q=')[0]; // simple cleanup
+        if (imageUrl && imageUrl.includes('?q=')) imageUrl = imageUrl.split('?q=')[0];
 
         // Price
         let priceStr = $('div._30jeq3._16Jk6d').first().text() || $('div.Nx9bqj.CxhGGd').first().text() || '';
@@ -229,9 +247,11 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         });
     } catch (error) {
         console.error('Flipkart fetch error:', error.message);
-        res.status(500).json({ success: false, error: 'Failed to fetch product details from Flipkart.' });
+        res.status(500).json({ success: false, error: 'Failed to fetch product details. Flipkart may be blocking automated requests.' });
+    } finally {
+        if (browser) await browser.close();
     }
 });
 
-module.exports = router;
 
+module.exports = router;
