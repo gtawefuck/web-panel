@@ -7,10 +7,8 @@ if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
 
 const db = new Database(path.join(DB_DIR, 'panel.db'));
 
-// Enable WAL mode for better performance
 db.pragma('journal_mode = WAL');
 
-// Create tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS admins (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,6 +39,32 @@ db.exec(`
     role TEXT,
     details TEXT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS shops (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tg_id TEXT UNIQUE NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    shop_name TEXT DEFAULT 'FlipDeals',
+    banner_text TEXT DEFAULT 'Big Billion Sale — Up to 70% OFF!',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    shop_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    image_url TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    original_price INTEGER NOT NULL,
+    discount INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    rating REAL NOT NULL,
+    review_count INTEGER NOT NULL,
+    reviews TEXT NOT NULL,
+    in_stock INTEGER DEFAULT 1,
+    FOREIGN KEY (shop_id) REFERENCES shops(id)
   );
 `);
 

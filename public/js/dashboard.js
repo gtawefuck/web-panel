@@ -1,346 +1,431 @@
-// ─── Dashboard JS ──────────────────────────────────────────────────────────────
+// ── State ──────────────────────────────────────────────────────────────────────
 let currentUser = null;
-let selectedUserId = null;
+let shopProducts = [];
+let shopUrl = '';
 
-// ─── Init ──────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async () => {
+// ── Init ───────────────────────────────────────────────────────────────────────
+async function init() {
     try {
         const res = await fetch('/api/auth/me');
-        if (!res.ok) { window.location.href = '/login.html'; return; }
+        if (!res.ok) { location.href = '/login.html'; return; }
         const data = await res.json();
         currentUser = data.user;
-        initUI();
-    } catch {
-        window.location.href = '/login.html';
-    }
-});
+        setupUI();
+    } catch { location.href = '/login.html'; }
+}
 
-function initUI() {
+function setupUI() {
     const { tgId, role } = currentUser;
-
-    // Set user info in sidebar
     document.getElementById('userTgId').textContent = tgId;
-    document.getElementById('userRoleLabel').textContent =
-        role === 'superAdmin' ? '⭐ Super Admin' : role === 'admin' ? '🛡️ Admin' : '👤 User';
-    document.getElementById('userAvatar').textContent = tgId[0];
+    document.getElementById('userAvatar').textContent = String(tgId).charAt(0);
+    const roleLabels = { superAdmin: '⭐ Super Admin', admin: '🛡️ Admin', user: '👤 User' };
+    document.getElementById('userRoleLabel').textContent = roleLabels[role] || role;
 
-    // Show relevant nav sections
+    // Show nav sections based on role
     if (role === 'admin' || role === 'superAdmin') {
         document.getElementById('navAdmin').style.display = '';
         document.getElementById('adminStats').style.display = '';
         document.getElementById('recentLogsCard').style.display = '';
-        loadAdminDashboard();
+        document.getElementById('dashTitle').textContent = 'Admin Dashboard';
+        document.getElementById('dashSub').textContent = 'Manage users, view logs, and monitor activity.';
+        loadUsers(); loadLogs();
+        if (role === 'superAdmin') {
+            document.getElementById('navSuperAdmin').style.display = '';
+            document.getElementById('statAdminCard').style.display = '';
+            loadAdmins();
+        }
     } else {
         document.getElementById('userAccessCard').style.display = '';
-        loadUserDashboard();
+        document.getElementById('dashTitle').textContent = 'Welcome';
+        document.getElementById('dashSub').textContent = 'Your access status and shop.';
+        loadUserAccess();
     }
 
-    if (role === 'superAdmin') {
-        document.getElementById('navSuperAdmin').style.display = '';
-        document.getElementById('statAdminCard').style.display = '';
-    }
-
-    // Update title
-    const titles = { superAdmin: '⭐ Super Admin Dashboard', admin: '🛡️ Admin Dashboard', user: '👋 Welcome' };
-    document.getElementById('dashTitle').textContent = titles[role] || 'Dashboard';
-    document.getElementById('dashSub').textContent =
-        role === 'user'
-            ? 'Your access is active and verified.'
-            : 'Here\'s a summary of your panel.';
+    // Show My Shop for ALL roles
+    document.getElementById('navMyShop').style.display = '';
+    loadMyShop();
 }
 
-// ─── Page navigation ─────────────────────────────────────────────────────────
+// ── Page Navigation ────────────────────────────────────────────────────────────
 function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-    const loaders = { users: loadUsers, admins: loadAdmins, logs: loadLogs };
-    if (loaders[name]) loaders[name]();
-
-    // Highlight nav
-    const navMap = { dashboard: 0, users: 1, logs: 2, admins: 0 };
-    const items = document.querySelectorAll('.nav-item');
-    // Simple approach: match by text
-    items.forEach(btn => {
-        const txt = btn.textContent.toLowerCase();
-        if (name === 'dashboard' && txt.includes('dashboard')) btn.classList.add('active');
-        if (name === 'users' && txt.includes('users')) btn.classList.add('active');
-        if (name === 'logs' && txt.includes('logs')) btn.classList.add('active');
-        if (name === 'admins' && txt.includes('admins')) btn.classList.add('active');
-    });
+    const page = document.getElementById('page-' + name);
+    if (page) page.classList.add('active');
+    // highlight nav
+    const btns = document.querySelectorAll('.nav-item');
+    btns.forEach(b => { if (b.textContent.trim().toLowerCase().includes(name === 'myshop' ? 'my shop' : name)) b.classList.add('active'); });
+    // load data
+    if (name === 'users') loadUsers();
+    if (name === 'logs') loadLogs();
+    if (name === 'admins') loadAdmins();
+    if (name === 'myshop') loadMyShop();
 }
 
-// ─── Modals ───────────────────────────────────────────────────────────────────
-function openModal(id) {
-    document.getElementById(id).classList.add('open');
-    // Clear alerts
-    const alertEl = document.querySelector('#' + id + ' .alert');
-    if (alertEl) { alertEl.className = 'alert'; alertEl.textContent = ''; }
-}
-function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
-}
-// Close on overlay click
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', e => {
-        if (e.target === overlay) closeModal(overlay.id);
-    });
-});
+// ── Modals ─────────────────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-function setModalAlert(id, msg, type = 'error') {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = msg;
-    el.className = `alert alert-${type} show`;
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function fmtDate(str) {
-    if (!str) return '—';
-    const d = new Date(str);
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
-        ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-}
-
-function daysLeft(expiresAt) {
-    const diff = new Date(expiresAt) - new Date();
-    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return days;
-}
-
-async function apiFetch(url, opts = {}) {
-    const res = await fetch(url, {
-        headers: { 'Content-Type': 'application/json' },
-        ...opts
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
-    return data;
-}
-
-// ─── User Dashboard ───────────────────────────────────────────────────────────
-async function loadUserDashboard() {
-    try {
-        const me = await apiFetch('/api/auth/me');
-        const badgeEl = document.getElementById('expiryBadge');
-        if (me.user) {
-            // The expiry is in the session — for users we show a generic message
-            badgeEl.textContent = '✅ Access is Active';
-        }
-    } catch {
-        document.getElementById('expiryBadge').textContent = '✅ Access is Active';
-    }
-}
-
-// ─── Admin Dashboard ──────────────────────────────────────────────────────────
-async function loadAdminDashboard() {
-    try {
-        const data = await apiFetch('/api/admin/users');
-        const users = data.users || [];
-        const active = users.filter(u => u.status === 'active').length;
-        const expired = users.filter(u => u.status === 'expired').length;
-        document.getElementById('statTotalUsers').textContent = users.length;
-        document.getElementById('statActiveUsers').textContent = active;
-        document.getElementById('statExpiredUsers').textContent = expired;
-    } catch { /* ignore */ }
-
-    if (currentUser.role === 'superAdmin') {
-        try {
-            const data = await apiFetch('/api/admin/admins');
-            document.getElementById('statAdmins').textContent = (data.admins || []).length;
-        } catch { /* ignore */ }
-    }
-
-    loadRecentLogs();
-}
-
-// ─── Users ─────────────────────────────────────────────────────────────────────
+// ── Users ──────────────────────────────────────────────────────────────────────
 async function loadUsers() {
-    const tbody = document.getElementById('usersTableBody');
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span class="spinner"></span></div></td></tr>`;
     try {
-        const { users } = await apiFetch('/api/admin/users');
+        const res = await fetch('/api/admin/users');
+        if (!res.ok) return;
+        const { users } = await res.json();
+        const tbody = document.getElementById('usersTableBody');
         if (!users.length) {
-            tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">👥</div>No users yet. Add one!</div></td></tr>`;
+            tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">👥</div>No users yet. Add one!</div></td></tr>';
+            updateStats(0, 0, 0);
             return;
         }
-        tbody.innerHTML = users.map(u => `
-      <tr>
-        <td><code>${u.tg_id}</code></td>
-        <td>${u.username || '<span class="text-muted">—</span>'}</td>
-        <td><code>${u.added_by}</code></td>
-        <td>${fmtDate(u.activated_at)}</td>
-        <td>${fmtDate(u.expires_at)}</td>
-        <td><span class="badge badge-${u.status}">${u.status}</span></td>
-        <td>
-          <div class="flex gap-2">
-            <button class="btn btn-success btn-sm" onclick="openExtend(${u.id},'${u.tg_id}','${u.expires_at}')">Extend</button>
-            <button class="btn btn-danger btn-sm" onclick="removeUser(${u.id},'${u.tg_id}')">Remove</button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
-    } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state" style="color:var(--danger)">${e.message}</div></td></tr>`;
-    }
+        const active = users.filter(u => u.status === 'active').length;
+        const expired = users.filter(u => u.status === 'expired').length;
+        updateStats(users.length, active, expired);
+
+        tbody.innerHTML = users.map(u => `<tr>
+      <td><strong>${u.tg_id}</strong></td>
+      <td>${u.username || '—'}</td>
+      <td>${u.added_by}</td>
+      <td>${fmtDate(u.activated_at)}</td>
+      <td>${fmtDate(u.expires_at)}</td>
+      <td><span class="badge ${u.status === 'active' ? 'badge-success' : 'badge-danger'}">${u.status}</span></td>
+      <td>
+        <button class="btn btn-secondary btn-xs" onclick="openExtend(${u.id},'${u.tg_id}')">⏳ Extend</button>
+        <button class="btn btn-danger btn-xs" onclick="removeUser(${u.id})">🗑️</button>
+      </td>
+    </tr>`).join('');
+    } catch { }
+}
+
+function updateStats(total, active, expired) {
+    document.getElementById('statTotalUsers').textContent = total;
+    document.getElementById('statActiveUsers').textContent = active;
+    document.getElementById('statExpiredUsers').textContent = expired;
 }
 
 async function addUser() {
     const tgId = document.getElementById('newUserTgId').value.trim();
     const username = document.getElementById('newUserName').value.trim();
-    const days = parseInt(document.getElementById('newUserDays').value);
-
-    if (!tgId || !/^\d+$/.test(tgId)) return setModalAlert('addUserAlert', 'Enter a valid Telegram User ID.');
-    if (!days || days < 1) return setModalAlert('addUserAlert', 'Enter valid number of days (≥ 1).');
-
+    const days = document.getElementById('newUserDays').value;
+    const alert = document.getElementById('addUserAlert');
+    if (!tgId || !days) { showAlert(alert, 'Fill in Telegram ID and days.', 'error'); return; }
     try {
-        const data = await apiFetch('/api/admin/users', {
-            method: 'POST',
-            body: JSON.stringify({ tgId, username, days })
+        const res = await fetch('/api/admin/users', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tgId, username, days: parseInt(days) })
         });
-        setModalAlert('addUserAlert', data.message, 'success');
-        // Reset form
+        const data = await res.json();
+        if (!res.ok) { showAlert(alert, data.error, 'error'); return; }
+        showAlert(alert, data.message + (data.shopSlug ? ` | Shop: /shop/${data.shopSlug}` : ''), 'success');
+        loadUsers();
         document.getElementById('newUserTgId').value = '';
         document.getElementById('newUserName').value = '';
         document.getElementById('newUserDays').value = '';
-        setTimeout(() => { closeModal('addUserModal'); loadUsers(); loadAdminDashboard(); }, 1200);
-    } catch (e) {
-        setModalAlert('addUserAlert', e.message);
-    }
+    } catch (e) { showAlert(alert, 'Network error.', 'error'); }
 }
 
-function openExtend(id, tgId, expiresAt) {
-    selectedUserId = id;
-    document.getElementById('extendUserInfo').textContent =
-        `User: ${tgId} · Current expiry: ${fmtDate(expiresAt)}`;
-    document.getElementById('extendDays').value = '';
+let extendUserId = null;
+function openExtend(id, tgId) {
+    extendUserId = id;
+    document.getElementById('extendUserInfo').textContent = `Extending access for user ${tgId}`;
     openModal('extendUserModal');
 }
 
 async function extendUser() {
-    const days = parseInt(document.getElementById('extendDays').value);
-    if (!days || days < 1) return setModalAlert('extendAlert', 'Enter valid days.');
+    const days = document.getElementById('extendDays').value;
+    const alert = document.getElementById('extendAlert');
+    if (!days) { showAlert(alert, 'Enter number of days.', 'error'); return; }
     try {
-        const data = await apiFetch(`/api/admin/users/${selectedUserId}/extend`, {
-            method: 'PATCH',
-            body: JSON.stringify({ days })
+        const res = await fetch(`/api/admin/users/${extendUserId}/extend`, {
+            method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ days: parseInt(days) })
         });
-        setModalAlert('extendAlert', `Access extended! New expiry: ${fmtDate(data.newExpiresAt)}`, 'success');
-        setTimeout(() => { closeModal('extendUserModal'); loadUsers(); }, 1200);
-    } catch (e) {
-        setModalAlert('extendAlert', e.message);
-    }
-}
-
-async function removeUser(id, tgId) {
-    if (!confirm(`Remove user ${tgId}? They will lose access immediately.`)) return;
-    try {
-        await apiFetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) { showAlert(alert, data.error, 'error'); return; }
+        showAlert(alert, `Access extended! New expiry: ${fmtDate(data.newExpiresAt)}`, 'success');
         loadUsers();
-        loadAdminDashboard();
-    } catch (e) {
-        alert('Error: ' + e.message);
-    }
+    } catch (e) { showAlert(alert, 'Network error.', 'error'); }
 }
 
-// ─── Admins ────────────────────────────────────────────────────────────────────
+async function removeUser(id) {
+    if (!confirm('Remove this user?')) return;
+    await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+    loadUsers();
+}
+
+// ── Admins ─────────────────────────────────────────────────────────────────────
 async function loadAdmins() {
-    const tbody = document.getElementById('adminsTableBody');
-    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><span class="spinner"></span></div></td></tr>`;
     try {
-        const { admins } = await apiFetch('/api/admin/admins');
+        const res = await fetch('/api/admin/admins');
+        if (!res.ok) return;
+        const { admins } = await res.json();
+        document.getElementById('statAdmins').textContent = admins.length;
+        const tbody = document.getElementById('adminsTableBody');
         if (!admins.length) {
-            tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><div class="icon">🛡️</div>No admins yet.</div></td></tr>`;
+            tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="icon">🛡️</div>No admins yet</div></td></tr>';
             return;
         }
-        tbody.innerHTML = admins.map(a => `
-      <tr>
-        <td><code>${a.tg_id}</code></td>
-        <td><code>${a.added_by}</code></td>
-        <td>${fmtDate(a.added_at)}</td>
-        <td>
-          <button class="btn btn-danger btn-sm" onclick="removeAdmin(${a.id},'${a.tg_id}')">Remove</button>
-        </td>
-      </tr>
-    `).join('');
-    } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state" style="color:var(--danger)">${e.message}</div></td></tr>`;
-    }
+        tbody.innerHTML = admins.map(a => `<tr>
+      <td><strong>${a.tg_id}</strong></td>
+      <td>${a.added_by}</td>
+      <td>${fmtDate(a.added_at)}</td>
+      <td><button class="btn btn-danger btn-xs" onclick="removeAdmin(${a.id})">🗑️</button></td>
+    </tr>`).join('');
+    } catch { }
 }
 
 async function addAdmin() {
     const tgId = document.getElementById('newAdminTgId').value.trim();
-    if (!tgId || !/^\d+$/.test(tgId)) return setModalAlert('addAdminAlert', 'Enter a valid Telegram User ID.');
+    const alert = document.getElementById('addAdminAlert');
+    if (!tgId) { showAlert(alert, 'Enter Telegram ID.', 'error'); return; }
     try {
-        const data = await apiFetch('/api/admin/admins', {
-            method: 'POST',
+        const res = await fetch('/api/admin/admins', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ tgId })
         });
-        setModalAlert('addAdminAlert', data.message, 'success');
-        document.getElementById('newAdminTgId').value = '';
-        setTimeout(() => { closeModal('addAdminModal'); loadAdmins(); loadAdminDashboard(); }, 1200);
-    } catch (e) {
-        setModalAlert('addAdminAlert', e.message);
-    }
-}
-
-async function removeAdmin(id, tgId) {
-    if (!confirm(`Remove admin ${tgId}?`)) return;
-    try {
-        await apiFetch(`/api/admin/admins/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) { showAlert(alert, data.error, 'error'); return; }
+        showAlert(alert, data.message, 'success');
         loadAdmins();
-        loadAdminDashboard();
-    } catch (e) {
-        alert('Error: ' + e.message);
-    }
+        document.getElementById('newAdminTgId').value = '';
+    } catch (e) { showAlert(alert, 'Network error.', 'error'); }
 }
 
-// ─── Logs ──────────────────────────────────────────────────────────────────────
-async function loadRecentLogs() {
-    const tbody = document.getElementById('recentLogsBody');
-    if (!tbody) return;
-    try {
-        const { logs } = await apiFetch('/api/admin/logs?limit=5');
-        tbody.innerHTML = (logs || []).map(l => `
-      <tr>
-        <td><code>${l.tg_id}</code></td>
-        <td>${l.action}</td>
-        <td>${l.role || '—'}</td>
-        <td>${fmtDate(l.timestamp)}</td>
-      </tr>
-    `).join('') || `<tr><td colspan="4"><div class="empty-state">No logs yet</div></td></tr>`;
-    } catch { /* ignore */ }
+async function removeAdmin(id) {
+    if (!confirm('Remove this admin?')) return;
+    await fetch(`/api/admin/admins/${id}`, { method: 'DELETE' });
+    loadAdmins();
 }
 
+// ── Logs ───────────────────────────────────────────────────────────────────────
 async function loadLogs() {
-    const tbody = document.getElementById('logsTableBody');
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><span class="spinner"></span></div></td></tr>`;
     try {
-        const { logs } = await apiFetch('/api/admin/logs');
+        const res = await fetch('/api/admin/logs');
+        if (!res.ok) return;
+        const { logs } = await res.json();
+        const logsBody = document.getElementById('logsTableBody');
+        const recentBody = document.getElementById('recentLogsBody');
         if (!logs.length) {
-            tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="icon">📋</div>No logs yet.</div></td></tr>`;
+            logsBody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="icon">📋</div>No logs yet</div></td></tr>';
+            if (recentBody) recentBody.innerHTML = '<tr><td colspan="4">No recent activity</td></tr>';
             return;
         }
-        tbody.innerHTML = logs.map(l => `
-      <tr>
-        <td><code>${l.tg_id}</code></td>
-        <td>${l.action}</td>
-        <td>${l.role || '—'}</td>
-        <td class="text-muted">${l.details || '—'}</td>
-        <td>${fmtDate(l.timestamp)}</td>
-      </tr>
-    `).join('');
+        const renderRow = (l, cols) => `<tr>
+      <td>${l.tg_id}</td><td>${l.action}</td><td>${l.role || '—'}</td>
+      ${cols === 5 ? `<td>${l.details || '—'}</td>` : ''}
+      <td>${fmtDate(l.timestamp)}</td>
+    </tr>`;
+        logsBody.innerHTML = logs.map(l => renderRow(l, 5)).join('');
+        if (recentBody) recentBody.innerHTML = logs.slice(0, 5).map(l => renderRow(l, 4)).join('');
+    } catch { }
+}
+
+// ── User Access ────────────────────────────────────────────────────────────────
+async function loadUserAccess() {
+    try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) return;
+        const { user } = await res.json();
+        if (user.expiresAt) {
+            const exp = new Date(user.expiresAt);
+            const days = Math.max(0, Math.ceil((exp - new Date()) / 86400000));
+            document.getElementById('expiryBadge').textContent = `📅 Expires: ${fmtDate(user.expiresAt)} (${days} day${days !== 1 ? 's' : ''} left)`;
+        }
+    } catch { }
+}
+
+// ── MY SHOP ────────────────────────────────────────────────────────────────────
+async function loadMyShop() {
+    try {
+        const res = await fetch('/api/shop/my');
+        if (res.status === 404) {
+            document.getElementById('productEditGrid').innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No shop assigned yet. Contact admin.</div>';
+            return;
+        }
+        if (!res.ok) return;
+        const data = await res.json();
+        shopProducts = data.products;
+        shopUrl = data.shopUrl;
+
+        // Update URL banner
+        document.getElementById('shopLiveUrl').textContent = shopUrl;
+
+        // Update shop settings inputs
+        document.getElementById('shopNameInput').value = data.shop.shop_name || '';
+        document.getElementById('bannerTextInput').value = data.shop.banner_text || '';
+
+        // Render product grid
+        renderProductGrid();
+    } catch { }
+}
+
+function renderProductGrid() {
+    const grid = document.getElementById('productEditGrid');
+    if (!shopProducts.length) {
+        grid.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No products.</div>';
+        return;
+    }
+    grid.innerHTML = shopProducts.map(p => `
+    <div class="pe-card">
+      <div class="pe-img-wrap">
+        <img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
+        <button class="pe-edit-btn" onclick="openEditDrawer(${p.id})">✏️ Edit</button>
+      </div>
+      <div class="pe-body">
+        <div class="pe-name">${p.name}</div>
+        <div class="pe-cat">${p.category} · ⭐ ${parseFloat(p.rating).toFixed(1)}</div>
+        <div class="pe-price">₹${parseInt(p.price).toLocaleString('en-IN')} <span class="pe-disc">${p.discount}% off</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Shop Settings ──────────────────────────────────────────────────────────────
+async function saveShopSettings() {
+    const shop_name = document.getElementById('shopNameInput').value.trim();
+    const banner_text = document.getElementById('bannerTextInput').value.trim();
+    if (!shop_name && !banner_text) return;
+    try {
+        await fetch('/api/shop/settings', {
+            method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ shop_name, banner_text })
+        });
+        alert('✅ Shop settings saved!');
+    } catch { alert('❌ Failed to save.'); }
+}
+
+function copyShopLink() {
+    navigator.clipboard.writeText(shopUrl).catch(() => { });
+    alert('✅ Shop URL copied!');
+}
+
+function openShopInTab() {
+    if (shopUrl) window.open(shopUrl, '_blank');
+}
+
+// ── Edit Product Drawer ────────────────────────────────────────────────────────
+function openEditDrawer(id) {
+    const p = shopProducts.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('edProductId').value = id;
+    document.getElementById('edImgPreview').src = p.image_url;
+    document.getElementById('edImageUrl').value = p.image_url;
+    document.getElementById('edName').value = p.name;
+    document.getElementById('edDesc').value = p.description;
+    document.getElementById('edPrice').value = p.price;
+    document.getElementById('edOrigPrice').value = p.original_price;
+    document.getElementById('edRating').value = p.rating;
+    document.getElementById('edMsg').className = 'ed-msg';
+    document.getElementById('edImageFile').value = '';
+    renderStars(p.rating);
+    document.getElementById('editDrawer').classList.add('open');
+}
+
+function closeEditDrawer() {
+    document.getElementById('editDrawer').classList.remove('open');
+}
+
+function renderStars(rating) {
+    const container = document.getElementById('edStars');
+    const val = parseFloat(rating);
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        const filled = i <= Math.round(val);
+        html += `<span class="rating-star" onclick="setRating(${i})" style="cursor:pointer">${filled ? '⭐' : '☆'}</span>`;
+    }
+    html += `<span style="font-size:14px;color:var(--text-muted);margin-left:4px" id="ratingVal">${val.toFixed(1)}</span>`;
+    container.innerHTML = html;
+}
+
+function setRating(val) {
+    document.getElementById('edRating').value = val;
+    renderStars(val);
+}
+
+// ── Image Upload ───────────────────────────────────────────────────────────────
+async function handleImageSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Preview immediately
+    const reader = new FileReader();
+    reader.onload = (ev) => { document.getElementById('edImgPreview').src = ev.target.result; };
+    reader.readAsDataURL(file);
+
+    // Upload to server
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+        const res = await fetch('/api/shop/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (res.ok) {
+            document.getElementById('edImageUrl').value = data.url;
+            document.getElementById('edImgPreview').src = data.url;
+        } else {
+            alert('❌ Upload failed: ' + (data.error || 'Unknown error'));
+        }
+    } catch { alert('❌ Upload failed.'); }
+}
+
+// ── Save Product Edit ──────────────────────────────────────────────────────────
+async function saveProductEdit() {
+    const id = document.getElementById('edProductId').value;
+    const msg = document.getElementById('edMsg');
+    const payload = {
+        name: document.getElementById('edName').value,
+        image_url: document.getElementById('edImageUrl').value,
+        description: document.getElementById('edDesc').value,
+        price: document.getElementById('edPrice').value,
+        original_price: document.getElementById('edOrigPrice').value,
+        discount: Math.max(0, Math.round((1 - parseInt(document.getElementById('edPrice').value) / parseInt(document.getElementById('edOrigPrice').value)) * 100)),
+        rating: document.getElementById('edRating').value,
+    };
+
+    try {
+        const res = await fetch(`/api/shop/products/${id}`, {
+            method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) { msg.textContent = '❌ ' + data.error; msg.className = 'ed-msg err'; return; }
+
+        // Update local
+        const idx = shopProducts.findIndex(x => x.id === parseInt(id));
+        if (idx !== -1) shopProducts[idx] = { ...shopProducts[idx], ...data.product };
+        renderProductGrid();
+
+        msg.textContent = '✅ Product updated!';
+        msg.className = 'ed-msg ok';
+        setTimeout(() => closeEditDrawer(), 1000);
     } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state" style="color:var(--danger)">${e.message}</div></td></tr>`;
+        msg.textContent = '❌ Network error.';
+        msg.className = 'ed-msg err';
     }
 }
 
-// ─── Logout ───────────────────────────────────────────────────────────────────
-async function logout() {
-    try {
-        await fetch('/api/auth/logout', { method: 'POST' });
-    } finally {
-        window.location.href = '/login.html';
-    }
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function fmtDate(d) {
+    if (!d) return '—';
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' +
+        dt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
+
+function showAlert(el, msg, type) {
+    el.textContent = msg;
+    el.className = `alert alert-${type === 'error' ? 'danger' : 'success'}`;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+async function logout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    location.href = '/login.html';
+}
+
+// Close edit drawer on overlay click
+document.getElementById('editDrawer').addEventListener('click', function (e) {
+    if (e.target === this) closeEditDrawer();
+});
+
+init();

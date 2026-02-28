@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,72 +8,172 @@
   <meta name="description" content="Secure admin panel with Telegram OTP authentication." />
   <link rel="stylesheet" href="/css/style.css" />
   <style>
-    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-    .login-wrap { position: relative; z-index: 1; width: 100%; max-width: 420px; }
-    .login-logo {
-      text-align: center; margin-bottom: 36px;
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
     }
+
+    .login-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
     .login-logo .logo-icon {
-      width: 68px; height: 68px;
+      width: 68px;
+      height: 68px;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       border-radius: 20px;
       margin: 0 auto 16px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 32px;
-      box-shadow: 0 8px 30px var(--accent-glow), 0 0 0 1px rgba(59,130,246,0.3);
+      box-shadow: 0 8px 30px var(--accent-glow), 0 0 0 1px rgba(59, 130, 246, 0.3);
     }
-    .login-logo h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-    .login-logo p  { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
-    .login-card { padding: 32px; }
-    .step { display: none; }
-    .step.active { display: block; animation: fadeInSlide 0.3s ease; }
+
+    .login-logo h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .login-logo p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .login-card {
+      padding: 32px;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+      animation: fadeInSlide 0.3s ease;
+    }
+
     .step-indicator {
-      display: flex; gap: 8px; margin-bottom: 28px;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
     }
+
     .step-dot {
-      flex: 1; height: 3px; border-radius: 99px;
+      flex: 1;
+      height: 3px;
+      border-radius: 99px;
       background: var(--border);
       transition: background var(--transition);
     }
-    .step-dot.done { background: var(--accent); }
-    .step-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .step-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
-    .back-btn {
-      background: none; border: none; color: var(--text-muted);
-      font-size: 13px; cursor: pointer; display: inline-flex;
-      align-items: center; gap: 6px; margin-bottom: 20px;
-      transition: color var(--transition); font-family: inherit;
+
+    .step-dot.done {
+      background: var(--accent);
     }
-    .back-btn:hover { color: var(--text-primary); }
-    .otp-inputs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .step-sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+      transition: color var(--transition);
+      font-family: inherit;
+    }
+
+    .back-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .otp-inputs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
     .otp-digit {
-      width: 52px; height: 60px;
-      background: rgba(255,255,255,0.05);
+      width: 52px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--text-primary);
-      font-size: 24px; font-weight: 700;
+      font-size: 24px;
+      font-weight: 700;
       text-align: center;
       font-family: inherit;
       outline: none;
       transition: all var(--transition);
     }
+
     .otp-digit:focus {
       border-color: var(--accent);
-      background: rgba(59,130,246,0.08);
+      background: rgba(59, 130, 246, 0.08);
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
-    .resend-row { text-align: center; margin-top: 14px; }
+
+    .resend-row {
+      text-align: center;
+      margin-top: 14px;
+    }
+
     .resend-btn {
-      background: none; border: none; color: var(--accent-light);
-      font-size: 13px; cursor: pointer; font-family: inherit;
+      background: none;
+      border: none;
+      color: var(--accent-light);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
       transition: color var(--transition);
     }
-    .resend-btn:hover { color: var(--accent); }
-    .footer { text-align: center; margin-top: 24px; color: var(--text-muted); font-size: 12px; }
-    .tg-icon { color: #2AABEE; }
+
+    .resend-btn:hover {
+      color: var(--accent);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .tg-icon {
+      color: #2AABEE;
+    }
   </style>
 </head>
+
 <body>
   <div class="bg-mesh"></div>
 
@@ -96,8 +197,8 @@
 
         <div class="form-group">
           <label class="form-label" for="tgId">Telegram User ID</label>
-          <input id="tgId" type="text" class="form-input" placeholder="e.g. 123456789"
-            inputmode="numeric" autocomplete="off" />
+          <input id="tgId" type="text" class="form-input" placeholder="e.g. 123456789" inputmode="numeric"
+            autocomplete="off" />
         </div>
 
         <button class="btn btn-primary btn-full" id="sendOtpBtn" onclick="requestOTP()">
@@ -117,7 +218,8 @@
       <div class="step" id="step2">
         <button class="back-btn" onclick="goBack()">← Back</button>
         <div class="step-title">Enter OTP</div>
-        <div class="step-sub" id="otpSubText">Check your Telegram for the 6-digit code.</div>
+        <div class="step-sub" id="otpSubText">Check your Telegram — <strong>@webxpanelsbot</strong> sent you the 6-digit
+          code.</div>
 
         <div class="otp-inputs">
           <input class="otp-digit" id="d1" maxlength="1" inputmode="numeric" />
@@ -141,11 +243,14 @@
     </div>
 
     <div class="footer">
-      Secured with end-to-end Telegram authentication &nbsp;·&nbsp;
-      <span class="tg-icon">Telegram</span>
+      Before logging in, start the bot on Telegram:
+      <a href="https://t.me/webxpanelsbot" target="_blank"
+        style="color:#2AABEE;text-decoration:none;font-weight:600;">@webxpanelsbot</a>
+      &nbsp;·&nbsp; Secured with Telegram OTP
     </div>
   </div>
 
   <script src="/js/login.js"></script>
 </body>
+
 </html>

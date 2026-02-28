@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { requireAdmin, requireSuperAdmin } = require('../middleware/auth');
+const { createShopForUser } = require('../seed');
+
 
 function logAction(tgId, action, role, details = '') {
     db.prepare(`INSERT INTO login_logs (tg_id, action, role, details) VALUES (?, ?, ?, ?)`)
@@ -35,19 +37,27 @@ router.post('/users', requireAdmin, (req, res) => {
     try {
         db.prepare(`
       INSERT INTO users (tg_id, username, added_by, expires_at)
-      VALUES (?, ?, ?, ?)
-    `).run(cleanId, username || '', req.session.user.tgId, expiresAt.toISOString());
+      VALUES (?, ?, ?, ?)\n    `).run(cleanId, username || '', req.session.user.tgId, expiresAt.toISOString());
+
+        // Auto-create a shop with 30 products for this user
+        const slug = createShopForUser(cleanId);
 
         logAction(req.session.user.tgId, 'add_user', req.session.user.role,
             `Added user ${cleanId} (${username}) for ${days} days`);
 
-        res.json({ success: true, message: `User ${cleanId} added with ${days} day(s) access.`, expiresAt });
+        res.json({
+            success: true,
+            message: `User ${cleanId} added with ${days} day(s) access.`,
+            expiresAt,
+            shopSlug: slug
+        });
     } catch (err) {
         if (err.message.includes('UNIQUE')) {
             return res.status(409).json({ error: 'User already exists. Use extend to update their access.' });
         }
         throw err;
     }
+
 });
 
 // DELETE /api/admin/users/:id
