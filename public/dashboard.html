@@ -380,6 +380,7 @@
             margin-bottom: 4px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -551,11 +552,24 @@
 
         @media (max-width: 768px) {
             .sidebar {
-                display: none;
+                transform: translateX(-100%);
+                position: fixed;
+                transition: transform 0.3s ease;
+                background: rgba(6, 11, 20, 0.95);
+                backdrop-filter: blur(16px);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            }
+
+            .mobile-header {
+                display: flex !important;
             }
 
             .main {
-                padding: 20px;
+                padding: 16px;
             }
 
             .product-edit-grid {
@@ -568,11 +582,41 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .mobile-header {
+            display: none;
+            padding: 16px 20px;
+            background: rgba(6, 11, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 4px;
+        }
     </style>
 </head>
 
 <body>
     <div class="bg-mesh"></div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header" id="mobileHeader">
+        <div class="logo-icon"
+            style="width:32px;height:32px;font-size:16px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            🔐</div>
+        <div style="font-weight:800;flex:1;margin-left:12px;font-size:16px;">Admin Panel</div>
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    </div>
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
@@ -621,7 +665,7 @@
             <div class="user-pill" id="userPill">
                 <div class="user-avatar" id="userAvatar">?</div>
                 <div class="user-info">
-                    <div class="uid" id="userTgId">Loading...</div>
+                    <div class="uid" id="userTgId">Admin Panel</div>
                     <div class="role" id="userRoleLabel">—</div>
                 </div>
             </div>
@@ -673,7 +717,7 @@
                         <div class="access-title">Access Granted</div>
                         <div class="access-sub">Your account is active and verified.</div>
                         <div class="expiry-badge" id="expiryBadge">
-                            📅 Loading...
+                            📅 Active Status
                         </div>
                     </div>
                 </div>

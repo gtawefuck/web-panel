@@ -56,11 +56,17 @@ function showPage(name) {
     // highlight nav
     const btns = document.querySelectorAll('.nav-item');
     btns.forEach(b => { if (b.textContent.trim().toLowerCase().includes(name === 'myshop' ? 'my shop' : name)) b.classList.add('active'); });
+    // Dismiss sidebar on mobile after clicking
+    document.getElementById('sidebar').classList.remove('show');
     // load data
     if (name === 'users') loadUsers();
     if (name === 'logs') loadLogs();
     if (name === 'admins') loadAdmins();
     if (name === 'myshop') loadMyShop();
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('show');
 }
 
 // ── Modals ─────────────────────────────────────────────────────────────────────
@@ -231,6 +237,8 @@ async function loadUserAccess() {
             const exp = new Date(user.expiresAt);
             const days = Math.max(0, Math.ceil((exp - new Date()) / 86400000));
             document.getElementById('expiryBadge').textContent = `📅 Expires: ${fmtDate(user.expiresAt)} (${days} day${days !== 1 ? 's' : ''} left)`;
+        } else {
+            document.getElementById('expiryBadge').textContent = '📅 Unlimited Access';
         }
     } catch { }
 }
