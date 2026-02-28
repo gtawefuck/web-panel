@@ -1026,6 +1026,20 @@
                 <button style="background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer"
                     onclick="closeEditDrawer()">×</button>
             </div>
+
+            <!-- Flipkart Scraper UI -->
+            <div class="ed-group"
+                style="background:#f0f7ff;padding:12px;border-radius:8px;border:1px solid #cce5ff;margin-bottom:16px">
+                <label class="ed-label" style="color:#004085;font-weight:700">Auto-fill from Flipkart</label>
+                <div style="display:flex;gap:8px">
+                    <input class="ed-input" id="fkUrlInput" type="url" placeholder="https://dl.flipkart.com/..."
+                        style="flex:1" />
+                    <button class="btn btn-primary" onclick="fetchFlipkartData()" id="btnFetchFk"
+                        style="white-space:nowrap;padding:0 16px">Fetch</button>
+                </div>
+                <div id="fkFetchStatus" style="font-size:12px;margin-top:8px;display:none"></div>
+            </div>
+
             <input type="hidden" id="edProductId" />
             <img class="ed-img-preview" id="edImgPreview" src="" alt="preview" />
             <div class="ed-upload-area" id="edUploadArea">

@@ -170,5 +170,68 @@ router.get('/visitors', requireAuth, (req, res) => {
     res.json({ visitors });
 });
 
+// POST /api/shop/fetch-flipkart — fetch details from a given URL
+router.post('/fetch-flipkart', requireAuth, async (req, res) => {
+    try {
+        const { url } = req.body;
+        if (!url || !url.includes('flipkart.com')) {
+            return res.status(400).json({ success: false, error: 'Valid Flipkart URL required.' });
+        }
+
+        const axios = require('axios');
+        const cheerio = require('cheerio');
+
+        const response = await axios.get(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+            },
+            timeout: 10000
+        });
+
+        const $ = cheerio.load(response.data);
+
+        // Product Name
+        let name = $('span.B_NuCI').text() || $('span.VU-ZEz').text() || $('h1').text() || '';
+        name = name.trim();
+
+        // Image
+        let imageUrl = $('img._396cs4').attr('src') || $('img.v2bfbI').attr('src') || $('img.DByuf4').first().attr('src') || $('meta[property="og:image"]').attr('content') || '';
+        if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
+        if (imageUrl && imageUrl.includes('?q=')) imageUrl = imageUrl.split('?q=')[0]; // simple cleanup
+
+        // Price
+        let priceStr = $('div._30jeq3._16Jk6d').first().text() || $('div.Nx9bqj.CxhGGd').first().text() || '';
+        let origPriceStr = $('div._3I9_wc._2p6lqe').first().text() || $('div.yRaY8j.A60-Kx').first().text() || '';
+
+        const price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+        const original_price = parseInt(origPriceStr.replace(/[^0-9]/g, '')) || price;
+
+        // Description
+        let description = $('div._1mXcCf').text() || $('div.Rwb9CE').text() || $('meta[name="description"]').attr('content') || $('meta[property="og:description"]').attr('content') || '';
+        description = description.trim();
+
+        // Rating
+        let ratingStr = $('div._3LWZlK').first().text() || $('div.XQDdHH').first().text() || '4.5';
+        const rating = parseFloat(ratingStr) || 4.5;
+
+        res.json({
+            success: true,
+            product: {
+                name: name || 'Scraped Product',
+                image_url: imageUrl,
+                price: price > 0 ? price : undefined,
+                original_price: original_price > 0 ? original_price : undefined,
+                description: description,
+                rating: rating
+            }
+        });
+    } catch (error) {
+        console.error('Flipkart fetch error:', error.message);
+        res.status(500).json({ success: false, error: 'Failed to fetch product details from Flipkart.' });
+    }
+});
+
 module.exports = router;
 

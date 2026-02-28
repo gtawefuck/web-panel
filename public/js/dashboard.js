@@ -359,8 +359,68 @@ function openEditDrawer(id) {
     document.getElementById('edRating').value = p.rating;
     document.getElementById('edMsg').className = 'ed-msg';
     document.getElementById('edImageFile').value = '';
+
+    // Clear scraper fields
+    const fkUrlInput = document.getElementById('fkUrlInput');
+    const fkStatus = document.getElementById('fkFetchStatus');
+    if (fkUrlInput) fkUrlInput.value = '';
+    if (fkStatus) fkStatus.style.display = 'none';
+
     renderStars(p.rating);
     document.getElementById('editDrawer').classList.add('open');
+}
+
+async function fetchFlipkartData() {
+    const urlInput = document.getElementById('fkUrlInput');
+    const statusEl = document.getElementById('fkFetchStatus');
+    const btn = document.getElementById('btnFetchFk');
+    const url = urlInput.value.trim();
+
+    if (!url) {
+        statusEl.textContent = '❌ Please enter a Flipkart URL.';
+        statusEl.style.color = '#dc3545';
+        statusEl.style.display = 'block';
+        return;
+    }
+
+    statusEl.textContent = '⏳ Fetching details from Flipkart...';
+    statusEl.style.color = '#004085';
+    statusEl.style.display = 'block';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/api/shop/fetch-flipkart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            statusEl.textContent = '✅ Successfully fetched details!';
+            statusEl.style.color = '#28a745';
+
+            // Populate form fields if data exists
+            if (data.product.name) document.getElementById('edName').value = data.product.name;
+            if (data.product.price) document.getElementById('edPrice').value = data.product.price;
+            if (data.product.original_price) document.getElementById('edOrigPrice').value = data.product.original_price;
+            if (data.product.description) document.getElementById('edDesc').value = data.product.description;
+            if (data.product.rating) setRating(data.product.rating);
+
+            if (data.product.image_url) {
+                document.getElementById('edImageUrl').value = data.product.image_url;
+                document.getElementById('edImgPreview').src = data.product.image_url;
+            }
+        } else {
+            statusEl.textContent = '❌ Error: ' + (data.error || 'Could not fetch details.');
+            statusEl.style.color = '#dc3545';
+        }
+    } catch (e) {
+        statusEl.textContent = '❌ Network error while fetching.';
+        statusEl.style.color = '#dc3545';
+    } finally {
+        btn.disabled = false;
+    }
 }
 
 function closeEditDrawer() {
