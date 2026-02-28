@@ -1355,6 +1355,15 @@
             .ck-row {
                 grid-template-columns: 1fr
             }
+
+            .ck-layout {
+                flex-direction: column !important;
+            }
+
+            .ck-price-col {
+                width: 100% !important;
+                position: static !important;
+            }
         }
 
         /* UPI App Buttons */
@@ -1521,273 +1530,331 @@
             </div>
         </main>
 
-        <!-- CHECKOUT PAGE -->
-        <div class="checkout-page" id="checkoutPage">
-            <button class="ck-back" onclick="exitCheckout()">← Continue Shopping</button>
-            <h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Checkout</h2>
+        <!-- CHECKOUT PAGE (Flipkart Style) -->
+        <div class="checkout-page" id="checkoutPage" style="background:#f1f3f6;padding:0;max-width:100%">
+            <div style="max-width:1100px;margin:0 auto;display:flex;gap:16px;padding:16px;align-items:flex-start;box-sizing:border-box"
+                class="ck-layout">
 
-            <!-- Step 1 & 2: Address + Order -->
-            <div id="ckStepAddress">
-                <div class="ck-card">
-                    <div class="ck-head"><span class="ck-step">1</span> Delivery Address</div>
-                    <div class="ck-body">
-                        <div id="locationDetected" class="ck-detected" style="display:none">📍 <strong
-                                id="detectedCity"></strong></div>
-                        <div class="ck-row">
-                            <div class="ck-group">
-                                <label class="ck-label">Name *</label>
-                                <input class="ck-input" id="ckName" type="text" placeholder="Full Name"
-                                    autocomplete="name" onkeypress="return /[a-zA-Z\s]/.test(event.key)" />
-                            </div>
-                            <div class="ck-group">
-                                <label class="ck-label">10-digit mobile number *</label>
-                                <input class="ck-input" id="ckPhone" type="tel" placeholder="Mobile number"
-                                    maxlength="10" inputmode="numeric" autocomplete="tel"
-                                    onkeypress="return /[0-9]/.test(event.key)"
-                                    oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
-                            </div>
-                        </div>
-                        <div class="ck-row">
-                            <div class="ck-group">
-                                <label class="ck-label">Pincode *</label>
-                                <input class="ck-input" id="ckPincode" type="text" placeholder="6 digits [0-9]"
-                                    maxlength="6" inputmode="numeric" onkeypress="return /[0-9]/.test(event.key)"
-                                    oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
-                            </div>
-                            <div class="ck-group">
-                                <label class="ck-label">Locality</label>
-                                <input class="ck-input" id="ckLocality" type="text"
-                                    placeholder="Locality / Town / Block" />
-                            </div>
-                        </div>
-                        <div class="ck-group">
-                            <label class="ck-label">Address (Area and Street) *</label>
-                            <textarea class="ck-input ck-textarea" id="ckAddress"
-                                placeholder="Flat no, Building, Street, Area" rows="2"></textarea>
-                        </div>
-                        <div class="ck-row">
-                            <div class="ck-group">
-                                <label class="ck-label">City / District / Town *</label>
-                                <input class="ck-input" id="ckCity" type="text" placeholder="City" />
-                            </div>
-                            <div class="ck-group">
-                                <label class="ck-label">State *</label>
-                                <select class="ck-input" id="ckState" style="height:44px;cursor:pointer">
-                                    <option value="">-- Select State --</option>
-                                    <option>Andhra Pradesh</option>
-                                    <option>Arunachal Pradesh</option>
-                                    <option>Assam</option>
-                                    <option>Bihar</option>
-                                    <option>Chhattisgarh</option>
-                                    <option>Goa</option>
-                                    <option>Gujarat</option>
-                                    <option>Haryana</option>
-                                    <option>Himachal Pradesh</option>
-                                    <option>Jharkhand</option>
-                                    <option>Karnataka</option>
-                                    <option>Kerala</option>
-                                    <option>Madhya Pradesh</option>
-                                    <option>Maharashtra</option>
-                                    <option>Manipur</option>
-                                    <option>Meghalaya</option>
-                                    <option>Mizoram</option>
-                                    <option>Nagaland</option>
-                                    <option>Odisha</option>
-                                    <option>Punjab</option>
-                                    <option>Rajasthan</option>
-                                    <option>Sikkim</option>
-                                    <option>Tamil Nadu</option>
-                                    <option>Telangana</option>
-                                    <option>Tripura</option>
-                                    <option>Uttar Pradesh</option>
-                                    <option>Uttarakhand</option>
-                                    <option>West Bengal</option>
-                                    <option>Andaman and Nicobar Islands</option>
-                                    <option>Chandigarh</option>
-                                    <option>Dadra and Nagar Haveli and Daman and Diu</option>
-                                    <option>Delhi</option>
-                                    <option>Jammu and Kashmir</option>
-                                    <option>Ladakh</option>
-                                    <option>Lakshadweep</option>
-                                    <option>Puducherry</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="ck-row">
-                            <div class="ck-group">
-                                <label class="ck-label">Email Address *</label>
-                                <input class="ck-input" id="ckEmail" type="email" placeholder="you@example.com"
-                                    autocomplete="email" />
-                            </div>
-                            <div class="ck-group">
-                                <label class="ck-label">Landmark (Optional)</label>
-                                <input class="ck-input" id="ckLandmark" type="text"
-                                    placeholder="E.g. Near Apollo Hospital" />
-                            </div>
-                        </div>
-                        <div class="ck-group">
-                            <label class="ck-label">Alternate Phone (Optional)</label>
-                            <input class="ck-input" id="ckAltPhone" type="tel" placeholder="Alternate mobile number"
-                                maxlength="10" inputmode="numeric" onkeypress="return /[0-9]/.test(event.key)"
-                                oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
-                        </div>
-                        <div class="ck-group" style="margin-top:4px">
-                            <label class="ck-label" style="display:block;margin-bottom:12px">Type of Address</label>
-                            <div style="display:flex;gap:12px;flex-wrap:wrap">
-                                <label class="fk-addr-type">
-                                    <input type="radio" name="addrType" value="home" checked />
-                                    <span><i>🏠</i> Home (All day delivery)</span>
-                                </label>
-                                <label class="fk-addr-type">
-                                    <input type="radio" name="addrType" value="work" />
-                                    <span><i>🏢</i> Work (Delivery between 10 AM - 5 PM)</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ck-card">
-                    <div class="ck-head"><span class="ck-step">2</span> Order Summary</div>
-                    <div class="ck-body" id="ckOrderItems"></div>
-                    <div class="ck-summary">
-                        <div class="ck-summary-row"><span>Price (<span id="ckItemCount">0</span> item<span
-                                    id="ckItemCountS">s</span>)</span><span id="ckSubtotal">₹0</span></div>
-                        <div class="ck-summary-row" style="color:var(--fk-green)"><span>Discount</span><span
-                                id="ckDiscount">-₹0</span></div>
-                        <div class="ck-summary-row"><span>Delivery Charges</span><span
-                                style="color:var(--fk-green)">FREE</span></div>
-                        <div class="ck-summary-total"><span>Total Amount</span><span id="ckTotal">₹0</span></div>
-                        <div
-                            style="background:#f1f8e9;border-radius:4px;padding:8px 12px;color:var(--fk-green);font-size:13px;font-weight:600;margin-top:8px">
-                            ✅ You will save <span id="ckSavings">₹0</span> on this order!</div>
-                    </div>
-                </div>
-                <button class="ck-place-btn" onclick="goToPayment()">CONTINUE TO PAYMENT →</button>
-            </div>
+                <!-- LEFT: Accordion Steps -->
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
 
-
-            <!-- Step 3: UPI Payment -->
-            <div id="ckStepPayment" style="display:none">
-                <div class="ck-card" id="upiPayCard">
-                    <div class="ck-head" style="justify-content:space-between">
-                        <div style="display:flex;align-items:center;gap:10px"><span class="ck-step">3</span> Complete
-                            UPI Payment</div>
-                        <div id="payCountdown"
-                            style="background:#fff3e0;color:#e65100;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:800">
-                            ⏱ 10:00</div>
+                    <!-- STEP 1: LOGIN -->
+                    <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)">
+                        <div style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#fff">
+                            <span
+                                style="background:#f0f0f0;color:#2874f0;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">1</span>
+                            <span
+                                style="font-size:14px;font-weight:500;color:#878787;text-transform:uppercase;letter-spacing:.5px">LOGIN</span>
+                            <span style="margin-left:auto;color:#2874f0;font-size:14px">✔</span>
+                        </div>
+                        <div style="padding:4px 24px 14px 64px;font-size:14px;font-weight:500;color:#212121"
+                            id="ckLoginDisplay">Guest Checkout</div>
                     </div>
-                    <div class="ck-body">
-                        <div
-                            style="background:linear-gradient(135deg,#1a237e,#2874f0);border-radius:10px;padding:18px 20px;margin-bottom:20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
-                            <div>
-                                <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Pay to</div>
-                                <div style="font-size:15px;font-weight:700" id="payMerchantName">Shop</div>
-                                <div style="font-size:12px;opacity:0.8;margin-top:2px" id="payMerchantUpi"></div>
-                            </div>
-                            <div style="text-align:right">
-                                <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Total Amount</div>
-                                <div style="font-size:28px;font-weight:900" id="payTotalDisplay">₹0</div>
-                            </div>
+
+                    <!-- STEP 2: DELIVERY ADDRESS -->
+                    <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)" id="ckStep2Wrap">
+                        <div id="ckStep2Head"
+                            style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#2874f0;cursor:pointer"
+                            onclick="expandStep(2)">
+                            <span id="ckStep2Num"
+                                style="background:#fff;color:#2874f0;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">2</span>
+                            <span
+                                style="font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:inherit">DELIVERY
+                                ADDRESS</span>
+                            <span id="ckStep2Check"
+                                style="margin-left:auto;color:#2874f0;font-size:14px;display:none">✔</span>
                         </div>
-                        <div style="margin-bottom:20px">
-                            <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px">Pay instantly
-                                using your UPI app:</div>
-                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-                                <button class="upi-app-btn" onclick="openUpiApp('gpay')">
-                                    <div class="upi-app-icon"
-                                        style="background:#fff;color:#1a73e8;font-weight:900;font-size:18px">G Pay</div>
-                                    <div class="upi-app-name">Google Pay</div>
-                                </button>
-                                <button class="upi-app-btn" onclick="openUpiApp('phonepe')">
-                                    <div class="upi-app-icon"
-                                        style="background:#5f259f;color:#fff;font-weight:900;font-size:14px">Pe</div>
-                                    <div class="upi-app-name">PhonePe</div>
-                                </button>
-                                <button class="upi-app-btn" onclick="openUpiApp('paytm')">
-                                    <div class="upi-app-icon"
-                                        style="background:#002970;color:#00baf2;font-weight:900;font-size:13px">Paytm
-                                    </div>
-                                    <div class="upi-app-name">Paytm</div>
-                                </button>
+                        <!-- Collapsed Summary -->
+                        <div id="ckStep2Summary"
+                            style="display:none;padding:8px 24px 14px 64px;font-size:14px;color:#212121"></div>
+                        <!-- Form Body -->
+                        <div id="ckStep2Body" style="padding:24px;background:#f5faff">
+                            <div id="locationDetected" class="ck-detected" style="display:none">📍 <strong
+                                    id="detectedCity"></strong></div>
+                            <div class="ck-row">
+                                <div class="ck-group"><label class="ck-label">Name *</label><input class="ck-input"
+                                        id="ckName" type="text" placeholder="Full Name" autocomplete="name"
+                                        onkeypress="return /[a-zA-Z\s]/.test(event.key)" /></div>
+                                <div class="ck-group"><label class="ck-label">10-digit mobile number *</label><input
+                                        class="ck-input" id="ckPhone" type="tel" placeholder="Mobile number"
+                                        maxlength="10" inputmode="numeric" autocomplete="tel"
+                                        onkeypress="return /[0-9]/.test(event.key)"
+                                        oninput="this.value=this.value.replace(/[^0-9]/g,'')" /></div>
                             </div>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-                            <div style="flex:1;height:1px;background:var(--fk-border)"></div>
-                            <span style="font-size:12px;color:#999;font-weight:600">OR SCAN QR CODE</span>
-                            <div style="flex:1;height:1px;background:var(--fk-border)"></div>
-                        </div>
-                        <div style="text-align:center;margin-bottom:20px">
-                            <div id="qrLoading" style="padding:30px;color:#999;font-size:13px">⏳ Generating payment
-                                QR...</div>
-                            <div id="qrContainer" style="display:none">
-                                <img id="dynamicQrImg" src="" alt="UPI QR Code"
-                                    style="width:220px;height:220px;border:3px solid #e8f0fe;border-radius:12px;padding:6px" />
-                                <div style="margin-top:8px;font-size:12px;color:#666">Scan with Google Pay, PhonePe,
-                                    Paytm or any UPI app</div>
-                                <div id="upiIdBadge"
-                                    style="margin-top:8px;display:inline-block;background:#e8f0fe;color:var(--fk-blue);padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700">
+                            <div class="ck-row">
+                                <div class="ck-group"><label class="ck-label">Pincode *</label><input class="ck-input"
+                                        id="ckPincode" type="text" placeholder="6 digits [0-9]" maxlength="6"
+                                        inputmode="numeric" onkeypress="return /[0-9]/.test(event.key)"
+                                        oninput="this.value=this.value.replace(/[^0-9]/g,'')" /></div>
+                                <div class="ck-group"><label class="ck-label">Locality</label><input class="ck-input"
+                                        id="ckLocality" type="text" placeholder="Locality / Town / Block" /></div>
+                            </div>
+                            <div class="ck-group"><label class="ck-label">Address (Area and Street) *</label><textarea
+                                    class="ck-input ck-textarea" id="ckAddress"
+                                    placeholder="Flat no, Building, Street, Area" rows="2"></textarea></div>
+                            <div class="ck-row">
+                                <div class="ck-group"><label class="ck-label">City / District / Town *</label><input
+                                        class="ck-input" id="ckCity" type="text" placeholder="City" /></div>
+                                <div class="ck-group"><label class="ck-label">State *</label>
+                                    <select class="ck-input" id="ckState" style="height:44px;cursor:pointer">
+                                        <option value="">-- Select State --</option>
+                                        <option>Andhra Pradesh</option>
+                                        <option>Arunachal Pradesh</option>
+                                        <option>Assam</option>
+                                        <option>Bihar</option>
+                                        <option>Chhattisgarh</option>
+                                        <option>Goa</option>
+                                        <option>Gujarat</option>
+                                        <option>Haryana</option>
+                                        <option>Himachal Pradesh</option>
+                                        <option>Jharkhand</option>
+                                        <option>Karnataka</option>
+                                        <option>Kerala</option>
+                                        <option>Madhya Pradesh</option>
+                                        <option>Maharashtra</option>
+                                        <option>Manipur</option>
+                                        <option>Meghalaya</option>
+                                        <option>Mizoram</option>
+                                        <option>Nagaland</option>
+                                        <option>Odisha</option>
+                                        <option>Punjab</option>
+                                        <option>Rajasthan</option>
+                                        <option>Sikkim</option>
+                                        <option>Tamil Nadu</option>
+                                        <option>Telangana</option>
+                                        <option>Tripura</option>
+                                        <option>Uttar Pradesh</option>
+                                        <option>Uttarakhand</option>
+                                        <option>West Bengal</option>
+                                        <option>Andaman and Nicobar Islands</option>
+                                        <option>Chandigarh</option>
+                                        <option>Delhi</option>
+                                        <option>Jammu and Kashmir</option>
+                                        <option>Ladakh</option>
+                                        <option>Lakshadweep</option>
+                                        <option>Puducherry</option>
+                                    </select>
                                 </div>
                             </div>
+                            <div class="ck-row">
+                                <div class="ck-group"><label class="ck-label">Email Address *</label><input
+                                        class="ck-input" id="ckEmail" type="email" placeholder="you@example.com"
+                                        autocomplete="email" /></div>
+                                <div class="ck-group"><label class="ck-label">Landmark (Optional)</label><input
+                                        class="ck-input" id="ckLandmark" type="text"
+                                        placeholder="E.g. Near Apollo Hospital" /></div>
+                            </div>
+                            <div class="ck-group"><label class="ck-label">Alternate Phone (Optional)</label><input
+                                    class="ck-input" id="ckAltPhone" type="tel" placeholder="Alternate mobile number"
+                                    maxlength="10" inputmode="numeric" onkeypress="return /[0-9]/.test(event.key)"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'')" /></div>
+                            <div class="ck-group" style="margin-top:4px">
+                                <label class="ck-label" style="display:block;margin-bottom:12px">Address Type</label>
+                                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                                    <label class="fk-addr-type"><input type="radio" name="addrType" value="home"
+                                            checked /><span><i>🏠</i> Home (All day delivery)</span></label>
+                                    <label class="fk-addr-type"><input type="radio" name="addrType"
+                                            value="work" /><span><i>🏢</i> Work (Delivery between 10 AM - 5
+                                            PM)</span></label>
+                                </div>
+                            </div>
+                            <div style="padding-top:16px;display:flex;align-items:center;gap:16px">
+                                <button
+                                    style="padding:16px 48px;background:#fb641b;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;border-radius:2px;font-family:inherit;box-shadow:0 1px 2px 0 rgba(0,0,0,.2)"
+                                    onclick="goToOrderSummary()">SAVE AND DELIVER HERE</button>
+                                <button onclick="exitCheckout()"
+                                    style="background:none;border:none;color:#2874f0;font-weight:600;font-size:14px;cursor:pointer">CANCEL</button>
+                            </div>
                         </div>
-                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-                            <div style="flex:1;height:1px;background:var(--fk-border)"></div>
-                            <span style="font-size:12px;color:#999;font-weight:600">AFTER PAYING — CONFIRM HERE</span>
-                            <div style="flex:1;height:1px;background:var(--fk-border)"></div>
+                    </div>
+
+                    <!-- STEP 3: ORDER SUMMARY -->
+                    <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)" id="ckStep3Wrap">
+                        <div id="ckStep3Head"
+                            style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#fff;cursor:pointer"
+                            onclick="expandStep(3)">
+                            <span id="ckStep3Num"
+                                style="background:#f0f0f0;color:#878787;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">3</span>
+                            <span
+                                style="font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:inherit">ORDER
+                                SUMMARY</span>
+                            <span id="ckStep3Check"
+                                style="margin-left:auto;color:#2874f0;font-size:14px;display:none">✔</span>
                         </div>
-                        <div style="background:#f0f7ff;border:2px solid var(--fk-blue);border-radius:10px;padding:16px">
-                            <div style="font-size:13px;font-weight:700;color:var(--fk-dark);margin-bottom:4px">Enter UTR
-                                / Transaction Reference Number</div>
-                            <div style="font-size:11px;color:#666;margin-bottom:12px">Find this in your UPI app after
-                                payment (e.g. 402517890123)</div>
-                            <input class="ck-input" id="utrInput" type="text"
-                                placeholder="12-digit UTR or transaction ID"
-                                style="font-size:15px;font-weight:700;letter-spacing:1px" />
-                            <button class="ck-place-btn" onclick="submitUtr()"
-                                style="margin-top:12px;background:var(--fk-green)">✅ I'VE PAID — CONFIRM ORDER</button>
+                        <div id="ckStep3Summary"
+                            style="display:none;padding:4px 24px 14px 64px;font-size:14px;color:#212121"></div>
+                        <div id="ckStep3Body" style="display:none;background:#fff">
+                            <div id="ckOrderItems" style="padding:24px"></div>
+                            <div
+                                style="padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center">
+                                <span style="font-size:13px;color:#878787">Order confirmation email will be sent to your
+                                    email</span>
+                                <button
+                                    style="padding:16px 48px;background:#fb641b;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;border-radius:2px;font-family:inherit;box-shadow:0 1px 2px 0 rgba(0,0,0,.2)"
+                                    onclick="goToPayment()">CONTINUE</button>
+                            </div>
                         </div>
-                        <div style="text-align:center;margin-top:10px">
-                            <button onclick="cancelPayment()"
-                                style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;font-family:inherit">Cancel
-                                and go back</button>
+                    </div>
+
+                    <!-- STEP 4: PAYMENT OPTIONS -->
+                    <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)" id="ckStep4Wrap">
+                        <div id="ckStep4Head"
+                            style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#fff">
+                            <span id="ckStep4Num"
+                                style="background:#f0f0f0;color:#878787;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">4</span>
+                            <span
+                                style="font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:inherit">PAYMENT
+                                OPTIONS</span>
+                            <div id="payCountdown"
+                                style="display:none;margin-left:auto;background:#fff3e0;color:#e65100;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:800">
+                                ⏱ 10:00</div>
                         </div>
-                        <p style="text-align:center;font-size:11px;color:#ccc;margin-top:6px">🔒 Secured by UPI — RBI
-                            licensed payment system</p>
+                        <div id="ckStepPayment" style="display:none;padding:24px;background:#fff">
+                            <div
+                                style="background:linear-gradient(135deg,#1a237e,#2874f0);border-radius:8px;padding:18px 20px;margin-bottom:20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+                                <div>
+                                    <div style="font-size:12px;opacity:.8;margin-bottom:4px">Pay to</div>
+                                    <div style="font-size:15px;font-weight:700" id="payMerchantName">Shop</div>
+                                    <div style="font-size:12px;opacity:.8;margin-top:2px" id="payMerchantUpi"></div>
+                                </div>
+                                <div style="text-align:right">
+                                    <div style="font-size:12px;opacity:.8;margin-bottom:4px">Total Amount</div>
+                                    <div style="font-size:28px;font-weight:900" id="payTotalDisplay">₹0</div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:20px">
+                                <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px">Pay instantly
+                                    using your UPI app:</div>
+                                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+                                    <button class="upi-app-btn" onclick="openUpiApp('gpay')">
+                                        <div class="upi-app-icon"
+                                            style="background:#fff;color:#1a73e8;font-weight:900;font-size:18px">G Pay
+                                        </div>
+                                        <div class="upi-app-name">Google Pay</div>
+                                    </button>
+                                    <button class="upi-app-btn" onclick="openUpiApp('phonepe')">
+                                        <div class="upi-app-icon"
+                                            style="background:#5f259f;color:#fff;font-weight:900;font-size:14px">Pe
+                                        </div>
+                                        <div class="upi-app-name">PhonePe</div>
+                                    </button>
+                                    <button class="upi-app-btn" onclick="openUpiApp('paytm')">
+                                        <div class="upi-app-icon"
+                                            style="background:#002970;color:#00baf2;font-weight:900;font-size:13px">
+                                            Paytm</div>
+                                        <div class="upi-app-name">Paytm</div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+                                <div style="flex:1;height:1px;background:#e0e0e0"></div><span
+                                    style="font-size:12px;color:#999;font-weight:600">OR SCAN QR CODE</span>
+                                <div style="flex:1;height:1px;background:#e0e0e0"></div>
+                            </div>
+                            <div style="text-align:center;margin-bottom:20px">
+                                <div id="qrLoading" style="padding:30px;color:#999;font-size:13px">⏳ Generating payment
+                                    QR...</div>
+                                <div id="qrContainer" style="display:none"><img id="dynamicQrImg" src=""
+                                        alt="UPI QR Code"
+                                        style="width:200px;height:200px;border:3px solid #e8f0fe;border-radius:12px;padding:6px" />
+                                    <div style="margin-top:8px;font-size:12px;color:#666">Scan with any UPI app</div>
+                                    <div id="upiIdBadge"
+                                        style="margin-top:8px;display:inline-block;background:#e8f0fe;color:#2874f0;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700">
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+                                <div style="flex:1;height:1px;background:#e0e0e0"></div><span
+                                    style="font-size:12px;color:#999;font-weight:600">AFTER PAYING — CONFIRM HERE</span>
+                                <div style="flex:1;height:1px;background:#e0e0e0"></div>
+                            </div>
+                            <div style="background:#f0f7ff;border:2px solid #2874f0;border-radius:8px;padding:16px">
+                                <div style="font-size:13px;font-weight:700;color:#212121;margin-bottom:4px">Enter UTR /
+                                    Transaction Reference Number</div>
+                                <div style="font-size:11px;color:#666;margin-bottom:12px">Find this in your UPI app
+                                    after payment (e.g. 402517890123)</div>
+                                <input class="ck-input" id="utrInput" type="text" placeholder="12-digit UTR"
+                                    style="font-size:15px;font-weight:700;letter-spacing:1px" />
+                                <button
+                                    style="width:100%;padding:16px;background:#fb641b;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;border-radius:2px;font-family:inherit;margin-top:12px"
+                                    onclick="submitUtr()">CONFIRM PAYMENT</button>
+                            </div>
+                            <div style="text-align:center;margin-top:10px"><button onclick="cancelPayment()"
+                                    style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;font-family:inherit">Cancel
+                                    and go back</button></div>
+                            <p style="text-align:center;font-size:11px;color:#ccc;margin-top:6px">🔒 Secured by UPI —
+                                RBI licensed payment system</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Price Details (sticky) -->
+                <div style="width:380px;flex-shrink:0;position:sticky;top:16px" class="ck-price-col">
+                    <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)">
+                        <div style="padding:16px 24px;border-bottom:1px solid #e0e0e0"><span
+                                style="font-size:12px;font-weight:500;color:#878787;text-transform:uppercase;letter-spacing:.5px">PRICE
+                                DETAILS</span></div>
+                        <div style="padding:16px 24px">
+                            <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:16px">
+                                <span>Price (<span id="ckItemCount">0</span> item<span
+                                        id="ckItemCountS">s</span>)</span><span id="ckSubtotal">₹0</span>
+                            </div>
+                            <div
+                                style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:16px;color:#388e3c">
+                                <span>Discount</span><span id="ckDiscount">− ₹0</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:16px">
+                                <span>Delivery Charges</span><span style="color:#388e3c">FREE</span>
+                            </div>
+                            <div
+                                style="display:flex;justify-content:space-between;font-size:16px;font-weight:600;padding:16px 0;border-top:1px dashed #e0e0e0;border-bottom:1px dashed #e0e0e0">
+                                <span>Total Amount</span><span id="ckTotal">₹0</span>
+                            </div>
+                            <div style="color:#388e3c;font-size:14px;font-weight:500;margin-top:16px">You will save
+                                <span id="ckSavings">₹0</span> on this order
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style="padding:16px 24px;display:flex;align-items:center;gap:10px;color:#878787;font-size:13px;margin-top:12px">
+                        <span style="font-size:26px">🛡️</span>
+                        <span>Safe and Secure Payments. Easy returns. 100% Authentic products.</span>
                     </div>
                 </div>
             </div>
 
             <!-- Pending Verification -->
-            <div id="ckPending" style="display:none;text-align:center;padding:50px 20px">
+            <div id="ckPending"
+                style="display:none;text-align:center;padding:50px 20px;max-width:500px;margin:40px auto;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
                 <div style="font-size:72px;margin-bottom:16px">⏳</div>
-                <h2 style="font-size:24px;font-weight:900;color:var(--fk-blue);margin-bottom:10px">Payment Submitted for
+                <h2 style="font-size:24px;font-weight:900;color:#2874f0;margin-bottom:10px">Payment Submitted for
                     Verification</h2>
                 <p style="color:#555;font-size:15px;margin-bottom:8px">Your payment details have been received!</p>
                 <div
                     style="background:#e8f0fe;border-radius:10px;padding:16px 24px;display:inline-block;margin:16px auto;max-width:420px;text-align:left">
                     <div style="font-size:13px;color:#1a237e;margin-bottom:8px"><b>📋 Order Ref:</b> <span
-                            id="confirmedTxnRef"
-                            style="font-family:monospace;font-size:12px;color:var(--fk-blue)"></span></div>
+                            id="confirmedTxnRef" style="font-family:monospace;font-size:12px;color:#2874f0"></span>
+                    </div>
                     <div style="font-size:13px;color:#1a237e;margin-bottom:8px"><b>💰 Amount:</b> <span
                             id="confirmedAmount"></span></div>
                     <div style="font-size:13px;color:#1a237e;margin-bottom:8px"><b>🔢 Your UTR:</b> <span
-                            id="confirmedUtr"
-                            style="font-family:monospace;font-weight:700;color:var(--fk-green)"></span></div>
+                            id="confirmedUtr" style="font-family:monospace;font-weight:700;color:#388e3c"></span></div>
                     <div style="font-size:13px;color:#1a237e"><b>📧 Email:</b> <span id="confirmedEmail"></span></div>
                 </div>
                 <div
                     style="background:#fff8e1;border:1px solid #ffd54f;border-radius:8px;padding:12px 20px;display:inline-block;margin-bottom:20px;font-size:13px;color:#795548">
-                    ⚠️ Admin will verify your payment within <b>5–30 minutes</b>. Keep your UTR safe.
-                </div>
-                <br />
-                <button class="ck-place-btn" style="max-width:250px;display:inline-block;margin-top:12px"
+                    ⚠️ Admin will verify your payment within <b>5–30 minutes</b>. Keep your UTR safe.</div><br />
+                <button
+                    style="padding:16px 48px;background:#fb641b;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;border-radius:2px;font-family:inherit;margin-top:12px"
                     onclick="exitCheckout();cart=[];saveCart()">Continue Shopping →</button>
             </div>
 
-            <!-- Success screen (instant confirm) -->
-            <div id="ckSuccess" style="display:none;text-align:center;padding:60px 20px">
+            <!-- Success screen -->
+            <div id="ckSuccess"
+                style="display:none;text-align:center;padding:60px 20px;max-width:500px;margin:40px auto;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
                 <div style="font-size:80px;margin-bottom:20px">🎉</div>
-                <h2 style="font-size:28px;font-weight:900;color:var(--fk-green);margin-bottom:12px">Order Placed
-                    Successfully!</h2>
+                <h2 style="font-size:28px;font-weight:900;color:#388e3c;margin-bottom:12px">Order Placed Successfully!
+                </h2>
                 <p style="color:#666;font-size:16px;margin-bottom:8px">Thank you! Your order has been confirmed.</p>
                 <p style="color:#666;font-size:14px;margin-bottom:28px">Confirmation sent to <strong
                         id="successEmail"></strong></p>
@@ -1796,7 +1863,8 @@
                     <div style="font-size:13px;color:#558b2f;font-weight:700">Estimated Delivery: <span
                             style="font-size:16px">3-5 Business Days 🚚</span></div>
                 </div><br />
-                <button class="ck-place-btn" style="max-width:250px;display:inline-block"
+                <button
+                    style="padding:16px 48px;background:#fb641b;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;border-radius:2px;font-family:inherit"
                     onclick="exitCheckout();cart=[];saveCart()">Continue Shopping →</button>
             </div>
         </div>
@@ -2050,44 +2118,50 @@
         function showToast(msg) { const t = document.getElementById('cartToast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
         // ── Checkout ──
+        function expandStep(n) { /* allow clicking completed step headers to re-expand */ }
+
+        function setStepActive(n) {
+            [2, 3, 4].forEach(s => {
+                const head = document.getElementById('ckStep' + s + 'Head');
+                const num = document.getElementById('ckStep' + s + 'Num');
+                const body = document.getElementById(s === 2 ? 'ckStep2Body' : s === 3 ? 'ckStep3Body' : 'ckStepPayment');
+                const check = document.getElementById('ckStep' + s + 'Check');
+                const summary = document.getElementById('ckStep' + s + 'Summary');
+                if (s === n) {
+                    head.style.background = '#2874f0'; head.style.color = '#fff';
+                    num.style.background = '#fff'; num.style.color = '#2874f0';
+                    if (body) body.style.display = (s === 4 ? 'block' : 'block');
+                    if (check) check.style.display = 'none';
+                    if (summary) summary.style.display = 'none';
+                } else if (s < n) {
+                    head.style.background = '#fff'; head.style.color = '#878787';
+                    num.style.background = '#f0f0f0'; num.style.color = '#2874f0';
+                    if (body) body.style.display = 'none';
+                    if (check) check.style.display = '';
+                } else {
+                    head.style.background = '#fff'; head.style.color = '#878787';
+                    num.style.background = '#f0f0f0'; num.style.color = '#878787';
+                    if (body) body.style.display = 'none';
+                    if (check) check.style.display = 'none';
+                    if (summary) summary.style.display = 'none';
+                }
+            });
+        }
+
         function goToCheckout() {
             if (!cart.length) { showToast('🛒 Cart is empty!'); return }
             closeCart();
             document.getElementById('mainShopContent').style.display = 'none';
             document.getElementById('shopFooter').style.display = 'none';
             document.getElementById('checkoutPage').classList.add('active');
-            
-            // Accordion states
-            document.getElementById('ckStepAddressWrap').style.display = '';
-            document.getElementById('ckStepAddressHead').style.background = '#2874f0';
-            document.getElementById('ckStepAddressHead').style.color = '#fff';
-            document.getElementById('ckStepAddressNum').style.background = '#fff';
-            document.getElementById('ckStepAddressNum').style.color = '#2874f0';
-            document.getElementById('ckStepAddressCheck').style.display = 'none';
-            document.getElementById('ckStepAddressSummary').style.display = 'none';
-            document.getElementById('ckStepAddress').style.display = 'block';
-
-            document.getElementById('ckStepOrderHead').style.background = '#fff';
-            document.getElementById('ckStepOrderHead').style.color = '#878787';
-            document.getElementById('ckStepOrderNum').style.background = '#f0f0f0';
-            document.getElementById('ckStepOrderNum').style.color = '#2874f0';
-            document.getElementById('ckOrderItemsWrap').style.display = 'none';
-            document.getElementById('ckStepOrderCheck').style.display = 'none';
-            document.getElementById('ckStepOrderSummary').style.display = 'none';
-
-            document.getElementById('ckStepPaymentHead').style.background = '#fff';
-            document.getElementById('ckStepPaymentHead').style.color = '#878787';
-            document.getElementById('ckStepPaymentNum').style.background = '#f0f0f0';
-            document.getElementById('ckStepPaymentNum').style.color = '#2874f0';
-            document.querySelector('.ck-layout').style.display = 'none';
-                    document.getElementById('ckStepPayment').style.display = 'none';
-            document.getElementById('payCountdown').style.display = 'none';
-
             document.getElementById('ckPending').style.display = 'none';
             document.getElementById('ckSuccess').style.display = 'none';
-            
+            document.getElementById('payCountdown').style.display = 'none';
+            document.getElementById('ckStepPayment').style.display = 'none';
             document.querySelector('.ck-layout').style.display = 'flex';
-            document.getElementById('ckRightSidebar').style.display = 'block';
+
+            // Set Step 2 (Address) active
+            setStepActive(2);
 
             if (visitorCity) {
                 document.getElementById('locationDetected').style.display = 'block';
@@ -2101,32 +2175,33 @@
                 const origPrice = parseFloat(p.original_price) || parseFloat(c.price) || 0;
                 const salePrice = parseFloat(c.price) || 0;
                 const disc = origPrice > salePrice ? Math.round(((origPrice - salePrice) / origPrice) * 100) : 0;
-                return `<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
-                    <img src="${c.image_url||''}" style="width:64px;height:64px;object-fit:cover;border-radius:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
+                const delivDate = getDeliveryDate();
+                return `<div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #f0f0f0">
+                    <img src="${c.image_url || ''}" style="width:72px;height:72px;object-fit:cover;border-radius:4px;border:1px solid #f0f0f0" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
                     <div style="flex:1">
-                        <div style="font-size:13px;font-weight:600;margin-bottom:2px">${c.name||'Product'}</div>
-                        ${disc > 0 ? '<span style="font-size:11px;background:#e8f5e9;color:#388e3c;padding:2px 6px;border-radius:3px;font-weight:700">' + disc + '% OFF</span>' : ''}
-                        <div style="font-size:11px;color:#878787;margin-top:4px">Qty: ${c.qty} &nbsp;|&nbsp; Delivery by <b>${getDeliveryDate()}</b></div>
-                    </div>
-                    <div style="text-align:right">
-                        <div style="font-weight:800;font-size:14px">₹${(salePrice * c.qty).toLocaleString('en-IN')}</div>
-                        ${origPrice > salePrice ? '<div style="font-size:11px;color:#878787;text-decoration:line-through">₹' + (origPrice * c.qty).toLocaleString('en-IN') + '</div>' : ''}
+                        <div style="font-size:14px;color:#212121;margin-bottom:6px">${c.name || 'Product'}</div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                            <span style="font-weight:600;font-size:14px">₹${salePrice.toLocaleString('en-IN')}</span>
+                            ${origPrice > salePrice ? '<span style="font-size:12px;color:#878787;text-decoration:line-through">₹' + origPrice.toLocaleString('en-IN') + '</span><span style="font-size:12px;color:#388e3c;font-weight:600">' + disc + '% Off</span>' : ''}
+                        </div>
+                        <div style="font-size:12px;color:#878787">Qty: ${c.qty}</div>
+                        <div style="font-size:13px;margin-top:8px;color:#212121">Delivery by <b style="color:#388e3c">${delivDate}</b> | <span style="color:#388e3c;font-weight:600">Free</span> <span style="text-decoration:line-through;color:#878787;font-size:12px">₹40</span></div>
                     </div>
                 </div>`;
             }).join('');
             // Calculate totals
-            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty)||1), 0);
-            const total = cart.reduce((s, c) => s + (parseFloat(c.price)||0) * (parseInt(c.qty)||1), 0);
+            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty) || 1), 0);
+            const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
             const origTotal = cart.reduce((s, c) => {
                 const p = allProducts.find(x => x.id === c.id) || {};
-                return s + (parseFloat(p.original_price) || parseFloat(c.price) || 0) * (parseInt(c.qty)||1);
+                return s + (parseFloat(p.original_price) || parseFloat(c.price) || 0) * (parseInt(c.qty) || 1);
             }, 0);
             const discount = Math.max(0, origTotal - total);
             const el = id => document.getElementById(id);
             el('ckItemCount').textContent = itemCount;
             el('ckItemCountS').textContent = itemCount === 1 ? '' : 's';
             el('ckSubtotal').textContent = '₹' + origTotal.toLocaleString('en-IN');
-            el('ckDiscount').textContent = '-₹' + discount.toLocaleString('en-IN');
+            el('ckDiscount').textContent = '− ₹' + discount.toLocaleString('en-IN');
             el('ckTotal').textContent = '₹' + total.toLocaleString('en-IN');
             el('ckSavings').textContent = '₹' + discount.toLocaleString('en-IN');
             window.scrollTo(0, 0);
@@ -2146,7 +2221,7 @@
         // ── UPI Payment State ──
         let currentTxnRef = null, payCountdownInterval = null, currentPayTotal = 0, currentUpiUri = null;
 
-        
+
         function goToOrderSummary() {
             const gv = id => document.getElementById(id).value.trim();
             if (!gv('ckName')) { showToast('❌ Please enter your name'); return; }
@@ -2157,49 +2232,39 @@
             if (!gv('ckState')) { showToast('❌ Please select your state'); return; }
             if (!gv('ckEmail')) { showToast('❌ Please enter your email'); return; }
 
-            // Collapse Address, show summary
-            document.getElementById('ckStepAddress').style.display = 'none';
-            document.getElementById('ckStepAddressHead').style.background = '#fff';
-            document.getElementById('ckStepAddressHead').style.color = '#878787';
-            document.getElementById('ckStepAddressNum').style.background = '#f0f0f0';
-            document.getElementById('ckStepAddressNum').style.color = '#2874f0';
-            document.getElementById('ckStepAddressCheck').style.display = '';
-            
-            const summary = `<strong style="color:#212121">${gv('ckName')} ${gv('ckPhone')}</strong><br><span style="color:#212121;font-weight:400">${gv('ckAddress')}, ${gv('ckLocality')||''} ${gv('ckCity')}, ${gv('ckState')} - ${gv('ckPincode')}</span>`;
-            document.getElementById('ckStepAddressSummary').innerHTML = summary;
-            document.getElementById('ckStepAddressSummary').style.display = 'block';
+            // Show summary text under Step 2
+            const summary = `<strong>${gv('ckName')}</strong> ${gv('ckPhone')}<br><span style="color:#878787">${gv('ckAddress')}, ${gv('ckLocality') || ''} ${gv('ckCity')}, ${gv('ckState')} - ${gv('ckPincode')}</span>`;
+            document.getElementById('ckStep2Summary').innerHTML = summary;
+            document.getElementById('ckStep2Summary').style.display = 'block';
 
-            // Open Order Summary
-            document.getElementById('ckStepOrderHead').style.background = '#2874f0';
-            document.getElementById('ckStepOrderHead').style.color = '#fff';
-            document.getElementById('ckStepOrderNum').style.background = '#fff';
-            document.getElementById('ckStepOrderNum').style.color = '#2874f0';
-            document.getElementById('ckOrderItemsWrap').style.display = 'block';
+            // Set Step 3 (Order Summary) active
+            setStepActive(3);
+            document.getElementById('ckStep3Body').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('ckStep3Wrap').offsetTop - 16, behavior: 'smooth' });
         }
 
         function goToPayment() {
             if (!shopData || !shopData.upi_id) { showToast('⚠️ No UPI ID configured. Please contact shop owner.'); }
-            
-            // Collapse Order Summary, show summary text
-            document.getElementById('ckOrderItemsWrap').style.display = 'none';
-            document.getElementById('ckStepOrderHead').style.background = '#fff';
-            document.getElementById('ckStepOrderHead').style.color = '#878787';
-            document.getElementById('ckStepOrderNum').style.background = '#f0f0f0';
-            document.getElementById('ckStepOrderNum').style.color = '#2874f0';
-            document.getElementById('ckStepOrderCheck').style.display = '';
-            
-            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty)||1), 0);
-            document.getElementById('ckStepOrderSummary').innerHTML = `${itemCount} item<span style="font-weight:400">s</span>`;
-            document.getElementById('ckStepOrderSummary').style.display = 'block';
+
+            // Show summary text under Step 3
+            const itemCount = cart.reduce((s, c) => s + (parseInt(c.qty) || 1), 0);
+            document.getElementById('ckStep3Summary').innerHTML = `${itemCount} item${itemCount === 1 ? '' : 's'}`;
+            document.getElementById('ckStep3Summary').style.display = 'block';
+
+            // Set Step 4 (Payment) active
+            setStepActive(4);
+            document.getElementById('ckStepPayment').style.display = 'block';
+            document.getElementById('payCountdown').style.display = '';
+            window.scrollTo({ top: document.getElementById('ckStep4Wrap').offsetTop - 16, behavior: 'smooth' });
 
             initiateUpiPayment();
         }
 
-                async function initiateUpiPayment() {
+        async function initiateUpiPayment() {
             const gv = id => document.getElementById(id).value.trim();
             const total = cart.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.qty) || 1), 0);
             currentPayTotal = total;
-            
+
             // Open Payment Step
             document.getElementById('ckStepPaymentHead').style.background = '#2874f0';
             document.getElementById('ckStepPaymentHead').style.color = '#fff';
@@ -2255,7 +2320,7 @@
         }
 
         function openUpiApp(app) {
-            if (!currentUpiUri) { showToast('❌ Payment not started'); return; }
+            if (!currentUpiUri) { showToast('❌ Payment not started'); rn; }
             let url = currentUpiUri;
             if (app === 'gpay') url = url.replace('upi://', 'gpay://upi/');
             else if (app === 'phonepe') url = url.replace('upi://', 'phonepe://');
