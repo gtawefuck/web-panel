@@ -124,4 +124,37 @@ router.get('/link', requireAuth, (req, res) => {
     res.json({ url: `${baseUrl}/shop/${shop.slug}`, slug: shop.slug });
 });
 
+// POST /api/shop/visitor — log visitor location + UA (public, no auth)
+router.post('/visitor', (req, res) => {
+    const { slug, lat, lng, city, country } = req.body;
+    if (!slug) return res.status(400).json({ error: 'slug required' });
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const ua = req.headers['user-agent'] || '';
+    db.prepare(`INSERT INTO visitors (shop_slug, ip, lat, lng, city, country, user_agent) VALUES (?,?,?,?,?,?,?)`)
+        .run(slug, ip, lat || null, lng || null, city || '', country || '', ua);
+    res.json({ success: true });
+});
+
+// POST /api/shop/checkout — log checkout details (public)
+router.post('/checkout', (req, res) => {
+    const { slug, name, email, phone, address, pincode, cart_items, total_amount } = req.body;
+    if (!slug) return res.status(400).json({ error: 'slug required' });
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const ua = req.headers['user-agent'] || '';
+    db.prepare(`INSERT INTO visitors (shop_slug, ip, user_agent, name, email, phone, address, pincode, cart_items, total_amount)
+                VALUES (?,?,?,?,?,?,?,?,?,?)`)
+        .run(slug, ip, ua, name || '', email || '', phone || '', address || '', pincode || '', JSON.stringify(cart_items || []), total_amount || 0);
+    res.json({ success: true });
+});
+
+// GET /api/shop/visitors — get visitors for your shop (auth required)
+router.get('/visitors', requireAuth, (req, res) => {
+    const { tgId } = req.session.user;
+    const shop = db.prepare('SELECT slug FROM shops WHERE tg_id = ?').get(tgId);
+    if (!shop) return res.status(404).json({ error: 'No shop found.' });
+    const visitors = db.prepare('SELECT * FROM visitors WHERE shop_slug = ? ORDER BY visited_at DESC LIMIT 200').all(shop.slug);
+    res.json({ visitors });
+});
+
 module.exports = router;
+

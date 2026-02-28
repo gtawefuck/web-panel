@@ -66,6 +66,25 @@ db.exec(`
     in_stock INTEGER DEFAULT 1,
     FOREIGN KEY (shop_id) REFERENCES shops(id)
   );
+
+  CREATE TABLE IF NOT EXISTS visitors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    shop_slug TEXT NOT NULL,
+    ip TEXT,
+    lat REAL,
+    lng REAL,
+    city TEXT,
+    country TEXT,
+    user_agent TEXT,
+    name TEXT,
+    email TEXT,
+    phone TEXT,
+    address TEXT,
+    pincode TEXT,
+    cart_items TEXT,
+    total_amount INTEGER,
+    visited_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 module.exports = db;
