@@ -41,8 +41,9 @@ function setupUI() {
         loadUserAccess();
     }
 
-    // Show My Shop for ALL roles
+    // Show My Shop + Payment Logs for ALL roles
     document.getElementById('navMyShop').style.display = '';
+    document.getElementById('navPayLogs').style.display = '';
     loadMyShop();
 }
 
@@ -256,6 +257,8 @@ async function loadMyShop() {
         const qrPrev = document.getElementById('qrPreview');
         const qrNo = document.getElementById('qrNoImg');
         if (upiEl) upiEl.value = data.shop.upi_id || '';
+        const mnEl = document.getElementById('shopMerchantName');
+        if (mnEl) mnEl.value = data.shop.merchant_name || '';
         if (qrPrev && data.shop.payment_qr) {
             qrPrev.src = data.shop.payment_qr;
             qrPrev.style.display = 'block';
@@ -290,11 +293,12 @@ function renderProductGrid() {
 // ── Payment Settings ─────────────────────────────────────────────────────────
 async function savePaymentSettings() {
     const upi_id = document.getElementById('shopUpiId').value.trim();
+    const merchant_name = document.getElementById('shopMerchantName')?.value.trim() || '';
     const payment_qr = document.getElementById('qrPreview').src.includes('/uploads/') ? document.getElementById('qrPreview').src : '';
     try {
-        const res = await fetch('/api/shop/settings', {
+        const res = await fetch('/api/pay/settings', {
             method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ upi_id, payment_qr })
+            body: JSON.stringify({ upi_id, payment_qr, merchant_name })
         });
         if (res.ok) alert('✅ Payment settings saved!');
         else alert('❌ Failed to save.');
@@ -457,5 +461,53 @@ async function logout() {
 document.getElementById('editDrawer').addEventListener('click', function (e) {
     if (e.target === this) closeEditDrawer();
 });
+
+// ── Payment Logs ───────────────────────────────────────────────────────────────
+async function loadPaymentLogs() {
+    try {
+        const res = await fetch('/api/pay/transactions');
+        if (!res.ok) return;
+        const { transactions } = await res.json();
+        const tbody = document.getElementById('payLogsBody');
+        if (!transactions.length) {
+            tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">💰</div>No transactions yet</div></td></tr>';
+            return;
+        }
+        const statusBadge = (s) => {
+            const colors = { pending: '#f59e0b', utr_submitted: '#3b82f6', verified: '#10b981', failed: '#ef4444', expired: '#6b7280' };
+            const labels = { pending: '⏳ Pending', utr_submitted: '📤 UTR Submitted', verified: '✅ Verified', failed: '❌ Failed', expired: '⏰ Expired' };
+            return `<span style="background:${colors[s] || '#999'}22;color:${colors[s] || '#999'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap">${labels[s] || s}</span>`;
+        };
+        tbody.innerHTML = transactions.map(t => `<tr>
+            <td style="font-family:monospace;font-size:11px">${t.txn_ref.slice(-8)}</td>
+            <td><div style="font-size:12px;font-weight:600">${t.customer_name || '—'}</div><div style="font-size:10px;color:var(--text-muted)">${t.customer_phone || ''} ${t.customer_email || ''}</div></td>
+            <td style="font-weight:800">₹${parseInt(t.amount).toLocaleString('en-IN')}</td>
+            <td style="font-family:monospace;font-size:12px;font-weight:700;color:${t.utr ? 'var(--accent)' : 'var(--text-muted)'}">${t.utr || '—'}</td>
+            <td>${statusBadge(t.status)}</td>
+            <td style="font-size:11px;color:var(--text-muted)">${fmtDate(t.created_at)}</td>
+            <td>${t.status === 'utr_submitted' ? `<button class="btn btn-primary btn-sm" onclick="verifyTxn(${t.id},'verified')" style="margin-right:4px;font-size:10px">✅ Verify</button><button class="btn btn-danger btn-sm" onclick="verifyTxn(${t.id},'failed')" style="font-size:10px">❌ Reject</button>` : t.status === 'pending' ? `<button class="btn btn-danger btn-sm" onclick="verifyTxn(${t.id},'failed')" style="font-size:10px">❌ Cancel</button>` : `<span style="font-size:11px;color:var(--text-muted)">${t.verified_at ? 'at ' + fmtDate(t.verified_at) : '—'}</span>`}</td>
+        </tr>`).join('');
+    } catch (e) { console.error('loadPaymentLogs:', e); }
+}
+
+async function verifyTxn(id, status) {
+    const notes = status === 'verified' ? 'Verified by admin' : prompt('Reason for rejection (optional):', 'Payment not received');
+    if (notes === null && status === 'failed') return; // user cancelled
+    try {
+        const res = await fetch('/api/pay/transactions/' + id, {
+            method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status, notes: notes || '' })
+        });
+        if (res.ok) { alert('✅ Transaction ' + status + '!'); loadPaymentLogs(); }
+        else { const d = await res.json(); alert('❌ ' + (d.error || 'Failed')); }
+    } catch { alert('❌ Network error.'); }
+}
+
+// Override showPage to load pay logs
+const _showPage = showPage;
+window.showPage = function (name) {
+    _showPage(name);
+    if (name === 'paylogs') loadPaymentLogs();
+};
 
 init();

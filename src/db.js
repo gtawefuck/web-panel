@@ -87,6 +87,25 @@ db.exec(`
     total_amount INTEGER,
     visited_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    shop_slug TEXT NOT NULL,
+    txn_ref TEXT UNIQUE NOT NULL,
+    amount INTEGER NOT NULL,
+    merchant_upi TEXT NOT NULL,
+    customer_name TEXT,
+    customer_email TEXT,
+    customer_phone TEXT,
+    delivery_address TEXT,
+    cart_items TEXT,
+    utr TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME,
+    verified_at DATETIME,
+    notes TEXT
+  );
 `);
 
 module.exports = db;

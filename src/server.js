@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/shop', require('./routes/shop'));
+app.use('/api/pay', require('./routes/pay'));
 
 // Per-user Flipkart shop pages — /shop/:slug
 app.get('/shop/:slug', (req, res) => {

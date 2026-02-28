@@ -593,6 +593,9 @@
             <button class="nav-item" id="navMyShop" onclick="showPage('myshop')" style="display:none">
                 <span class="icon">🛍️</span> My Shop
             </button>
+            <button class="nav-item" id="navPayLogs" onclick="showPage('paylogs')" style="display:none">
+                <span class="icon">💰</span> Payment Logs
+            </button>
         </div>
 
         <!-- Admin nav items (hidden for regular users) -->
@@ -826,6 +829,48 @@
             </div>
         </div>
 
+        <!-- Payment Logs Page -->
+        <div class="page" id="page-paylogs">
+            <div class="page-header">
+                <h2>💰 Payment Logs</h2>
+                <p>View all customer payments and verify transactions.</p>
+            </div>
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="flex-between">
+                        <h3>All Transactions</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="loadPaymentLogs()">🔄 Refresh</button>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>UTR</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payLogsBody">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state">
+                                            <div class="icon">💰</div>No transactions yet
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- My Shop Page -->
         <div class="page" id="page-myshop">
             <div class="page-header">
@@ -880,9 +925,14 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
                         <div>
                             <div class="ed-group">
-                                <label class="ed-label">UPI ID</label>
+                                <label class="ed-label">UPI ID (required)</label>
                                 <input class="ed-input" id="shopUpiId" type="text"
                                     placeholder="yourname@upi or yourname@paytm" />
+                            </div>
+                            <div class="ed-group">
+                                <label class="ed-label">Merchant Name</label>
+                                <input class="ed-input" id="shopMerchantName" type="text"
+                                    placeholder="Your Shop Name" />
                             </div>
                             <div class="ed-group">
                                 <label class="ed-label">Upload Payment QR Code</label>
