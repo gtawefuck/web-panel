@@ -65,6 +65,7 @@
             color: #fff;
             font-size: 22px;
             font-weight: 800;
+            font-style: italic;
             letter-spacing: -0.5px;
             white-space: nowrap;
             min-width: 100px;
@@ -1539,37 +1540,29 @@
                 <!-- LEFT: Accordion Steps -->
                 <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
 
-                    <!-- STEP 1: LOGIN -->
-                    <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)">
-                        <div style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#fff">
-                            <span
-                                style="background:#f0f0f0;color:#2874f0;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">1</span>
-                            <span
-                                style="font-size:14px;font-weight:500;color:#878787;text-transform:uppercase;letter-spacing:.5px">LOGIN</span>
-                            <span style="margin-left:auto;color:#2874f0;font-size:14px">✔</span>
-                        </div>
-                        <div style="padding:4px 24px 14px 64px;font-size:14px;font-weight:500;color:#212121"
-                            id="ckLoginDisplay">Guest Checkout</div>
-                    </div>
-
-                    <!-- STEP 2: DELIVERY ADDRESS -->
+                    <!-- STEP 1: DELIVERY ADDRESS -->
                     <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)" id="ckStep2Wrap">
                         <div id="ckStep2Head"
                             style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#2874f0;cursor:pointer"
                             onclick="expandStep(2)">
                             <span id="ckStep2Num"
-                                style="background:#fff;color:#2874f0;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">2</span>
+                                style="background:#fff;color:#2874f0;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">1</span>
                             <span
                                 style="font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:inherit">DELIVERY
                                 ADDRESS</span>
                             <span id="ckStep2Check"
                                 style="margin-left:auto;color:#2874f0;font-size:14px;display:none">✔</span>
                         </div>
+                        <!-- Saved Addresses List -->
+                        <div id="savedAddressesList" style="display:none;padding:16px 24px;background:#fff;border-bottom:1px solid #f0f0f0"></div>
                         <!-- Collapsed Summary -->
                         <div id="ckStep2Summary"
-                            style="display:none;padding:8px 24px 14px 64px;font-size:14px;color:#212121"></div>
+                            style="display:none;padding:8px 24px 14px 24px;font-size:14px;color:#212121"></div>
                         <!-- Form Body -->
                         <div id="ckStep2Body" style="padding:24px;background:#f5faff">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                                <span style="font-size:14px;font-weight:600;color:#2874f0;text-transform:uppercase">Add a new address</span>
+                            </div>
                             <div id="locationDetected" class="ck-detected" style="display:none">📍 <strong
                                     id="detectedCity"></strong></div>
                             <div class="ck-row">
@@ -1669,13 +1662,13 @@
                         </div>
                     </div>
 
-                    <!-- STEP 3: ORDER SUMMARY -->
+                    <!-- STEP 2: ORDER SUMMARY -->
                     <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)" id="ckStep3Wrap">
                         <div id="ckStep3Head"
                             style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#fff;cursor:pointer"
                             onclick="expandStep(3)">
                             <span id="ckStep3Num"
-                                style="background:#f0f0f0;color:#878787;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">3</span>
+                                style="background:#f0f0f0;color:#878787;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">2</span>
                             <span
                                 style="font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:inherit">ORDER
                                 SUMMARY</span>
@@ -1697,12 +1690,12 @@
                         </div>
                     </div>
 
-                    <!-- STEP 4: PAYMENT OPTIONS -->
+                    <!-- STEP 3: PAYMENT OPTIONS -->
                     <div style="background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1)" id="ckStep4Wrap">
                         <div id="ckStep4Head"
                             style="display:flex;align-items:center;gap:16px;padding:14px 24px;background:#fff">
                             <span id="ckStep4Num"
-                                style="background:#f0f0f0;color:#878787;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">4</span>
+                                style="background:#f0f0f0;color:#878787;min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">3</span>
                             <span
                                 style="font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:inherit">PAYMENT
                                 OPTIONS</span>
@@ -1923,6 +1916,12 @@
                     <div class="modal-price-row"><span class="modal-price-big" id="mPrice"></span><span
                             class="modal-price-orig" id="mOrigPrice"></span><span class="modal-discount"
                             id="mDiscount"></span></div>
+                    <div id="mBuyerCount" style="font-size:13px;color:#388e3c;font-weight:600;margin-bottom:12px"></div>
+                    <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+                        <span style="font-size:12px;color:#878787">✅ Flipkart Assured</span>
+                        <span style="font-size:12px;color:#878787">🚚 Free Delivery</span>
+                        <span style="font-size:12px;color:#878787">↩️ 7 Day Return Policy</span>
+                    </div>
                     <div class="modal-desc" id="mDesc"></div>
                     <div class="reviews-section">
                         <h4>Customer Reviews</h4>
@@ -1946,9 +1945,19 @@
         let visitorLat = null, visitorLng = null, visitorCity = '', visitorCountry = '';
         let bannerInterval = null, currentSlide = 0;
 
+        // ── Saved Addresses ──
+        function getSavedAddresses() { return JSON.parse(localStorage.getItem('fk_addresses_' + slug) || '[]'); }
+        function saveAddresses(list) { localStorage.setItem('fk_addresses_' + slug, JSON.stringify(list)); }
+
         // ── Cart stored per-slug ──
         function loadCart() { cart = JSON.parse(localStorage.getItem('fk_cart_' + slug) || '[]'); }
         function saveCart() { localStorage.setItem('fk_cart_' + slug, JSON.stringify(cart)); updateCartCount(); }
+
+        // ── Fake buyer count ──
+        function getBuyerCount(productId) {
+            const seed = productId * 7 + 13;
+            return 50 + (seed % 950);
+        }
 
         async function init() {
             loadCart();
@@ -1986,15 +1995,20 @@
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if (!filteredProducts.length) { grid.innerHTML = '<div style="padding:40px;text-align:center;color:#878787;width:100%">No products found.</div>'; return }
-            grid.innerHTML = filteredProducts.map(p => `
+            grid.innerHTML = filteredProducts.map(p => {
+                const disc = p.original_price > 0 ? Math.max(0, Math.round((1 - parseInt(p.price) / parseInt(p.original_price)) * 100)) : (p.discount || 0);
+                const buyers = getBuyerCount(p.id);
+                return `
     <div class="product-card" onclick="openProduct(${p.id})">
-      ${p.discount >= 40 ? `<div class="product-badge">${p.discount}% off</div>` : ''}
+      ${disc >= 40 ? `<div class="product-badge">${disc}% off</div>` : ''}
       <img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
       <div class="product-name">${p.name}</div>
       <div class="product-desc">${p.description}</div>
       <div class="product-rating"><span class="rating-badge ${p.rating < 4 ? 'low' : ''}">⭐ ${parseFloat(p.rating).toFixed(1)}</span><span class="rating-count">${p.review_count.toLocaleString()} ratings</span></div>
-      <div class="product-price"><span class="price-current">₹${parseInt(p.price).toLocaleString('en-IN')}</span><span class="price-original">₹${parseInt(p.original_price).toLocaleString('en-IN')}</span><span class="price-discount">${p.discount}% off</span></div>
-    </div>`).join('');
+      <div class="product-price"><span class="price-current">₹${parseInt(p.price).toLocaleString('en-IN')}</span><span class="price-original">₹${parseInt(p.original_price).toLocaleString('en-IN')}</span><span class="price-discount">${disc}% off</span></div>
+      <div style="font-size:11px;color:#388e3c;font-weight:600;margin-top:4px">${buyers}+ bought in past month</div>
+    </div>`;
+            }).join('');
         }
 
         function filterByCategory(cat, el) {
@@ -2027,6 +2041,7 @@
             id = parseInt(id);
             const p = allProducts.find(x => parseInt(x.id) === id); if (!p) return;
             currentProduct = p;
+            const disc = p.original_price > 0 ? Math.max(0, Math.round((1 - parseInt(p.price) / parseInt(p.original_price)) * 100)) : (p.discount || 0);
             document.getElementById('mImg').src = p.image_url;
             document.getElementById('mCategory').textContent = p.category;
             document.getElementById('mName').textContent = p.name;
@@ -2035,8 +2050,11 @@
             document.getElementById('mRatingCount').textContent = `${p.review_count.toLocaleString()} ratings & reviews`;
             document.getElementById('mPrice').textContent = `₹${parseInt(p.price).toLocaleString('en-IN')}`;
             document.getElementById('mOrigPrice').textContent = `₹${parseInt(p.original_price).toLocaleString('en-IN')}`;
-            document.getElementById('mDiscount').textContent = `${p.discount}% off`;
+            document.getElementById('mDiscount').textContent = `${disc}% off`;
             document.getElementById('mDesc').textContent = p.description;
+            // Buyer count
+            const mBuyers = document.getElementById('mBuyerCount');
+            if (mBuyers) mBuyers.textContent = `${getBuyerCount(p.id)}+ bought in past month`;
             const reviews = typeof p.reviews === 'string' ? JSON.parse(p.reviews) : p.reviews;
             document.getElementById('mReviews').innerHTML = reviews.map(r => `<div class="review-card"><div class="review-header"><span class="rating-badge ${r.rating < 4 ? 'low' : ''}">⭐ ${r.rating}</span><span class="reviewer-name">${r.user}</span><span class="review-date">${r.date}</span></div><div class="review-text">${r.text}</div></div>`).join('');
             // Similar products carousel
@@ -2045,14 +2063,17 @@
             const simDiv = document.getElementById('mSimilar');
             if (similar.length > 0) {
                 simWrap.style.display = '';
-                simDiv.innerHTML = similar.map(s => `<div onclick="openProduct(${s.id})" style="min-width:130px;cursor:pointer;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;background:#fff;flex-shrink:0;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
+                simDiv.innerHTML = similar.map(s => {
+                    const sd = s.original_price > 0 ? Math.max(0, Math.round((1 - parseInt(s.price) / parseInt(s.original_price)) * 100)) : (s.discount || 0);
+                    return `<div onclick="openProduct(${s.id})" style="min-width:130px;cursor:pointer;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;background:#fff;flex-shrink:0;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">
                     <img src="${s.image_url}" alt="${s.name}" style="width:100%;height:100px;object-fit:contain;background:#f9f9f9;padding:6px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'"/>
                     <div style="padding:8px">
                         <div style="font-size:11px;font-weight:600;color:#212121;line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${s.name}</div>
                         <div style="font-size:12px;font-weight:800;color:#212121">₹${parseInt(s.price).toLocaleString('en-IN')}</div>
-                        <div style="font-size:10px;color:#388e3c;font-weight:600">${s.discount}% off</div>
+                        <div style="font-size:10px;color:#388e3c;font-weight:600">${sd}% off</div>
                     </div>
-                </div>`).join('');
+                </div>`;
+                }).join('');
             } else {
                 simWrap.style.display = 'none';
             }
@@ -2119,7 +2140,10 @@
         function showToast(msg) { const t = document.getElementById('cartToast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
         // ── Checkout ──
-        function expandStep(n) { /* allow clicking completed step headers to re-expand */ }
+        function expandStep(n) {
+            if (n === 2) { setStepActive(2); }
+            else if (n === 3) { setStepActive(3); document.getElementById('ckStep3Body').style.display = 'block'; }
+        }
 
         function setStepActive(n) {
             [2, 3, 4].forEach(s => {
@@ -2128,25 +2152,97 @@
                 const body = document.getElementById(s === 2 ? 'ckStep2Body' : s === 3 ? 'ckStep3Body' : 'ckStepPayment');
                 const check = document.getElementById('ckStep' + s + 'Check');
                 const summary = document.getElementById('ckStep' + s + 'Summary');
+                const savedList = s === 2 ? document.getElementById('savedAddressesList') : null;
                 if (s === n) {
                     head.style.background = '#2874f0'; head.style.color = '#fff';
                     num.style.background = '#fff'; num.style.color = '#2874f0';
-                    if (body) body.style.display = (s === 4 ? 'block' : 'block');
+                    if (body) body.style.display = 'block';
                     if (check) check.style.display = 'none';
                     if (summary) summary.style.display = 'none';
+                    if (savedList && getSavedAddresses().length > 0) { renderSavedAddresses(); savedList.style.display = 'block'; }
                 } else if (s < n) {
                     head.style.background = '#fff'; head.style.color = '#878787';
                     num.style.background = '#f0f0f0'; num.style.color = '#2874f0';
                     if (body) body.style.display = 'none';
                     if (check) check.style.display = '';
+                    if (savedList) savedList.style.display = 'none';
                 } else {
                     head.style.background = '#fff'; head.style.color = '#878787';
                     num.style.background = '#f0f0f0'; num.style.color = '#878787';
                     if (body) body.style.display = 'none';
                     if (check) check.style.display = 'none';
                     if (summary) summary.style.display = 'none';
+                    if (savedList) savedList.style.display = 'none';
                 }
             });
+        }
+
+        // ── Saved Addresses UI ──
+        function renderSavedAddresses() {
+            const addresses = getSavedAddresses();
+            const container = document.getElementById('savedAddressesList');
+            if (!addresses.length) { container.style.display = 'none'; return; }
+            container.innerHTML = `<div style="font-size:12px;font-weight:500;color:#878787;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">YOUR SAVED ADDRESSES</div>` +
+                addresses.map((a, i) => `
+                <div style="border:1px solid #e0e0e0;border-radius:4px;padding:16px;margin-bottom:12px;cursor:pointer;transition:border-color 0.2s;position:relative" onmouseover="this.style.borderColor='#2874f0'" onmouseout="this.style.borderColor='#e0e0e0'">
+                    <div style="display:flex;align-items:flex-start;gap:12px">
+                        <input type="radio" name="savedAddr" value="${i}" style="margin-top:3px;accent-color:#2874f0" onclick="selectSavedAddress(${i})" ${i===0?'checked':''} />
+                        <div style="flex:1">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                                <span style="font-size:14px;font-weight:600;color:#212121">${a.name}</span>
+                                <span style="font-size:10px;font-weight:600;color:#878787;background:#f0f0f0;padding:2px 8px;border-radius:2px;text-transform:uppercase">${a.type || 'HOME'}</span>
+                                <span style="font-size:13px;color:#212121;margin-left:8px">${a.phone}</span>
+                            </div>
+                            <div style="font-size:13px;color:#212121;line-height:1.5">${a.address}, ${a.locality || ''} ${a.city}, ${a.state} - <strong>${a.pincode}</strong></div>
+                        </div>
+                        <button onclick="event.stopPropagation();deleteSavedAddress(${i})" style="background:none;border:none;color:#ff6161;font-size:18px;cursor:pointer;padding:4px" title="Remove">×</button>
+                    </div>
+                </div>`).join('') +
+                `<button onclick="showAddressForm()" style="color:#2874f0;font-size:14px;font-weight:600;background:none;border:none;cursor:pointer;padding:8px 0;font-family:inherit">+ Add a new address</button>
+                <div style="margin-top:12px"><button style="padding:16px 48px;background:#fb641b;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;border-radius:2px;font-family:inherit;box-shadow:0 1px 2px 0 rgba(0,0,0,.2)" onclick="deliverToSavedAddress()">DELIVER HERE</button></div>`;
+        }
+
+        function selectSavedAddress(idx) {
+            document.querySelectorAll('input[name="savedAddr"]').forEach((r, i) => r.checked = i === idx);
+        }
+
+        function deliverToSavedAddress() {
+            const selected = document.querySelector('input[name="savedAddr"]:checked');
+            if (!selected) { showToast('❌ Select an address'); return; }
+            const addresses = getSavedAddresses();
+            const a = addresses[parseInt(selected.value)];
+            // Fill form fields from saved address
+            document.getElementById('ckName').value = a.name;
+            document.getElementById('ckPhone').value = a.phone;
+            document.getElementById('ckPincode').value = a.pincode;
+            document.getElementById('ckLocality').value = a.locality || '';
+            document.getElementById('ckAddress').value = a.address;
+            document.getElementById('ckCity').value = a.city;
+            document.getElementById('ckState').value = a.state;
+            document.getElementById('ckEmail').value = a.email;
+            document.getElementById('ckLandmark').value = a.landmark || '';
+            document.getElementById('ckAltPhone').value = a.altPhone || '';
+            goToOrderSummary();
+        }
+
+        function showAddressForm() {
+            document.getElementById('savedAddressesList').style.display = 'none';
+            document.getElementById('ckStep2Body').style.display = 'block';
+            // Clear form
+            ['ckName','ckPhone','ckPincode','ckLocality','ckAddress','ckCity','ckEmail','ckLandmark','ckAltPhone'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('ckState').value = '';
+        }
+
+        function deleteSavedAddress(idx) {
+            if (!confirm('Remove this address?')) return;
+            const addresses = getSavedAddresses();
+            addresses.splice(idx, 1);
+            saveAddresses(addresses);
+            renderSavedAddresses();
+            if (!addresses.length) {
+                document.getElementById('savedAddressesList').style.display = 'none';
+                document.getElementById('ckStep2Body').style.display = 'block';
+            }
         }
 
         function goToCheckout() {
@@ -2163,6 +2259,17 @@
 
             // Set Step 2 (Address) active
             setStepActive(2);
+
+            // Show saved addresses if any, otherwise show form
+            const savedAddrs = getSavedAddresses();
+            if (savedAddrs.length > 0) {
+                renderSavedAddresses();
+                document.getElementById('savedAddressesList').style.display = 'block';
+                document.getElementById('ckStep2Body').style.display = 'none';
+            } else {
+                document.getElementById('savedAddressesList').style.display = 'none';
+                document.getElementById('ckStep2Body').style.display = 'block';
+            }
 
             if (visitorCity) {
                 document.getElementById('locationDetected').style.display = 'block';
@@ -2232,6 +2339,19 @@
             if (!gv('ckCity')) { showToast('❌ Please enter your city'); return; }
             if (!gv('ckState')) { showToast('❌ Please select your state'); return; }
             if (!gv('ckEmail')) { showToast('❌ Please enter your email'); return; }
+
+            // Save address to localStorage
+            const newAddr = {
+                name: gv('ckName'), phone: gv('ckPhone'), pincode: gv('ckPincode'),
+                locality: gv('ckLocality'), address: gv('ckAddress'), city: gv('ckCity'),
+                state: gv('ckState'), email: gv('ckEmail'), landmark: gv('ckLandmark'),
+                altPhone: gv('ckAltPhone'),
+                type: (document.querySelector('input[name="addrType"]:checked') || {}).value || 'Home'
+            };
+            const addresses = getSavedAddresses();
+            // Don't add duplicate (same name+phone+pincode)
+            const exists = addresses.some(a => a.name === newAddr.name && a.phone === newAddr.phone && a.pincode === newAddr.pincode);
+            if (!exists) { addresses.unshift(newAddr); saveAddresses(addresses); }
 
             // Show summary text under Step 2
             const summary = `<strong>${gv('ckName')}</strong> ${gv('ckPhone')}<br><span style="color:#878787">${gv('ckAddress')}, ${gv('ckLocality') || ''} ${gv('ckCity')}, ${gv('ckState')} - ${gv('ckPincode')}</span>`;

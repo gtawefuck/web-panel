@@ -248,13 +248,21 @@ async function loadMyShop() {
     try {
         const res = await fetch('/api/shop/my');
         if (res.status === 404) {
+            document.getElementById('shopLiveUrl').textContent = 'No shop assigned yet. Contact admin.';
             document.getElementById('productEditGrid').innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No shop assigned yet. Contact admin.</div>';
             return;
         }
-        if (!res.ok) return;
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            document.getElementById('shopLiveUrl').textContent = errData.error || 'Failed to load shop.';
+            return;
+        }
         const data = await res.json();
         shopProducts = data.products;
-        shopUrl = data.shopUrl;
+
+        // Build URL from browser origin (always correct in Codespaces/proxied envs)
+        const slug = data.shop.slug;
+        shopUrl = `${window.location.origin}/shop/${slug}`;
 
         document.getElementById('shopLiveUrl').textContent = shopUrl;
         document.getElementById('shopNameInput').value = data.shop.shop_name || '';
@@ -274,16 +282,23 @@ async function loadMyShop() {
         }
 
         renderProductGrid();
-    } catch { }
+    } catch (e) {
+        console.error('loadMyShop error:', e);
+        document.getElementById('shopLiveUrl').textContent = 'Error loading shop. Check console.';
+    }
 }
 
 function renderProductGrid() {
     const grid = document.getElementById('productEditGrid');
+    const countLabel = document.getElementById('productCountLabel');
+    if (countLabel) countLabel.textContent = `📦 Products (${shopProducts.length} items) — Hover to Edit`;
     if (!shopProducts.length) {
-        grid.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No products.</div>';
+        grid.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No products. Click "+ Add Product" to start!</div>';
         return;
     }
-    grid.innerHTML = shopProducts.map(p => `
+    grid.innerHTML = shopProducts.map(p => {
+        const disc = p.original_price > 0 ? Math.max(0, Math.round((1 - parseInt(p.price) / parseInt(p.original_price)) * 100)) : (p.discount || 0);
+        return `
     <div class="pe-card">
       <div class="pe-img-wrap">
         <img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
@@ -292,10 +307,10 @@ function renderProductGrid() {
       <div class="pe-body">
         <div class="pe-name">${p.name}</div>
         <div class="pe-cat">${p.category} · ⭐ ${parseFloat(p.rating).toFixed(1)}</div>
-        <div class="pe-price">₹${parseInt(p.price).toLocaleString('en-IN')} <span class="pe-disc">${p.discount}% off</span></div>
+        <div class="pe-price">₹${parseInt(p.price).toLocaleString('en-IN')} ${disc > 0 ? `<span class="pe-orig">₹${parseInt(p.original_price).toLocaleString('en-IN')}</span> <span class="pe-disc">${disc}% off</span>` : ''}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+    }).join('');
 }
 
 // ── Payment Settings ─────────────────────────────────────────────────────────
@@ -503,6 +518,200 @@ async function saveProductEdit() {
         msg.textContent = '❌ Network error.';
         msg.className = 'ed-msg err';
     }
+}
+
+// ── Add Product ────────────────────────────────────────────────────────────────
+function openAddProductModal() {
+    // Reset form
+    ['addProdName', 'addProdCategory', 'addProdImage', 'addProdDesc', 'addFkUrl'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    document.getElementById('addProdPrice').value = '';
+    document.getElementById('addProdOrigPrice').value = '';
+    document.getElementById('addProdRating').value = '4.5';
+    document.getElementById('addProdImgPreview').style.display = 'none';
+    document.getElementById('addDiscountDisplay').style.display = 'none';
+    document.getElementById('addFkStatus').style.display = 'none';
+    document.getElementById('addProductAlert').style.display = 'none';
+    document.getElementById('addProdImageFile').value = '';
+    openModal('addProductModal');
+}
+
+function calcAddDiscount() {
+    const sale = parseInt(document.getElementById('addProdPrice').value) || 0;
+    const orig = parseInt(document.getElementById('addProdOrigPrice').value) || 0;
+    const el = document.getElementById('addDiscountDisplay');
+    if (sale > 0 && orig > 0 && orig > sale) {
+        const pct = Math.round((1 - sale / orig) * 100);
+        el.textContent = `💰 Discount: ${pct}% off (Save ₹${(orig - sale).toLocaleString('en-IN')})`;
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+function calcEditDiscount() {
+    const sale = parseInt(document.getElementById('edPrice').value) || 0;
+    const orig = parseInt(document.getElementById('edOrigPrice').value) || 0;
+    const el = document.getElementById('editDiscountDisplay');
+    if (sale > 0 && orig > 0 && orig > sale) {
+        const pct = Math.round((1 - sale / orig) * 100);
+        el.textContent = `💰 Discount: ${pct}% off (Save ₹${(orig - sale).toLocaleString('en-IN')})`;
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+async function handleAddProductImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        document.getElementById('addProdImgPreview').src = ev.target.result;
+        document.getElementById('addProdImgPreview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+        const res = await fetch('/api/shop/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (res.ok) {
+            document.getElementById('addProdImage').value = data.url;
+            document.getElementById('addProdImgPreview').src = data.url;
+            document.getElementById('addProdImgPreview').style.display = 'block';
+        } else {
+            alert('❌ Upload failed: ' + (data.error || 'Unknown error'));
+        }
+    } catch { alert('❌ Upload failed.'); }
+}
+
+// Watch image URL changes for preview
+document.addEventListener('DOMContentLoaded', () => {
+    const imgUrlInput = document.getElementById('addProdImage');
+    if (imgUrlInput) {
+        imgUrlInput.addEventListener('input', () => {
+            const url = imgUrlInput.value.trim();
+            const preview = document.getElementById('addProdImgPreview');
+            if (url) { preview.src = url; preview.style.display = 'block'; }
+            else preview.style.display = 'none';
+        });
+    }
+});
+
+async function fetchFlipkartForAdd() {
+    const url = document.getElementById('addFkUrl').value.trim();
+    const statusEl = document.getElementById('addFkStatus');
+    const btn = document.getElementById('btnFetchFkAdd');
+    if (!url) {
+        statusEl.textContent = '❌ Please enter a Flipkart URL.';
+        statusEl.style.color = '#dc3545';
+        statusEl.style.display = 'block';
+        return;
+    }
+    statusEl.textContent = '⏳ Fetching details from Flipkart...';
+    statusEl.style.color = '#004085';
+    statusEl.style.display = 'block';
+    btn.disabled = true;
+    try {
+        const res = await fetch('/api/shop/fetch-flipkart', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+            statusEl.textContent = '✅ Successfully fetched details!';
+            statusEl.style.color = '#28a745';
+            if (data.product.name) document.getElementById('addProdName').value = data.product.name;
+            if (data.product.price) document.getElementById('addProdPrice').value = data.product.price;
+            if (data.product.original_price) document.getElementById('addProdOrigPrice').value = data.product.original_price;
+            if (data.product.description) document.getElementById('addProdDesc').value = data.product.description;
+            if (data.product.rating) document.getElementById('addProdRating').value = data.product.rating;
+            if (data.product.image_url) {
+                document.getElementById('addProdImage').value = data.product.image_url;
+                document.getElementById('addProdImgPreview').src = data.product.image_url;
+                document.getElementById('addProdImgPreview').style.display = 'block';
+            }
+            // Try to extract category
+            if (data.product.category) document.getElementById('addProdCategory').value = data.product.category;
+            calcAddDiscount();
+        } else {
+            statusEl.textContent = '❌ Error: ' + (data.error || 'Could not fetch details.');
+            statusEl.style.color = '#dc3545';
+        }
+    } catch (e) {
+        statusEl.textContent = '❌ Network error while fetching.';
+        statusEl.style.color = '#dc3545';
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function addProduct() {
+    const name = document.getElementById('addProdName').value.trim();
+    const category = document.getElementById('addProdCategory').value.trim();
+    const image_url = document.getElementById('addProdImage').value.trim();
+    const price = parseInt(document.getElementById('addProdPrice').value) || 0;
+    const original_price = parseInt(document.getElementById('addProdOrigPrice').value) || 0;
+    const description = document.getElementById('addProdDesc').value.trim();
+    const rating = parseFloat(document.getElementById('addProdRating').value) || 4.5;
+    const alert_el = document.getElementById('addProductAlert');
+
+    if (!name || !category || !image_url || !price || !original_price) {
+        showAlert(alert_el, 'Please fill all required fields (Name, Category, Image, Sale Price, Original Price).', 'error');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/shop/products', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, category, image_url, price, original_price, description, rating })
+        });
+        const data = await res.json();
+        if (!res.ok) { showAlert(alert_el, data.error || 'Failed to add product.', 'error'); return; }
+        shopProducts.push(data.product);
+        renderProductGrid();
+        showAlert(alert_el, '✅ Product added successfully!', 'success');
+        setTimeout(() => closeModal('addProductModal'), 1200);
+    } catch (e) {
+        showAlert(alert_el, 'Network error.', 'error');
+    }
+}
+
+// ── Delete Product ─────────────────────────────────────────────────────────────
+async function deleteCurrentProduct() {
+    const id = document.getElementById('edProductId').value;
+    if (!id) return;
+    const product = shopProducts.find(x => x.id === parseInt(id));
+    if (!confirm(`Delete "${product?.name || 'this product'}"? This cannot be undone.`)) return;
+    try {
+        const res = await fetch(`/api/shop/products/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            shopProducts = shopProducts.filter(x => x.id !== parseInt(id));
+            renderProductGrid();
+            closeEditDrawer();
+            alert('✅ Product deleted.');
+        } else {
+            const data = await res.json();
+            alert('❌ ' + (data.error || 'Failed to delete.'));
+        }
+    } catch { alert('❌ Network error.'); }
+}
+
+// ── Shop Settings Save ─────────────────────────────────────────────────────────
+async function saveShopSettings() {
+    const shop_name = document.getElementById('shopNameInput').value.trim();
+    const banner_text = document.getElementById('bannerTextInput').value.trim();
+    try {
+        const res = await fetch('/api/shop/settings', {
+            method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ shop_name, banner_text })
+        });
+        if (res.ok) alert('✅ Shop settings saved!');
+        else alert('❌ Failed to save.');
+    } catch { alert('❌ Network error.'); }
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────

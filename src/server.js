@@ -42,13 +42,16 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const HOST = process.env.HOST || '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
     const demoMode = process.env.DEMO_MODE === 'true';
-    console.log(`\n🚀 Admin Panel running on port ${PORT}`);
+    console.log(`\n🚀 Admin Panel running on ${HOST}:${PORT}`);
     console.log(`🔒 Super Admin ID: ${process.env.SUPER_ADMIN_TG_ID || '(not set)'}`);
     console.log(`📡 Telegram Bot: ${process.env.TELEGRAM_BOT_TOKEN ? '✅ Configured' : '❌ Not set'}`);
     console.log(`🧪 Demo Mode: ${demoMode ? '✅ ON' : '❌ OFF'}`);
-    console.log(`\n🌐 Open: http://localhost:${PORT}\n`);
+    console.log(`\n🌐 Local:  http://localhost:${PORT}`);
+    console.log(`🌍 Public: http://<server-ip>:${PORT}\n`);
 });
 
 module.exports = app;

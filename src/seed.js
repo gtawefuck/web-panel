@@ -367,6 +367,236 @@ const PRODUCTS = [
             { user: 'Arjun L.', rating: 5, text: 'Complex and rewarding build. Kids love it.', date: '2024-12-04' },
             { user: 'Meenakshi S.', rating: 4, text: 'Premium quality. Worth the investment.', date: '2024-11-20' }
         ], rating: 4.8, review_count: 3421
+    },
+
+    // Gifts (3)
+    {
+        name: 'Personalized LED Photo Frame with Name',
+        category: 'Gifts',
+        image_url: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=600&q=90',
+        price: 599, original_price: 1499, discount: 60,
+        description: 'Acrylic 3D LED Lamp | Customized Photo & Name | USB Powered | 7 Color Changing | Perfect Birthday/Anniversary Gift',
+        reviews: [
+            { user: 'Kavya R.', rating: 5, text: 'Beautiful gift! My friend loved it. Colors are amazing.', date: '2025-01-05' },
+            { user: 'Deepa M.', rating: 4, text: 'Good quality. Customization was perfect.', date: '2024-12-20' },
+            { user: 'Ankit S.', rating: 5, text: 'Delivered quickly. Looks exactly like the photo.', date: '2024-12-10' }
+        ], rating: 4.4, review_count: 8721
+    },
+    {
+        name: 'Ferrero Rocher Premium Chocolate Gift Box 24pc',
+        category: 'Gifts',
+        image_url: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=90',
+        price: 749, original_price: 999, discount: 25,
+        description: '24 Pieces | Hazelnut & Milk Chocolate | Gold Foil Wrapped | Premium Gift Box | Perfect for Festivals & Celebrations',
+        reviews: [
+            { user: 'Snehal P.', rating: 5, text: 'Best chocolate gift. Always impresses everyone.', date: '2024-12-25' },
+            { user: 'Rajesh K.', rating: 4, text: 'Premium packaging. Chocolates are fresh and delicious.', date: '2024-12-15' },
+            { user: 'Nisha T.', rating: 5, text: 'My go-to gift for every occasion.', date: '2024-12-01' }
+        ], rating: 4.6, review_count: 15432
+    },
+    {
+        name: 'TIED RIBBONS Romantic Gift Hamper for Couples',
+        category: 'Gifts',
+        image_url: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=600&q=90',
+        price: 899, original_price: 1999, discount: 55,
+        description: 'Love Cushion + Greeting Card + Mug + Keychain | Valentine/Birthday Gift | Premium Gift Box Packing | Combo Set',
+        reviews: [
+            { user: 'Priyanka D.', rating: 5, text: 'Perfect anniversary gift. Wife loved it!', date: '2025-01-08' },
+            { user: 'Arun W.', rating: 4, text: 'Good combo gift. Mug quality is nice.', date: '2024-12-22' },
+            { user: 'Sneha M.', rating: 5, text: 'Beautiful packaging. Arrived on time for birthday.', date: '2024-12-05' }
+        ], rating: 4.3, review_count: 6543
+    },
+
+    // Wellness & Massagers (3)
+    {
+        name: 'LifeLong Full Body Electric Massager Gun',
+        category: 'Wellness',
+        image_url: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=90',
+        price: 2499, original_price: 5999, discount: 58,
+        description: '6 Speed Settings | 4 Massage Heads | Deep Tissue Percussion | Rechargeable | Portable | Pain Relief | Sports Recovery',
+        reviews: [
+            { user: 'Vikram S.', rating: 5, text: 'Amazing for muscle recovery after gym. Very powerful.', date: '2025-01-02' },
+            { user: 'Anjali R.', rating: 4, text: 'Good build quality. Battery lasts 3-4 hours.', date: '2024-12-18' },
+            { user: 'Suresh P.', rating: 5, text: 'Best purchase. Relieves back pain instantly.', date: '2024-12-08' }
+        ], rating: 4.3, review_count: 11234
+    },
+    {
+        name: 'Lifelong Rechargeable Body Massager Wand',
+        category: 'Wellness',
+        image_url: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=600&q=90',
+        price: 999, original_price: 2499, discount: 60,
+        description: 'Wireless | 20 Vibration Modes | 8 Speeds | Waterproof | Flexible Neck | Full Body Relaxation | USB Rechargeable',
+        reviews: [
+            { user: 'Ritu M.', rating: 5, text: 'Very relaxing. Multiple modes are great. Quiet operation.', date: '2024-12-20' },
+            { user: 'Amit K.', rating: 4, text: 'Good for neck and shoulder pain. Compact design.', date: '2024-12-10' },
+            { user: 'Pooja S.', rating: 5, text: 'Excellent product. Battery lasts long. Waterproof is useful.', date: '2024-11-28' }
+        ], rating: 4.2, review_count: 18923
+    },
+    {
+        name: 'Dr Physio Electric Full Body Heating Pad',
+        category: 'Wellness',
+        image_url: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&q=90',
+        price: 799, original_price: 1999, discount: 60,
+        description: 'Orthopaedic Pain Relief | 4 Temperature Settings | Auto Shut-Off | Washable Cover | For Back, Neck, Joints & Cramps',
+        reviews: [
+            { user: 'Sunita L.', rating: 5, text: 'Instant pain relief. Best for winter nights.', date: '2024-12-15' },
+            { user: 'Kiran D.', rating: 4, text: 'Good heating pad. Auto shut-off is a safety plus.', date: '2024-12-01' },
+            { user: 'Madhu R.', rating: 4, text: 'Comfortable and effective. Easy to wash.', date: '2024-11-20' }
+        ], rating: 4.1, review_count: 9876
+    },
+
+    // Kitchen Appliances (3)
+    {
+        name: 'Prestige Iris 750W Mixer Grinder 3 Jars',
+        category: 'Kitchen Appliances',
+        image_url: 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600&q=90',
+        price: 2199, original_price: 4495, discount: 51,
+        description: '750W Powerful Motor | Stainless Steel Blades | 3 Jars (Dry/Wet/Chutney) | Overload Protection | 2 Year Warranty',
+        reviews: [
+            { user: 'Lakshmi V.', rating: 5, text: 'Perfect grinding every time. Motor is very powerful.', date: '2024-12-20' },
+            { user: 'Bharathi S.', rating: 4, text: 'Good quality. Easy to clean. Jars are durable.', date: '2024-12-05' },
+            { user: 'Kamala R.', rating: 4, text: 'Best mixer in this price range. Daily use for 6 months.', date: '2024-11-18' }
+        ], rating: 4.3, review_count: 12456
+    },
+    {
+        name: 'Havells Instanio Prime 3L Instant Water Heater',
+        category: 'Kitchen Appliances',
+        image_url: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&q=90',
+        price: 3199, original_price: 5990, discount: 47,
+        description: '3 Litre | 3000W | Color Changing LED | ISI Marked | Whirlflow Technology | Heavy Duty Anode Rod | 5 Star Rating',
+        reviews: [
+            { user: 'Rajmohan K.', rating: 5, text: 'Heats water super fast. LED indicator is brilliant.', date: '2024-12-18' },
+            { user: 'Deepa G.', rating: 4, text: 'Energy efficient. Good build quality.', date: '2024-12-02' },
+            { user: 'Vivek M.', rating: 5, text: 'Best geyser. Hot water in 2 minutes flat.', date: '2024-11-15' }
+        ], rating: 4.4, review_count: 7654
+    },
+    {
+        name: 'Butterfly Rapid 750W Juicer Mixer Grinder',
+        category: 'Kitchen Appliances',
+        image_url: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=600&q=90',
+        price: 1799, original_price: 3595, discount: 50,
+        description: '750W Motor | 4 Jars | Juicer Attachment | Stainless Steel Blades | Anti-Skid Feet | Hands-Free Operation',
+        reviews: [
+            { user: 'Meena T.', rating: 4, text: 'Great juicer. Makes smooth juice every time.', date: '2024-12-10' },
+            { user: 'Harish S.', rating: 4, text: 'Good value for money. All 4 jars are useful.', date: '2024-11-25' },
+            { user: 'Sarala D.', rating: 5, text: 'Perfect for daily kitchen use. Very powerful.', date: '2024-11-10' }
+        ], rating: 4.2, review_count: 5678
+    },
+
+    // Grooming & Beauty (3)
+    {
+        name: 'Braun Silk-Expert Pro 5 IPL Hair Removal',
+        category: 'Grooming',
+        image_url: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=90',
+        price: 24999, original_price: 44990, discount: 44,
+        description: 'SensoAdapt Skin Tone Sensor | 400,000 Flashes | FDA Cleared | 3 Comfort Modes | Virtual Body Plan App | Pouch Included',
+        reviews: [
+            { user: 'Ritika A.', rating: 5, text: 'Results visible after 4 weeks. Best home IPL device.', date: '2025-01-05' },
+            { user: 'Swathi N.', rating: 4, text: 'Gentle on skin. Auto skin tone adjustment works well.', date: '2024-12-20' },
+            { user: 'Prerna J.', rating: 5, text: 'No more salon visits! Worth every penny.', date: '2024-12-08' }
+        ], rating: 4.5, review_count: 4321
+    },
+    {
+        name: 'Dyson Airwrap Complete Hair Styler Multi',
+        category: 'Grooming',
+        image_url: 'https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=600&q=90',
+        price: 44900, original_price: 54900, discount: 18,
+        description: 'Coanda Airflow | 6 Attachments | Curl, Wave, Smooth & Dry | Heat Control | For All Hair Types | Travel Pouch',
+        reviews: [
+            { user: 'Meghna S.', rating: 5, text: 'Game changer! Curls and straightens perfectly.', date: '2024-12-22' },
+            { user: 'Trisha P.', rating: 4, text: 'Premium quality. Hair looks salon-like every day.', date: '2024-12-10' },
+            { user: 'Bhavna K.', rating: 5, text: 'Expensive but delivers results. No heat damage.', date: '2024-11-28' }
+        ], rating: 4.6, review_count: 3456
+    },
+    {
+        name: 'Vega Professional Pro Curl Hair Curler 25mm',
+        category: 'Grooming',
+        image_url: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=600&q=90',
+        price: 899, original_price: 1850, discount: 51,
+        description: 'Ceramic Coated Barrel | 25mm | Quick Heat Up | 360° Swivel Cord | Auto Shut-Off | Cool Tip | Temperature Control',
+        reviews: [
+            { user: 'Jyoti D.', rating: 4, text: 'Good curler for the price. Heats up quickly.', date: '2024-12-15' },
+            { user: 'Shilpa M.', rating: 4, text: 'Nice curls that last all day. Easy to use.', date: '2024-12-01' },
+            { user: 'Mansi R.', rating: 5, text: 'Professional quality at budget price. Love it!', date: '2024-11-18' }
+        ], rating: 4.2, review_count: 7890
+    },
+
+    // Smart Home (2)
+    {
+        name: 'Amazon Echo Dot 5th Gen Smart Speaker',
+        category: 'Smart Home',
+        image_url: 'https://images.unsplash.com/photo-1543512214-318228f1e9ba?w=600&q=90',
+        price: 4499, original_price: 5499, discount: 18,
+        description: 'Improved Audio | Alexa Built-in | Smart Home Hub | Clock Display | Temperature Sensor | Bluetooth & 3.5mm Output',
+        reviews: [
+            { user: 'Taran J.', rating: 5, text: 'Best smart speaker. Alexa is very responsive.', date: '2024-12-20' },
+            { user: 'Preeti K.', rating: 4, text: 'Good sound quality for its size. Clock display is handy.', date: '2024-12-05' },
+            { user: 'Vikrant S.', rating: 5, text: 'Controls all my smart devices. Essential for smart home.', date: '2024-11-20' }
+        ], rating: 4.4, review_count: 28456
+    },
+    {
+        name: 'Mi 360° Home Security Camera 2K Pro',
+        category: 'Smart Home',
+        image_url: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&q=90',
+        price: 3999, original_price: 4999, discount: 20,
+        description: '2K Super Clear | 360° View | AI Human Detection | Night Vision | Two-Way Audio | MicroSD up to 256GB | Mi Home App',
+        reviews: [
+            { user: 'Ganesh R.', rating: 5, text: '2K quality is superb. Night vision is crystal clear.', date: '2024-12-18' },
+            { user: 'Smita P.', rating: 4, text: 'Easy setup. AI detection reduces false alerts.', date: '2024-12-05' },
+            { user: 'Naveen M.', rating: 5, text: 'Best budget security camera. Worth every rupee.', date: '2024-11-22' }
+        ], rating: 4.3, review_count: 11234
+    },
+
+    // Travel (2)
+    {
+        name: 'Safari Pentagon Hardside 55cm Cabin Luggage',
+        category: 'Travel',
+        image_url: 'https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?w=600&q=90',
+        price: 2499, original_price: 6990, discount: 64,
+        description: 'Cabin Size 55cm | Polycarbonate | 4 Wheel 360° | TSA Lock | 5 Year Warranty | Lightweight 3.1kg | Expandable',
+        reviews: [
+            { user: 'Ravi T.', rating: 5, text: 'Excellent quality. Survived 10 flights without a scratch.', date: '2024-12-20' },
+            { user: 'Anitha M.', rating: 4, text: 'Lightweight and spacious. TSA lock is a plus.', date: '2024-12-08' },
+            { user: 'Karthik R.', rating: 5, text: 'Best cabin luggage at this price. Highly recommended.', date: '2024-11-25' }
+        ], rating: 4.4, review_count: 14567
+    },
+    {
+        name: 'Noise ColorFit Pro 5 Max Smartwatch AMOLED',
+        category: 'Travel',
+        image_url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=90',
+        price: 3999, original_price: 8999, discount: 56,
+        description: '1.96" AMOLED Display | Always-On | BT Calling | GPS | 100+ Sports Modes | SpO2 | Heart Rate | 7 Day Battery',
+        reviews: [
+            { user: 'Arjun B.', rating: 5, text: 'AMOLED display is stunning. BT calling works perfectly.', date: '2025-01-02' },
+            { user: 'Divya S.', rating: 4, text: 'Great smartwatch for the price. GPS is accurate.', date: '2024-12-18' },
+            { user: 'Suman K.', rating: 5, text: 'Battery easily lasts a week. Love the always-on display.', date: '2024-12-05' }
+        ], rating: 4.3, review_count: 9876
+    },
+
+    // Stationery & Office (2)
+    {
+        name: 'Parker Vector Standard Roller Ball Pen Gift Set',
+        category: 'Stationery',
+        image_url: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=600&q=90',
+        price: 399, original_price: 680, discount: 41,
+        description: 'Classic Design | Stainless Steel | Smooth Writing | Gift Box | Roller Ball Tip | Refillable | Professional Look',
+        reviews: [
+            { user: 'Dr. Sharma', rating: 5, text: 'Elegant pen. Smooth writing. Perfect corporate gift.', date: '2024-12-15' },
+            { user: 'Anil K.', rating: 4, text: 'Good quality. Gift box presentation is excellent.', date: '2024-12-01' },
+            { user: 'Rekha S.', rating: 5, text: 'Gifted this for birthday. Everyone impressed.', date: '2024-11-18' }
+        ], rating: 4.5, review_count: 11234
+    },
+    {
+        name: 'AmazonBasics Mesh Office Desk Organizer Set',
+        category: 'Stationery',
+        image_url: 'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=600&q=90',
+        price: 699, original_price: 1299, discount: 46,
+        description: '6-Piece Set | File Sorter | Pencil Cup | Letter Tray | Memo Holder | Black Metal Mesh | Anti-Scratch Rubber Feet',
+        reviews: [
+            { user: 'Rohan J.', rating: 4, text: 'Keeps desk tidy. Good quality mesh.', date: '2024-12-10' },
+            { user: 'Priya N.', rating: 5, text: 'Complete set. No more messy desk. Sturdy build.', date: '2024-11-28' },
+            { user: 'Vivek T.', rating: 4, text: 'Functional and looks professional. Good value.', date: '2024-11-12' }
+        ], rating: 4.2, review_count: 5678
     }
 ];
 

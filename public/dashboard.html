@@ -402,6 +402,41 @@
             font-weight: 600;
         }
 
+        .pe-orig {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            font-weight: 400;
+            margin: 0 4px;
+        }
+
+        .btn-sm {
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 6px;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .btn-danger:hover { background: #dc2626; }
+
+        /* Edit drawer delete + save row */
+        .ed-action-row { display: flex; gap: 8px; margin-top: 8px; }
+
+        /* Add product modal form styles */
+        #addProductModal .form-group { margin-bottom: 12px; }
+        #addProductModal .form-label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 13px; color: var(--text-primary); }
+        #addProductModal .form-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: var(--bg-primary); color: var(--text-primary); box-sizing: border-box; }
+        #addProductModal .form-input:focus { border-color: var(--accent); outline: none; }
+        #addProductModal .btn-full { width: 100%; padding: 12px; font-size: 15px; font-weight: 700; margin-top: 8px; }
+
         /* Edit product drawer */
         .edit-drawer-overlay {
             position: fixed;
@@ -1006,10 +1041,11 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="flex-between">
-                        <h3>📦 Products (30 items) — Hover to Edit</h3>
-                        <span class="badge"
-                            style="background:rgba(16,185,129,0.15);color:#10b981;padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700">✅
-                            Default products active</span>
+                        <h3 id="productCountLabel">📦 Products — Hover to Edit</h3>
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <span class="badge" style="background:rgba(16,185,129,0.15);color:#10b981;padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700">✅ Active</span>
+                            <button class="btn btn-primary btn-sm" onclick="openAddProductModal()">+ Add Product</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-edit-grid" id="productEditGrid"></div>
@@ -1062,21 +1098,83 @@
             <div class="ed-row">
                 <div class="ed-group">
                     <label class="ed-label">Sale Price (₹)</label>
-                    <input class="ed-input" id="edPrice" type="number" min="1" />
+                    <input class="ed-input" id="edPrice" type="number" min="1" oninput="calcEditDiscount()" />
                 </div>
                 <div class="ed-group">
                     <label class="ed-label">Original Price (₹)</label>
-                    <input class="ed-input" id="edOrigPrice" type="number" min="1" />
+                    <input class="ed-input" id="edOrigPrice" type="number" min="1" oninput="calcEditDiscount()" />
                 </div>
             </div>
+            <div id="editDiscountDisplay" style="font-size:13px;font-weight:700;color:#10b981;margin-bottom:8px;display:none"></div>
             <div class="ed-group">
                 <label class="ed-label">Rating (click to set)</label>
                 <div class="rating-stars" id="edStars"></div>
                 <input type="hidden" id="edRating" value="4.5" />
             </div>
-            <button class="btn btn-primary btn-full" onclick="saveProductEdit()" style="margin-top:8px">💾 Save
-                Changes</button>
+            <div style="display:flex;gap:8px">
+                <button class="btn btn-primary" style="flex:1" onclick="saveProductEdit()">💾 Save Changes</button>
+                <button class="btn btn-danger" onclick="deleteCurrentProduct()" style="padding:0 16px">🗑️ Delete</button>
+            </div>
             <div class="ed-msg" id="edMsg"></div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" id="addProductModal">
+        <div class="modal glass" style="max-width:560px;max-height:90vh;overflow-y:auto">
+            <div class="modal-header">
+                <div class="modal-title">➕ Add New Product</div>
+                <button class="modal-close" onclick="closeModal('addProductModal')">×</button>
+            </div>
+
+            <!-- Flipkart Scraper -->
+            <div style="background:#f0f7ff;padding:12px;border-radius:8px;border:1px solid #cce5ff;margin-bottom:16px">
+                <label class="ed-label" style="color:#004085;font-weight:700">🔗 Auto-fill from Flipkart Link</label>
+                <div style="display:flex;gap:8px">
+                    <input class="ed-input" id="addFkUrl" type="url" placeholder="Paste Flipkart product URL here..." style="flex:1" />
+                    <button class="btn btn-primary" onclick="fetchFlipkartForAdd()" id="btnFetchFkAdd" style="white-space:nowrap;padding:0 16px">Fetch</button>
+                </div>
+                <div id="addFkStatus" style="font-size:12px;margin-top:8px;display:none"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Product Name *</label>
+                <input id="addProdName" type="text" class="form-input" placeholder="e.g. Samsung Galaxy S24" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Category *</label>
+                <input id="addProdCategory" type="text" class="form-input" placeholder="e.g. Electronics" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL *</label>
+                <input id="addProdImage" type="url" class="form-input" placeholder="https://..." />
+                <img id="addProdImgPreview" src="" style="max-width:100%;max-height:150px;margin-top:8px;border-radius:8px;display:none" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Or Upload Image</label>
+                <input type="file" id="addProdImageFile" accept="image/*" onchange="handleAddProductImageUpload(event)" class="form-input" />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="form-group">
+                    <label class="form-label">Sale Price (₹) *</label>
+                    <input id="addProdPrice" type="number" class="form-input" placeholder="100" min="1" oninput="calcAddDiscount()" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Original Price (₹) *</label>
+                    <input id="addProdOrigPrice" type="number" class="form-input" placeholder="100000" min="1" oninput="calcAddDiscount()" />
+                </div>
+            </div>
+            <div id="addDiscountDisplay" style="font-size:13px;font-weight:700;color:#10b981;margin-bottom:12px;display:none"></div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea id="addProdDesc" class="form-input" rows="3" placeholder="Product specs and description"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Rating (1-5)</label>
+                <input id="addProdRating" type="number" class="form-input" value="4.5" min="1" max="5" step="0.1" />
+            </div>
+            <div class="alert" id="addProductAlert"></div>
+            <button class="btn btn-primary btn-full" onclick="addProduct()">➕ Add Product</button>
         </div>
     </div>
 

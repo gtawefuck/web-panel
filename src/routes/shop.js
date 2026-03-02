@@ -6,6 +6,14 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+// Auto-detect public base URL from request
+function getBaseUrl(req) {
+    if (process.env.BASE_URL) return process.env.BASE_URL.replace(/\/$/, '');
+    const proto = req.headers['x-forwarded-proto'] || req.protocol || 'http';
+    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    return `${proto}://${host}`;
+}
+
 // Ensure uploads directory exists
 const UPLOAD_DIR = path.join(__dirname, '..', '..', 'public', 'uploads');
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -42,7 +50,7 @@ router.get('/my', requireAuth, (req, res) => {
 
     const products = db.prepare('SELECT * FROM products WHERE shop_id = ? ORDER BY id ASC').all(shop.id);
     const parsed = products.map(p => ({ ...p, reviews: JSON.parse(p.reviews) }));
-    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = getBaseUrl(req);
     res.json({ shop, products: parsed, shopUrl: `${baseUrl}/shop/${shop.slug}` });
 });
 
@@ -67,8 +75,53 @@ router.get('/info/:slug', (req, res) => {
 // POST /api/shop/upload — upload product image from device
 router.post('/upload', requireAuth, upload.single('image'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No image uploaded.' });
-    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = getBaseUrl(req);
     res.json({ success: true, url: `${baseUrl}/uploads/${req.file.filename}` });
+});
+
+// POST /api/shop/products — add a new product to your shop
+router.post('/products', requireAuth, (req, res) => {
+    const { tgId, role } = req.session.user;
+    const shop = db.prepare('SELECT * FROM shops WHERE tg_id = ?').get(tgId);
+    if (!shop) return res.status(404).json({ error: 'No shop found.' });
+
+    const { name, category, image_url, price, original_price, description, rating, review_count } = req.body;
+    if (!name || !category || !image_url || price == null || original_price == null) {
+        return res.status(400).json({ error: 'name, category, image_url, price, and original_price are required.' });
+    }
+
+    const p = parseInt(price);
+    const op = parseInt(original_price);
+    const discount = op > 0 ? Math.max(0, Math.round(((op - p) / op) * 100)) : 0;
+    const r = parseFloat(rating) || 4.5;
+    const rc = parseInt(review_count) || 0;
+    const reviews = JSON.stringify([]);
+
+    const result = db.prepare(
+        'INSERT INTO products (shop_id, name, category, image_url, price, original_price, discount, description, rating, review_count, reviews) VALUES (?,?,?,?,?,?,?,?,?,?,?)'
+    ).run(shop.id, name, category, image_url, p, op, discount, description || '', r, rc, reviews);
+
+    const product = db.prepare('SELECT * FROM products WHERE id = ?').get(result.lastInsertRowid);
+    res.json({ success: true, product: { ...product, reviews: JSON.parse(product.reviews) } });
+});
+
+// DELETE /api/shop/products/:id — delete a product
+router.delete('/products/:id', requireAuth, (req, res) => {
+    const { id } = req.params;
+    const { tgId, role } = req.session.user;
+
+    const product = db.prepare(`
+    SELECT p.*, s.tg_id as shop_owner FROM products p
+    JOIN shops s ON s.id = p.shop_id WHERE p.id = ?
+  `).get(id);
+    if (!product) return res.status(404).json({ error: 'Product not found.' });
+
+    if (product.shop_owner !== tgId && role !== 'admin' && role !== 'superAdmin') {
+        return res.status(403).json({ error: 'You can only delete products in your own shop.' });
+    }
+
+    db.prepare('DELETE FROM products WHERE id = ?').run(id);
+    res.json({ success: true });
 });
 
 // PATCH /api/shop/products/:id — edit product (name, image, price, description, rating)
@@ -126,7 +179,7 @@ router.patch('/settings', requireAuth, (req, res) => {
 // POST /api/shop/upload-qr — upload payment QR image
 router.post('/upload-qr', requireAuth, upload.single('qr'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No image uploaded.' });
-    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = getBaseUrl(req);
     res.json({ success: true, url: `${baseUrl}/uploads/${req.file.filename}` });
 });
 
@@ -134,7 +187,7 @@ router.post('/upload-qr', requireAuth, upload.single('qr'), (req, res) => {
 router.get('/link', requireAuth, (req, res) => {
     const shop = db.prepare('SELECT slug FROM shops WHERE tg_id = ?').get(req.session.user.tgId);
     if (!shop) return res.status(404).json({ error: 'No shop found.' });
-    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = getBaseUrl(req);
     res.json({ url: `${baseUrl}/shop/${shop.slug}`, slug: shop.slug });
 });
 
@@ -171,128 +224,72 @@ router.get('/visitors', requireAuth, (req, res) => {
 });
 
 // POST /api/shop/fetch-flipkart — fetch details from a given URL
+// Uses axios+cheerio first (fast), falls back to puppeteer if blocked
 router.post('/fetch-flipkart', requireAuth, async (req, res) => {
-    let browser = null;
-    try {
-        const { url } = req.body;
-        if (!url || !url.includes('flipkart.com')) {
-            return res.status(400).json({ success: false, error: 'Valid Flipkart URL required.' });
-        }
+    const { url } = req.body;
+    if (!url || !url.includes('flipkart')) {
+        return res.status(400).json({ success: false, error: 'Valid Flipkart URL required.' });
+    }
 
-        const puppeteer = require('puppeteer-extra');
-        const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-        puppeteer.use(StealthPlugin());
-        const cheerio = require('cheerio');
+    const cheerio = require('cheerio');
+    const axios = require('axios');
 
-        browser = await puppeteer.launch({
-            headless: 'new',
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-blink-features=AutomationControlled'
-            ]
-        });
-
-        const page = await browser.newPage();
-
-        await page.setViewport({ width: 1366, height: 768 });
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
-        
-        // Set extra headers to appear more like a real browser
-        await page.setExtraHTTPHeaders({
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        });
-
-        // Load page with networkidle0 for better content loading
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-
-        // Wait for content to load
-        await new Promise(r => setTimeout(r, 2000));
-
-        const html = await page.content();
-        const $ = cheerio.load(html);
-
-        // Check for captcha/bot detection
-        const pageText = $('body').text();
-        if (pageText.includes('Are you a human') || pageText.includes('captcha') || pageText.includes('robot')) {
-            return res.status(403).json({
-                success: false,
-                error: 'Flipkart Anti-Bot Captcha blocked the request. Try pasting the URL again later.'
+    // Resolve dl.flipkart.com short links to actual product URLs
+    let resolvedUrl = url;
+    if (url.includes('dl.flipkart.com')) {
+        try {
+            const headRes = await axios.head(url, {
+                maxRedirects: 10,
+                timeout: 10000,
+                headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36' }
             });
-        }
-
-        // Product Name - updated selectors for current Flipkart layout
-        let name = '';
-        const nameSelectors = [
-            'span.VU-ZEz',           // New product page title
-            'span.B_NuCI',           // Legacy selector
-            'h1.yhB1nd',             // Alternative h1 class
-            'h1 span',               // Generic h1 span
-            '.product-title',        // Generic class
-            'meta[property="og:title"]'
-        ];
-        for (const sel of nameSelectors) {
-            if (sel.startsWith('meta')) {
-                name = $(sel).attr('content') || '';
-            } else {
-                name = $(sel).first().text().trim();
+            resolvedUrl = headRes.request?.res?.responseUrl || headRes.request?._redirectable?._currentUrl || url;
+        } catch (e) {
+            if (e.response && e.response.headers && e.response.headers.location) {
+                resolvedUrl = e.response.headers.location;
+            } else if (e.request && e.request._redirectable && e.request._redirectable._currentUrl) {
+                resolvedUrl = e.request._redirectable._currentUrl;
             }
+        }
+        // Clean up URL
+        if (resolvedUrl.startsWith('//')) resolvedUrl = 'https:' + resolvedUrl;
+        if (!resolvedUrl.includes('flipkart.com')) resolvedUrl = url; // fallback
+        console.log('Resolved Flipkart URL:', resolvedUrl);
+    }
+
+    // Helper: extract product data from cheerio-loaded HTML
+    function extractProduct($) {
+        const pageText = $('body').text();
+        if (pageText.includes('Are you a human') || pageText.includes('captcha')) return null;
+
+        // Name
+        let name = '';
+        for (const sel of ['span.VU-ZEz', 'span.B_NuCI', 'h1.yhB1nd', 'h1 span', 'h1']) {
+            name = $(sel).first().text().trim();
             if (name && name.length > 3) break;
         }
+        if (!name) name = ($('meta[property="og:title"]').attr('content') || '').trim();
 
-        // Image - updated selectors
+        // Image
         let imageUrl = '';
-        const imgSelectors = [
-            'img.DByuf4',            // Main product image
-            'img._396cs4',           // Legacy selector
-            'img.v2bfbI',            // Alternative selector
-            'img._2r_T1I',           // Another variant
-            'img[loading="eager"]',  // Main loaded image
-            'div._4WELSP img',       // Image container
-            'meta[property="og:image"]'
-        ];
-        for (const sel of imgSelectors) {
-            if (sel.startsWith('meta')) {
-                imageUrl = $(sel).attr('content') || '';
-            } else {
-                imageUrl = $(sel).first().attr('src') || '';
-            }
+        for (const sel of ['img.DByuf4', 'img._396cs4', 'img.v2bfbI', 'img._2r_T1I', 'div._4WELSP img', 'img[loading="eager"]']) {
+            imageUrl = $(sel).first().attr('src') || '';
             if (imageUrl) break;
         }
+        if (!imageUrl) imageUrl = $('meta[property="og:image"]').attr('content') || '';
         if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
-        // Get higher quality image by removing size params
-        if (imageUrl && imageUrl.includes('?q=')) imageUrl = imageUrl.split('?q=')[0];
         if (imageUrl && imageUrl.includes('/128/')) imageUrl = imageUrl.replace('/128/', '/416/');
 
-        // Price - updated selectors
+        // Price
         let priceStr = '';
-        const priceSelectors = [
-            'div.Nx9bqj.CxhGGd',     // New price class
-            'div._30jeq3._16Jk6d',   // Legacy price
-            'div.Nx9bqj',            // Alternative
-            'div._25b18c div._30jeq3',
-            '.price-current',
-            'meta[itemprop="price"]'
-        ];
-        for (const sel of priceSelectors) {
-            if (sel.startsWith('meta')) {
-                priceStr = $(sel).attr('content') || '';
-            } else {
-                priceStr = $(sel).first().text().trim();
-            }
+        for (const sel of ['div.Nx9bqj.CxhGGd', 'div._30jeq3._16Jk6d', 'div.Nx9bqj', 'div._25b18c div._30jeq3']) {
+            priceStr = $(sel).first().text().trim();
             if (priceStr) break;
         }
 
-        // Original Price
+        // Original price
         let origPriceStr = '';
-        const origPriceSelectors = [
-            'div.yRaY8j.A6+E6v',     // New original price (strikethrough)
-            'div._3I9_wc._2p6lqe',   // Legacy
-            'div.yRaY8j',            // Alternative
-            'div._2p6lqe'            // Legacy alternative
-        ];
-        for (const sel of origPriceSelectors) {
+        for (const sel of ['div.yRaY8j.A6\\+E6v', 'div.yRaY8j.A60-Kx', 'div._3I9_wc._2p6lqe', 'div.yRaY8j', 'div._2p6lqe']) {
             origPriceStr = $(sel).first().text().trim();
             if (origPriceStr) break;
         }
@@ -300,58 +297,124 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         const price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
         const original_price = parseInt(origPriceStr.replace(/[^0-9]/g, '')) || price;
 
-        // Description - updated selectors
+        // Description
         let description = '';
-        const descSelectors = [
-            'div.Rwb9CE',            // Highlights/description area
-            'div._1mXcCf',           // Legacy description
-            'div.xFVion',            // Product highlights
-            'ul._2418kt li',         // Feature list
-            'meta[name="description"]',
-            'meta[property="og:description"]'
-        ];
-        for (const sel of descSelectors) {
-            if (sel.startsWith('meta')) {
-                description = $(sel).attr('content') || '';
-            } else if (sel.includes(' li')) {
-                // For list items, join them
-                const items = [];
-                $(sel).each((i, el) => items.push($(el).text().trim()));
-                description = items.slice(0, 5).join(' | ');
-            } else {
-                description = $(sel).first().text().trim();
-            }
+        for (const sel of ['div.Rwb9CE', 'div._1mXcCf', 'div.xFVion']) {
+            description = $(sel).first().text().trim();
             if (description && description.length > 10) break;
         }
+        if (!description || description.length < 10) {
+            const items = [];
+            $('ul._2418kt li').each((i, el) => items.push($(el).text().trim()));
+            if (items.length) description = items.slice(0, 5).join(' | ');
+        }
+        if (!description) description = $('meta[name="description"]').attr('content') || $('meta[property="og:description"]').attr('content') || '';
 
-        // Rating - updated selectors
+        // Rating
         let ratingStr = '4.5';
-        const ratingSelectors = [
-            'div.XQDdHH',            // New rating badge
-            'div._3LWZlK',           // Legacy rating
-            'span.Y1HWO0',           // Alternative
-            'div.XQDdHH._1Quie7'     // Rating with reviews
-        ];
-        for (const sel of ratingSelectors) {
+        for (const sel of ['div.XQDdHH', 'div._3LWZlK', 'span.Y1HWO0']) {
             ratingStr = $(sel).first().text().trim();
             if (ratingStr && !isNaN(parseFloat(ratingStr))) break;
         }
         const rating = parseFloat(ratingStr) || 4.5;
 
-        res.json({
-            success: true,
-            product: {
-                name: name || 'Scraped Product',
-                image_url: imageUrl,
-                price: price > 0 ? price : undefined,
-                original_price: original_price > 0 ? original_price : undefined,
-                description: description,
-                rating: rating
-            }
+        return {
+            name: name || 'Product',
+            image_url: imageUrl,
+            price: price > 0 ? price : undefined,
+            original_price: original_price > 0 ? original_price : undefined,
+            description: description.trim(),
+            rating
+        };
+    }
+
+    // ── ATTEMPT 1: Fast fetch with axios (no browser needed) ──
+    try {
+        const { data: html } = await axios.get(resolvedUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+            },
+            timeout: 15000,
+            maxRedirects: 10
         });
+        const $ = cheerio.load(html);
+        const product = extractProduct($);
+        if (product && product.name && product.name !== 'Product' && product.name.length > 3) {
+            return res.json({ success: true, product });
+        }
+    } catch (e) {
+        console.log('Axios desktop fetch failed:', e.message);
+    }
+
+    // ── ATTEMPT 1.5: Axios with mobile user-agent (Flipkart mobile is simpler HTML) ──
+    try {
+        const mobileUrl = resolvedUrl.replace('www.flipkart.com', 'www.flipkart.com');
+        const { data: html } = await axios.get(mobileUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+            },
+            timeout: 15000,
+            maxRedirects: 10
+        });
+        const $ = cheerio.load(html);
+        const product = extractProduct($);
+        if (product && product.name && product.name !== 'Product' && product.name.length > 3) {
+            return res.json({ success: true, product });
+        }
+    } catch (e) {
+        console.log('Axios mobile fetch failed:', e.message);
+    }
+
+    // ── ATTEMPT 2: Puppeteer with stealth (slower but handles JS-rendered pages) ──
+    let browser = null;
+    try {
+        const puppeteer = require('puppeteer-extra');
+        const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+        puppeteer.use(StealthPlugin());
+
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox', '--disable-setuid-sandbox',
+                '--disable-blink-features=AutomationControlled',
+                '--disable-web-security', '--disable-features=IsolateOrigins',
+                '--disable-site-isolation-trials'
+            ]
+        });
+
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1366, height: 768 });
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+        await page.setExtraHTTPHeaders({
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        });
+
+        await page.goto(resolvedUrl, { waitUntil: 'networkidle2', timeout: 30000 });
+        await new Promise(r => setTimeout(r, 2500));
+
+        const html = await page.content();
+        const $ = cheerio.load(html);
+        const product = extractProduct($);
+
+        if (!product) {
+            return res.status(403).json({
+                success: false,
+                error: 'Flipkart blocked the request (captcha). Try again in a few minutes.'
+            });
+        }
+
+        res.json({ success: true, product });
     } catch (error) {
-        console.error('Flipkart fetch error:', error.message);
-        res.status(500).json({ success: false, error: 'Failed to fetch product details. Flipkart may be blocking automated requests.' });
+        console.error('Flipkart puppeteer fetch error:', error.message);
+        res.status(500).json({ success: false, error: 'Could not fetch product details. Try again or enter details manually.' });
     } finally {
         if (browser) await browser.close();
     }
