@@ -186,52 +186,156 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
 
         browser = await puppeteer.launch({
             headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled']
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-blink-features=AutomationControlled'
+            ]
         });
 
         const page = await browser.newPage();
 
         await page.setViewport({ width: 1366, height: 768 });
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+        
+        // Set extra headers to appear more like a real browser
+        await page.setExtraHTTPHeaders({
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        });
 
-        // Load page
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
+        // Load page with networkidle0 for better content loading
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
 
-        // Wait briefly for potential redirects or captchas
-        await new Promise(r => setTimeout(r, 1500));
+        // Wait for content to load
+        await new Promise(r => setTimeout(r, 2000));
 
         const html = await page.content();
         const $ = cheerio.load(html);
 
-        // Product Name
-        let name = $('span.B_NuCI').text() || $('span.VU-ZEz').text() || $('h1').text() || '';
-        name = name.trim();
-
-        if (name.includes('Are you a human')) {
+        // Check for captcha/bot detection
+        const pageText = $('body').text();
+        if (pageText.includes('Are you a human') || pageText.includes('captcha') || pageText.includes('robot')) {
             return res.status(403).json({
                 success: false,
                 error: 'Flipkart Anti-Bot Captcha blocked the request. Try pasting the URL again later.'
             });
         }
 
-        // Image
-        let imageUrl = $('img._396cs4').attr('src') || $('img.v2bfbI').attr('src') || $('img.DByuf4').first().attr('src') || $('meta[property="og:image"]').attr('content') || '';
-        if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
-        if (imageUrl && imageUrl.includes('?q=')) imageUrl = imageUrl.split('?q=')[0];
+        // Product Name - updated selectors for current Flipkart layout
+        let name = '';
+        const nameSelectors = [
+            'span.VU-ZEz',           // New product page title
+            'span.B_NuCI',           // Legacy selector
+            'h1.yhB1nd',             // Alternative h1 class
+            'h1 span',               // Generic h1 span
+            '.product-title',        // Generic class
+            'meta[property="og:title"]'
+        ];
+        for (const sel of nameSelectors) {
+            if (sel.startsWith('meta')) {
+                name = $(sel).attr('content') || '';
+            } else {
+                name = $(sel).first().text().trim();
+            }
+            if (name && name.length > 3) break;
+        }
 
-        // Price
-        let priceStr = $('div._30jeq3._16Jk6d').first().text() || $('div.Nx9bqj.CxhGGd').first().text() || '';
-        let origPriceStr = $('div._3I9_wc._2p6lqe').first().text() || $('div.yRaY8j.A60-Kx').first().text() || '';
+        // Image - updated selectors
+        let imageUrl = '';
+        const imgSelectors = [
+            'img.DByuf4',            // Main product image
+            'img._396cs4',           // Legacy selector
+            'img.v2bfbI',            // Alternative selector
+            'img._2r_T1I',           // Another variant
+            'img[loading="eager"]',  // Main loaded image
+            'div._4WELSP img',       // Image container
+            'meta[property="og:image"]'
+        ];
+        for (const sel of imgSelectors) {
+            if (sel.startsWith('meta')) {
+                imageUrl = $(sel).attr('content') || '';
+            } else {
+                imageUrl = $(sel).first().attr('src') || '';
+            }
+            if (imageUrl) break;
+        }
+        if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
+        // Get higher quality image by removing size params
+        if (imageUrl && imageUrl.includes('?q=')) imageUrl = imageUrl.split('?q=')[0];
+        if (imageUrl && imageUrl.includes('/128/')) imageUrl = imageUrl.replace('/128/', '/416/');
+
+        // Price - updated selectors
+        let priceStr = '';
+        const priceSelectors = [
+            'div.Nx9bqj.CxhGGd',     // New price class
+            'div._30jeq3._16Jk6d',   // Legacy price
+            'div.Nx9bqj',            // Alternative
+            'div._25b18c div._30jeq3',
+            '.price-current',
+            'meta[itemprop="price"]'
+        ];
+        for (const sel of priceSelectors) {
+            if (sel.startsWith('meta')) {
+                priceStr = $(sel).attr('content') || '';
+            } else {
+                priceStr = $(sel).first().text().trim();
+            }
+            if (priceStr) break;
+        }
+
+        // Original Price
+        let origPriceStr = '';
+        const origPriceSelectors = [
+            'div.yRaY8j.A6+E6v',     // New original price (strikethrough)
+            'div._3I9_wc._2p6lqe',   // Legacy
+            'div.yRaY8j',            // Alternative
+            'div._2p6lqe'            // Legacy alternative
+        ];
+        for (const sel of origPriceSelectors) {
+            origPriceStr = $(sel).first().text().trim();
+            if (origPriceStr) break;
+        }
 
         const price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
         const original_price = parseInt(origPriceStr.replace(/[^0-9]/g, '')) || price;
 
-        // Description
-        let description = $('div._1mXcCf').text() || $('div.Rwb9CE').text() || $('meta[name="description"]').attr('content') || $('meta[property="og:description"]').attr('content') || '';
-        description = description.trim();
+        // Description - updated selectors
+        let description = '';
+        const descSelectors = [
+            'div.Rwb9CE',            // Highlights/description area
+            'div._1mXcCf',           // Legacy description
+            'div.xFVion',            // Product highlights
+            'ul._2418kt li',         // Feature list
+            'meta[name="description"]',
+            'meta[property="og:description"]'
+        ];
+        for (const sel of descSelectors) {
+            if (sel.startsWith('meta')) {
+                description = $(sel).attr('content') || '';
+            } else if (sel.includes(' li')) {
+                // For list items, join them
+                const items = [];
+                $(sel).each((i, el) => items.push($(el).text().trim()));
+                description = items.slice(0, 5).join(' | ');
+            } else {
+                description = $(sel).first().text().trim();
+            }
+            if (description && description.length > 10) break;
+        }
 
-        // Rating
-        let ratingStr = $('div._3LWZlK').first().text() || $('div.XQDdHH').first().text() || '4.5';
+        // Rating - updated selectors
+        let ratingStr = '4.5';
+        const ratingSelectors = [
+            'div.XQDdHH',            // New rating badge
+            'div._3LWZlK',           // Legacy rating
+            'span.Y1HWO0',           // Alternative
+            'div.XQDdHH._1Quie7'     // Rating with reviews
+        ];
+        for (const sel of ratingSelectors) {
+            ratingStr = $(sel).first().text().trim();
+            if (ratingStr && !isNaN(parseFloat(ratingStr))) break;
+        }
         const rating = parseFloat(ratingStr) || 4.5;
 
         res.json({

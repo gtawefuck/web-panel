@@ -45,7 +45,7 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     tg_id TEXT UNIQUE NOT NULL,
     slug TEXT UNIQUE NOT NULL,
-    shop_name TEXT DEFAULT 'FlipDeals',
+    shop_name TEXT DEFAULT 'Flipkart',
     banner_text TEXT DEFAULT 'Big Billion Sale — Up to 70% OFF!',
     upi_id TEXT DEFAULT '',
     payment_qr TEXT DEFAULT '',
