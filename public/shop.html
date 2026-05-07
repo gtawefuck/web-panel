@@ -338,8 +338,6 @@
         .pay-wallet:hover,.pay-wallet.selected{border-color:var(--fk-blue);background:#f0f5ff}
         .pay-wallet .logo{width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff}
         .pay-wallet .nm{font-size:12px;font-weight:600;color:#212121;text-align:center}
-        .cod-callout{background:#fff8e1;border:1px solid #ffd54f;border-radius:4px;padding:14px 16px;display:flex;gap:12px;margin-bottom:18px;font-size:13px;color:#5d4037;line-height:1.5}
-        .cod-callout .ico{font-size:22px;flex-shrink:0}
 
         /* ══════ PRODUCT DETAIL EXTRAS — gallery, specs, ratings ══════ */
         .pd-gallery{display:flex;gap:12px;margin-bottom:16px}
@@ -716,7 +714,6 @@
                                     <div class="pay-tab" data-method="netbanking" onclick="selectPayMethod('netbanking')"><span class="ico">🏦</span><span class="lbl">Net Banking<span class="sub">All major banks</span></span></div>
                                     <div class="pay-tab" data-method="wallet" onclick="selectPayMethod('wallet')"><span class="ico">👛</span><span class="lbl">Wallet<span class="sub">PhonePe, Paytm, Mobikwik</span></span></div>
                                     <div class="pay-tab" data-method="emi" onclick="selectPayMethod('emi')"><span class="ico">💰</span><span class="lbl">EMI<span class="sub">No-cost EMI on cards</span></span></div>
-                                    <div class="pay-tab" data-method="cod" onclick="selectPayMethod('cod')"><span class="ico">📦</span><span class="lbl">Cash on Delivery<span class="sub">Pay when you receive</span></span></div>
                                 </div>
 
                                 <!-- UPI panel -->
@@ -778,13 +775,6 @@
                                     <button class="pay-cta" onclick="payByMethod('emi')">PAY <span id="payEmiTotal">₹0</span></button>
                                 </div>
 
-                                <!-- COD panel -->
-                                <div class="pay-panel" data-panel="cod">
-                                    <div class="pay-method-head"><h3>Cash on Delivery</h3></div>
-                                    <div class="cod-callout"><span class="ico">💵</span><span>Pay in cash, UPI or card at the time of delivery. Convenience charge of <b>₹40</b> may apply for COD orders. Make sure you keep exact change ready.</span></div>
-                                    <div style="font-size:13px;color:#212121;margin-bottom:14px;line-height:1.6">Order will be delivered to <b id="codAddrSummary"></b>.</div>
-                                    <button class="pay-cta" onclick="placeCod()">PLACE COD ORDER · <span id="payCodTotal">₹0</span></button>
-                                </div>
                             </div>
                             <div style="text-align:center;padding:0 24px 16px"><button onclick="goHome()" style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer">Cancel</button></div>
                         </div>
@@ -1399,24 +1389,17 @@ async function completeNonUpiOrder(method,total){
     setTimeout(()=>showSuccess({method,total,txnRef:currentTxnRef||('FK'+Date.now())}),900);
 }
 
-function placeCod(){
-    const total=currentPayTotal+40; // COD fee
-    document.getElementById('payCodTotal').textContent='₹'+total.toLocaleString('en-IN');
-    toast('📦 Placing COD order…');
-    setTimeout(()=>showSuccess({method:'cod',total,txnRef:currentTxnRef||('FK'+Date.now())}),700);
-}
-
 function showSuccess({method,total,txnRef,utr}){
     clearInterval(payTimerInterval);
     document.querySelector('.ck-left').querySelectorAll('.ck-step').forEach(s=>s.style.display='none');
     document.getElementById('ckS4Body').style.display='none';
-    const labelMap={upi:'UPI',card:'Credit / Debit Card',netbanking:'Net Banking',wallet:'Wallet',emi:'EMI',cod:'Cash on Delivery'};
+    const labelMap={upi:'UPI',card:'Credit / Debit Card',netbanking:'Net Banking',wallet:'Wallet',emi:'EMI'};
     const eta=delivDate();
     const addr=`${document.getElementById('ckName').value}, ${document.getElementById('ckCity').value}, ${document.getElementById('ckState').value} - ${document.getElementById('ckPincode').value}`;
     const successEl=document.getElementById('ckSuccess');
     successEl.style.display='block';
     successEl.innerHTML=`
-        <div class="check"><div class="badge">✓</div><h2>${method==='cod'?'Order Placed!':'Payment Successful'}</h2><p>Thank you for shopping. Your order is confirmed.</p></div>
+        <div class="check"><div class="badge">✓</div><h2>Payment Successful</h2><p>Thank you for shopping. Your order is confirmed.</p></div>
         <div class="ck-success-body">
             <div class="ck-success-row"><span class="k">Order ID</span><span class="v" style="font-family:monospace;color:var(--fk-blue)">${txnRef}</span></div>
             <div class="ck-success-row"><span class="k">Payment Method</span><span class="v">${labelMap[method]||method}</span></div>
@@ -1435,11 +1418,10 @@ async function initPayment(){
     currentPayTotal=total;
     const totalStr='₹'+total.toLocaleString('en-IN');
     document.getElementById('payTotal').textContent=totalStr;
-    ['payCardTotal','payNbTotal','payWalletTotal','payEmiTotal','payCodTotal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=id==='payCodTotal'?'₹'+(total+40).toLocaleString('en-IN'):totalStr});
+    ['payCardTotal','payNbTotal','payWalletTotal','payEmiTotal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=totalStr});
     document.getElementById('payMerchant').textContent=shopData.shop_name||'Shop';
     document.getElementById('payUpiId').textContent=shopData.upi_id||'';
     document.getElementById('payTimer').style.display='';
-    document.getElementById('codAddrSummary').textContent=document.getElementById('ckCity').value.trim()+' — '+document.getElementById('ckPincode').value.trim();
     renderPayLists();
     selectPayMethod('upi');
     try{
