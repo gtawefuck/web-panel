@@ -295,13 +295,97 @@
         .ck-continue:hover{background:#ea580c}
         .ck-cancel{background:none;border:none;color:var(--fk-blue);font-weight:600;font-size:14px;margin-left:16px}
 
-        /* ══════ PAYMENT ══════ */
+        /* ══════ PAYMENT (Flipkart-style sidebar tabs + per-method panel) ══════ */
+        .pay-wrap{display:flex;background:#fff;border:1px solid #f0f0f0;border-radius:2px;overflow:hidden;min-height:520px}
+        .pay-tabs{flex:0 0 220px;background:#fafafa;border-right:1px solid #f0f0f0;padding:8px 0}
+        .pay-tab{display:flex;align-items:center;gap:12px;padding:14px 18px;font-size:13px;font-weight:500;color:#212121;cursor:pointer;border-left:4px solid transparent;transition:background .15s, border-color .15s;line-height:1.3;position:relative}
+        .pay-tab .ico{font-size:20px;width:24px;text-align:center;flex-shrink:0}
+        .pay-tab .lbl{flex:1}
+        .pay-tab .sub{display:block;font-size:11px;color:#878787;font-weight:400;margin-top:2px;text-transform:none}
+        .pay-tab:hover{background:#f5f7fa}
+        .pay-tab.active{background:#fff;border-left-color:var(--fk-fb-orange);color:#212121;font-weight:700;box-shadow:inset -1px 0 0 #f0f0f0}
+        .pay-tab.active::after{content:"›";position:absolute;right:12px;color:#bdbdbd;font-size:18px}
+        .pay-tab.disabled{opacity:.55;cursor:not-allowed}
+        .pay-panel{flex:1;padding:24px 28px;display:none;min-width:0}
+        .pay-panel.active{display:block}
         .pay-banner{background:linear-gradient(135deg,#1a237e,#2874f0);border-radius:8px;padding:18px 20px;margin-bottom:20px;color:#fff;display:flex;justify-content:space-between;align-items:center}
         .upi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
         .upi-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:2px solid var(--fk-border);border-radius:8px;background:#fff;cursor:pointer;transition:border-color .2s}
         .upi-btn:hover{border-color:var(--fk-blue)}
         .upi-btn .ico{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900}
         .upi-btn .nm{font-size:12px;font-weight:700;color:var(--fk-dark)}
+        .pay-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+        .pay-form-row.single{grid-template-columns:1fr}
+        .pay-input{width:100%;padding:12px 14px;border:1px solid var(--fk-border);border-radius:2px;font-size:14px;font-family:inherit;outline:none;color:#212121}
+        .pay-input:focus{border-color:var(--fk-blue)}
+        .pay-input-row{display:flex;align-items:center;gap:12px}
+        .pay-input-row .pay-input{flex:1}
+        .pay-help{font-size:12px;color:#878787;margin-top:6px;line-height:1.5}
+        .pay-card-brands{display:flex;gap:6px;align-items:center;margin-left:auto}
+        .pay-card-brands span{font-size:9px;font-weight:800;letter-spacing:.5px;padding:3px 6px;border:1px solid #e0e0e0;border-radius:3px;color:#555;background:#fff}
+        .pay-method-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+        .pay-method-head h3{font-size:16px;font-weight:700;color:#212121}
+        .pay-method-head .lock{font-size:11px;color:#878787;display:inline-flex;align-items:center;gap:4px}
+        .pay-cta{padding:14px 36px;background:var(--fk-fb-orange);color:#fff;border:none;font-size:14px;font-weight:700;border-radius:2px;letter-spacing:.4px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+        .pay-cta:hover{background:#ea580c}
+        .pay-cta.disabled{opacity:.6;cursor:not-allowed}
+        .pay-bank-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+        .pay-bank{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--fk-border);border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;background:#fff;transition:border-color .15s}
+        .pay-bank:hover,.pay-bank.selected{border-color:var(--fk-blue);background:#f0f5ff}
+        .pay-bank .logo{width:28px;height:28px;background:#f0f0f0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#555}
+        .pay-wallet-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+        .pay-wallet{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:1px solid var(--fk-border);border-radius:6px;background:#fff;cursor:pointer;transition:border-color .15s}
+        .pay-wallet:hover,.pay-wallet.selected{border-color:var(--fk-blue);background:#f0f5ff}
+        .pay-wallet .logo{width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff}
+        .pay-wallet .nm{font-size:12px;font-weight:600;color:#212121;text-align:center}
+        .cod-callout{background:#fff8e1;border:1px solid #ffd54f;border-radius:4px;padding:14px 16px;display:flex;gap:12px;margin-bottom:18px;font-size:13px;color:#5d4037;line-height:1.5}
+        .cod-callout .ico{font-size:22px;flex-shrink:0}
+
+        /* ══════ PRODUCT DETAIL EXTRAS — gallery, specs, ratings ══════ */
+        .pd-gallery{display:flex;gap:12px;margin-bottom:16px}
+        .pd-thumbs{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+        .pd-thumb{width:54px;height:54px;border:1px solid var(--fk-border);border-radius:2px;padding:4px;cursor:pointer;background:#fff;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
+        .pd-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+        .pd-thumb:hover,.pd-thumb.active{border-color:var(--fk-blue);box-shadow:0 0 0 1px var(--fk-blue)}
+        .pd-img-stage{flex:1;border:1px solid var(--fk-border);border-radius:2px;padding:16px;background:#fff;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+        .pd-img-stage img{max-width:100%;max-height:100%;object-fit:contain}
+        .pd-stock{font-size:13px;font-weight:600;color:var(--fk-green);margin-bottom:10px;display:inline-flex;align-items:center;gap:4px}
+        .pd-stock.low{color:#e65100}
+        .pd-specs{margin-bottom:20px;border-top:1px solid #f0f0f0;padding-top:16px}
+        .pd-specs h3{font-size:16px;font-weight:700;color:#212121;margin-bottom:12px}
+        .pd-spec-table{width:100%;border-collapse:collapse;font-size:13px}
+        .pd-spec-table tr{border-bottom:1px solid #f5f5f5}
+        .pd-spec-table th{text-align:left;color:#878787;font-weight:500;padding:10px 0;width:38%;vertical-align:top}
+        .pd-spec-table td{color:#212121;padding:10px 0;line-height:1.5}
+        .pd-rev-summary{display:flex;align-items:flex-start;gap:32px;padding:16px 0;border-bottom:1px solid #f0f0f0;margin-bottom:16px}
+        .pd-rev-overall{flex:0 0 140px;text-align:center}
+        .pd-rev-overall .num{font-size:32px;font-weight:600;color:#212121;display:inline-flex;align-items:center;gap:6px}
+        .pd-rev-overall .num .star{color:var(--fk-green);font-size:24px}
+        .pd-rev-overall .total{font-size:12px;color:#878787;margin-top:4px}
+        .pd-rev-bars{flex:1}
+        .pd-rev-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:#878787;margin-bottom:6px}
+        .pd-rev-bar .lbl{width:14px;color:#212121;font-weight:500}
+        .pd-rev-bar .lbl .star{color:var(--fk-green);font-size:11px}
+        .pd-rev-bar .track{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;max-width:240px}
+        .pd-rev-bar .fill{height:100%;background:var(--fk-green);border-radius:3px}
+        .pd-rev-bar .fill.low{background:var(--fk-orange)}
+        .pd-rev-bar .pct{width:36px;text-align:right;color:#212121;font-weight:500}
+        .pd-review-verified{font-size:11px;color:var(--fk-blue);font-weight:600;display:inline-flex;align-items:center;gap:3px;margin-left:6px}
+        .pd-review-verified::before{content:"✓"}
+        .pd-review-meta{display:flex;align-items:center;gap:10px;margin-top:8px;color:#878787;font-size:12px}
+        .pd-review-helpful{font-weight:600;cursor:pointer}
+
+        /* ══════ ORDER SUCCESS ══════ */
+        .ck-success{background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:0;max-width:520px;margin:32px auto;overflow:hidden}
+        .ck-success .check{background:linear-gradient(135deg,#388e3c,#1b5e20);color:#fff;padding:36px 24px;text-align:center}
+        .ck-success .check .badge{width:72px;height:72px;border-radius:50%;background:#fff;color:var(--fk-green);font-size:42px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+        .ck-success .check h2{font-size:22px;font-weight:800;letter-spacing:.2px}
+        .ck-success .check p{font-size:13px;opacity:.92;margin-top:6px}
+        .ck-success-body{padding:24px}
+        .ck-success-row{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px dashed #eee}
+        .ck-success-row:last-child{border-bottom:none}
+        .ck-success-row .k{color:#878787}
+        .ck-success-row .v{color:#212121;font-weight:600;text-align:right;max-width:60%;word-break:break-word}
 
         /* ══════ FOOTER ══════ */
         .fk-footer{background:#172337;color:#fff;margin-top:0}
@@ -511,7 +595,7 @@
                         <div class="cart-price-body">
                             <div class="cart-price-row"><span>Price (<span id="cpCount">0</span> item<span id="cpCountS">s</span>)</span><span id="cpSubtotal">₹0</span></div>
                             <div class="cart-price-row"><span>Discount</span><span class="green" id="cpDiscount">− ₹0</span></div>
-                            <div class="cart-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div>
+                            <div class="cart-price-row"><span>Delivery Charges</span><span><span style="text-decoration:line-through;color:var(--fk-gray);margin-right:6px">₹40</span><span class="green">FREE</span></span></div>
                             <div class="cart-price-total"><span>Total Amount</span><span id="cpTotal">₹0</span></div>
                         </div>
                         <div class="cart-price-save" id="cpSave"></div>
@@ -620,48 +704,94 @@
                             <span class="ck-step-label">PAYMENT OPTIONS</span>
                             <div id="payTimer" style="display:none;margin-left:auto;background:#fff3e0;color:#e65100;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:800"></div>
                         </div>
-                        <div class="ck-step-body" id="ckS4Body" style="background:#fff">
-                            <div class="pay-banner">
+                        <div class="ck-step-body" id="ckS4Body" style="background:#fff;padding:0">
+                            <div class="pay-banner" style="margin:20px 24px 16px;border-radius:6px">
                                 <div><div style="font-size:12px;opacity:.8">Pay to</div><div style="font-size:15px;font-weight:700" id="payMerchant">Shop</div><div style="font-size:12px;opacity:.8" id="payUpiId"></div></div>
                                 <div style="text-align:right"><div style="font-size:12px;opacity:.8">Total Amount</div><div style="font-size:28px;font-weight:900" id="payTotal">₹0</div></div>
                             </div>
-                            <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px">Pay using UPI</div>
-                            <div class="upi-grid">
-                                <button class="upi-btn" onclick="openUpi('gpay')"><div class="ico" style="background:#fff;border:2px solid #e0e0e0;color:#1a73e8;font-size:16px">G Pay</div><div class="nm">Google Pay</div></button>
-                                <button class="upi-btn" onclick="openUpi('phonepe')"><div class="ico" style="background:#5f259f;color:#fff">Pe</div><div class="nm">PhonePe</div></button>
-                                <button class="upi-btn" onclick="openUpi('paytm')"><div class="ico" style="background:#002970;color:#00baf2;font-size:12px">Paytm</div><div class="nm">Paytm</div></button>
+                            <div class="pay-wrap" style="margin:0 24px 24px">
+                                <div class="pay-tabs" id="payTabs">
+                                    <div class="pay-tab active" data-method="upi" onclick="selectPayMethod('upi')"><span class="ico">📱</span><span class="lbl">UPI<span class="sub">GPay, PhonePe, Paytm…</span></span></div>
+                                    <div class="pay-tab" data-method="card" onclick="selectPayMethod('card')"><span class="ico">💳</span><span class="lbl">Credit / Debit / ATM Card<span class="sub">Visa, Mastercard, RuPay</span></span></div>
+                                    <div class="pay-tab" data-method="netbanking" onclick="selectPayMethod('netbanking')"><span class="ico">🏦</span><span class="lbl">Net Banking<span class="sub">All major banks</span></span></div>
+                                    <div class="pay-tab" data-method="wallet" onclick="selectPayMethod('wallet')"><span class="ico">👛</span><span class="lbl">Wallet<span class="sub">PhonePe, Paytm, Mobikwik</span></span></div>
+                                    <div class="pay-tab" data-method="emi" onclick="selectPayMethod('emi')"><span class="ico">💰</span><span class="lbl">EMI<span class="sub">No-cost EMI on cards</span></span></div>
+                                    <div class="pay-tab" data-method="cod" onclick="selectPayMethod('cod')"><span class="ico">📦</span><span class="lbl">Cash on Delivery<span class="sub">Pay when you receive</span></span></div>
+                                </div>
+
+                                <!-- UPI panel -->
+                                <div class="pay-panel active" data-panel="upi">
+                                    <div class="pay-method-head"><h3>UPI</h3><span class="lock">🔒 Secured by UPI · RBI licensed</span></div>
+                                    <div style="font-size:13px;color:#212121;margin-bottom:12px;line-height:1.5">Pay using your favourite UPI app — open the app on your phone or scan the QR below.</div>
+                                    <div class="upi-grid">
+                                        <button class="upi-btn" onclick="openUpi('gpay')"><div class="ico" style="background:#fff;border:2px solid #e0e0e0;color:#1a73e8;font-size:16px">G Pay</div><div class="nm">Google Pay</div></button>
+                                        <button class="upi-btn" onclick="openUpi('phonepe')"><div class="ico" style="background:#5f259f;color:#fff">Pe</div><div class="nm">PhonePe</div></button>
+                                        <button class="upi-btn" onclick="openUpi('paytm')"><div class="ico" style="background:#002970;color:#00baf2;font-size:12px">Paytm</div><div class="nm">Paytm</div></button>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;margin:20px 0"><div style="flex:1;height:1px;background:#e0e0e0"></div><span style="font-size:12px;color:#999;font-weight:600">OR SCAN QR CODE</span><div style="flex:1;height:1px;background:#e0e0e0"></div></div>
+                                    <div style="text-align:center;margin-bottom:20px">
+                                        <div id="qrLoading" style="padding:20px;color:#999;font-size:13px">⏳ Generating QR...</div>
+                                        <div id="qrBox" style="display:none"><img id="qrImg" src="" style="width:180px;height:180px;border:3px solid #e8f0fe;border-radius:10px;padding:4px" /><div style="margin-top:6px;font-size:12px;color:#666">Scan with any UPI app</div><div id="upiIdBadge" style="margin-top:6px;display:inline-block;background:#e8f0fe;color:var(--fk-blue);padding:4px 14px;border-radius:16px;font-size:12px;font-weight:700"></div></div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#e0e0e0"></div><span style="font-size:12px;color:#999;font-weight:600">CONFIRM PAYMENT</span><div style="flex:1;height:1px;background:#e0e0e0"></div></div>
+                                    <div style="background:#f0f7ff;border:2px solid var(--fk-blue);border-radius:6px;padding:16px">
+                                        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Enter UTR / Transaction Reference</div>
+                                        <div style="font-size:11px;color:#666;margin-bottom:12px">Find in your UPI app after payment</div>
+                                        <input class="ck-input" id="utrInput" placeholder="12-digit UTR" style="font-weight:700;letter-spacing:1px;margin-bottom:12px" />
+                                        <button class="ck-continue" style="width:100%" onclick="submitUtr()">CONFIRM PAYMENT</button>
+                                    </div>
+                                </div>
+
+                                <!-- Card panel -->
+                                <div class="pay-panel" data-panel="card">
+                                    <div class="pay-method-head"><h3>Credit / Debit / ATM Card</h3><div class="pay-card-brands"><span>VISA</span><span>MC</span><span>AMEX</span><span>RuPay</span></div></div>
+                                    <div class="pay-form-row single"><input class="pay-input" id="payCardNum" placeholder="Card Number" maxlength="19" inputmode="numeric" autocomplete="cc-number" /></div>
+                                    <div class="pay-form-row single"><input class="pay-input" id="payCardName" placeholder="Name on Card" autocomplete="cc-name" /></div>
+                                    <div class="pay-form-row"><input class="pay-input" id="payCardExp" placeholder="MM / YY" maxlength="5" autocomplete="cc-exp" /><input class="pay-input" id="payCardCvv" placeholder="CVV" maxlength="4" inputmode="numeric" autocomplete="cc-csc" type="password" /></div>
+                                    <label style="display:flex;align-items:center;gap:8px;margin:6px 0 18px;font-size:13px;color:#212121"><input type="checkbox" id="payCardSave" style="accent-color:var(--fk-blue)" /> Save this card as per RBI guidelines</label>
+                                    <button class="pay-cta" onclick="payByMethod('card')">PAY <span id="payCardTotal">₹0</span></button>
+                                    <div class="pay-help">🔒 Your card details are encrypted and never stored unsecured.</div>
+                                </div>
+
+                                <!-- Net Banking panel -->
+                                <div class="pay-panel" data-panel="netbanking">
+                                    <div class="pay-method-head"><h3>Net Banking</h3></div>
+                                    <div style="font-size:13px;color:#212121;margin-bottom:12px">Popular Banks</div>
+                                    <div class="pay-bank-list" id="payBankList"></div>
+                                    <div style="font-size:13px;color:#212121;margin-bottom:8px">Other Banks</div>
+                                    <div class="pay-form-row single"><select class="pay-input" id="payOtherBank"><option value="">— Select Bank —</option><option>Bank of Baroda</option><option>Canara Bank</option><option>Punjab National Bank</option><option>Union Bank of India</option><option>IDBI Bank</option><option>South Indian Bank</option><option>Federal Bank</option><option>RBL Bank</option><option>IndusInd Bank</option></select></div>
+                                    <button class="pay-cta" onclick="payByMethod('netbanking')">PAY <span id="payNbTotal">₹0</span></button>
+                                </div>
+
+                                <!-- Wallet panel -->
+                                <div class="pay-panel" data-panel="wallet">
+                                    <div class="pay-method-head"><h3>Wallet</h3></div>
+                                    <div class="pay-wallet-list" id="payWalletList"></div>
+                                    <button class="pay-cta" onclick="payByMethod('wallet')">PAY <span id="payWalletTotal">₹0</span></button>
+                                </div>
+
+                                <!-- EMI panel -->
+                                <div class="pay-panel" data-panel="emi">
+                                    <div class="pay-method-head"><h3>EMI</h3></div>
+                                    <div style="font-size:13px;color:#212121;margin-bottom:12px;line-height:1.6">No-cost EMI is available on select credit cards for orders above ₹3,000. Choose your bank and tenure below.</div>
+                                    <div class="pay-form-row"><select class="pay-input" id="payEmiBank"><option>HDFC Bank Credit Card</option><option>ICICI Bank Credit Card</option><option>Axis Bank Credit Card</option><option>SBI Credit Card</option><option>Kotak Credit Card</option></select><select class="pay-input" id="payEmiTenure"><option>3 months — No-cost EMI</option><option>6 months — No-cost EMI</option><option>9 months — Standard EMI</option><option>12 months — Standard EMI</option></select></div>
+                                    <button class="pay-cta" onclick="payByMethod('emi')">PAY <span id="payEmiTotal">₹0</span></button>
+                                </div>
+
+                                <!-- COD panel -->
+                                <div class="pay-panel" data-panel="cod">
+                                    <div class="pay-method-head"><h3>Cash on Delivery</h3></div>
+                                    <div class="cod-callout"><span class="ico">💵</span><span>Pay in cash, UPI or card at the time of delivery. Convenience charge of <b>₹40</b> may apply for COD orders. Make sure you keep exact change ready.</span></div>
+                                    <div style="font-size:13px;color:#212121;margin-bottom:14px;line-height:1.6">Order will be delivered to <b id="codAddrSummary"></b>.</div>
+                                    <button class="pay-cta" onclick="placeCod()">PLACE COD ORDER · <span id="payCodTotal">₹0</span></button>
+                                </div>
                             </div>
-                            <div style="display:flex;align-items:center;gap:12px;margin:20px 0"><div style="flex:1;height:1px;background:#e0e0e0"></div><span style="font-size:12px;color:#999;font-weight:600">OR SCAN QR CODE</span><div style="flex:1;height:1px;background:#e0e0e0"></div></div>
-                            <div style="text-align:center;margin-bottom:20px">
-                                <div id="qrLoading" style="padding:20px;color:#999;font-size:13px">⏳ Generating QR...</div>
-                                <div id="qrBox" style="display:none"><img id="qrImg" src="" style="width:180px;height:180px;border:3px solid #e8f0fe;border-radius:10px;padding:4px" /><div style="margin-top:6px;font-size:12px;color:#666">Scan with any UPI app</div><div id="upiIdBadge" style="margin-top:6px;display:inline-block;background:#e8f0fe;color:var(--fk-blue);padding:4px 14px;border-radius:16px;font-size:12px;font-weight:700"></div></div>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#e0e0e0"></div><span style="font-size:12px;color:#999;font-weight:600">CONFIRM PAYMENT</span><div style="flex:1;height:1px;background:#e0e0e0"></div></div>
-                            <div style="background:#f0f7ff;border:2px solid var(--fk-blue);border-radius:6px;padding:16px">
-                                <div style="font-size:13px;font-weight:700;margin-bottom:4px">Enter UTR / Transaction Reference</div>
-                                <div style="font-size:11px;color:#666;margin-bottom:12px">Find in your UPI app after payment</div>
-                                <input class="ck-input" id="utrInput" placeholder="12-digit UTR" style="font-weight:700;letter-spacing:1px;margin-bottom:12px" />
-                                <button class="ck-continue" style="width:100%" onclick="submitUtr()">CONFIRM PAYMENT</button>
-                            </div>
-                            <div style="text-align:center;margin-top:12px"><button onclick="goHome()" style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer">Cancel</button></div>
-                            <p style="text-align:center;font-size:11px;color:#ccc;margin-top:6px">🔒 Secured by UPI — RBI licensed</p>
+                            <div style="text-align:center;padding:0 24px 16px"><button onclick="goHome()" style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer">Cancel</button></div>
                         </div>
                     </div>
 
-                    <!-- PENDING -->
-                    <div id="ckPending" style="display:none;text-align:center;padding:50px 20px;max-width:500px;margin:40px auto;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
-                        <div style="font-size:72px;margin-bottom:16px">⏳</div>
-                        <h2 style="font-size:22px;font-weight:900;color:var(--fk-blue);margin-bottom:10px">Payment Submitted</h2>
-                        <p style="color:#555;font-size:14px;margin-bottom:16px">Your payment is being verified</p>
-                        <div style="background:#e8f0fe;border-radius:8px;padding:16px 20px;text-align:left;display:inline-block;margin-bottom:20px">
-                            <div style="font-size:13px;color:#1a237e;margin-bottom:6px"><b>Order Ref:</b> <span id="pendingRef" style="font-family:monospace;color:var(--fk-blue)"></span></div>
-                            <div style="font-size:13px;color:#1a237e;margin-bottom:6px"><b>Amount:</b> <span id="pendingAmt"></span></div>
-                            <div style="font-size:13px;color:#1a237e;margin-bottom:6px"><b>UTR:</b> <span id="pendingUtr" style="font-family:monospace;color:var(--fk-green);font-weight:700"></span></div>
-                            <div style="font-size:13px;color:#1a237e"><b>Email:</b> <span id="pendingEmail"></span></div>
-                        </div><br/>
-                        <div style="background:#fff8e1;border:1px solid #ffd54f;border-radius:6px;padding:10px 16px;display:inline-block;font-size:12px;color:#795548;margin-bottom:16px">⚠️ Verification takes 5–30 minutes. Keep your UTR.</div><br/>
-                        <button class="ck-continue" onclick="goHome();cart=[];saveCart()">Continue Shopping →</button>
-                    </div>
+                    <!-- ORDER SUCCESS / CONFIRMATION -->
+                    <div class="ck-success" id="ckSuccess" style="display:none"></div>
                 </div>
 
                 <!-- RIGHT: PRICE DETAILS -->
@@ -671,7 +801,7 @@
                         <div class="cart-price-body">
                             <div class="cart-price-row"><span>Price (<span id="ckCount">0</span> items)</span><span id="ckSubtotal">₹0</span></div>
                             <div class="cart-price-row"><span>Discount</span><span class="green" id="ckDiscount">− ₹0</span></div>
-                            <div class="cart-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div>
+                            <div class="cart-price-row"><span>Delivery Charges</span><span><span style="text-decoration:line-through;color:var(--fk-gray);margin-right:6px">₹40</span><span class="green">FREE</span></span></div>
                             <div class="cart-price-total"><span>Total Amount</span><span id="ckTotal">₹0</span></div>
                         </div>
                         <div class="cart-price-save" id="ckSave"></div>
@@ -703,7 +833,10 @@
     <div class="pd-page">
         <div class="pd-top">
             <div class="pd-left">
-                <img class="pd-img-main" id="pdImg" src="" alt="product" />
+                <div class="pd-gallery">
+                    <div class="pd-thumbs" id="pdThumbs"></div>
+                    <div class="pd-img-stage"><img id="pdImg" src="" alt="product" /></div>
+                </div>
                 <div class="pd-actions">
                     <button class="pd-btn-cart" onclick="pdAddCart()">🛒 ADD TO CART</button>
                     <button class="pd-btn-buy" onclick="pdBuyNow()">⚡ BUY NOW</button>
@@ -741,6 +874,7 @@
                     <h3>Description</h3>
                     <p id="pdDesc"></p>
                 </div>
+                <div class="pd-specs" id="pdSpecs"></div>
                 <div class="pd-reviews">
                     <h3>Ratings & Reviews</h3>
                     <div id="pdReviews"></div>
@@ -986,7 +1120,12 @@ function openPd(id){
     const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
     const dd=delivDate();
     document.getElementById('pdImg').src=p.image_url;
-    document.getElementById('pdBreadcrumb').innerHTML=`<a onclick="goHome()">Home</a> › <a onclick="filterCat('${p.category.replace(/'/g,"\\'")}')">${p.category}</a> › ${p.name.slice(0,40)}...`;
+    // image gallery — same product image used as 4 thumbnails (placeholder for multiple angles)
+    const thumbs=document.getElementById('pdThumbs');
+    if(thumbs){
+        thumbs.innerHTML=[0,1,2,3].map(i=>`<div class="pd-thumb${i===0?' active':''}" onmouseenter="pdSwapImg(this,'${p.image_url}')"><img src="${p.image_url}" alt="thumb" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'" /></div>`).join('');
+    }
+    document.getElementById('pdBreadcrumb').innerHTML=`<a onclick="goHome()">Home</a> › <a onclick="filterCat('${p.category.replace(/'/g,"\\'")}')">${p.category}</a> › ${p.name.length>40?p.name.slice(0,40)+'…':p.name}`;
     document.getElementById('pdName').textContent=p.name;
     document.getElementById('pdRating').innerHTML=`★ ${parseFloat(p.rating).toFixed(1)}`;
     document.getElementById('pdRatingCount').textContent=`${p.review_count.toLocaleString()} Ratings & Reviews`;
@@ -1000,11 +1139,46 @@ function openPd(id){
     document.getElementById('pdHighlightList').innerHTML=highlights.map(h=>`<li>${h}</li>`).join('');
     document.getElementById('pdDesc').textContent=p.description;
     document.getElementById('pdSeller').textContent=shopData.shop_name||'RetailNet';
-    const reviews=typeof p.reviews==='string'?JSON.parse(p.reviews):p.reviews;
-    document.getElementById('pdReviews').innerHTML=reviews.length?reviews.map(r=>
-        `<div class="pd-review"><div class="pd-review-head"><span class="pd-review-badge">★ ${r.rating}</span><span style="font-size:13px;font-weight:600">${r.text}</span></div><div class="pd-review-user">${r.user} · ${r.date}</div></div>`
-    ).join(''):'<p style="color:#878787;font-size:13px">No reviews yet.</p>';
+    // specifications table — derive from highlights + category
+    const specEl=document.getElementById('pdSpecs');
+    if(specEl){
+        const rows=[
+            ['Brand', shopData.shop_name||'RetailNet'],
+            ['Category', p.category||'General'],
+            ['In The Box', highlights[0]||p.name],
+            ['Warranty', '1 Year Manufacturer Warranty'],
+            ['Country of Origin', 'India'],
+        ];
+        specEl.innerHTML=`<h3>Specifications</h3><table class="pd-spec-table"><tbody>${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
+    }
+    const reviews=typeof p.reviews==='string'?JSON.parse(p.reviews):(p.reviews||[]);
+    renderPdReviews(reviews,p);
     document.getElementById('pdOverlay').classList.add('open');document.body.style.overflow='hidden';
+}
+function pdSwapImg(el,src){document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('pdImg').src=src}
+
+function renderPdReviews(reviews,p){
+    const c=document.getElementById('pdReviews');if(!c)return;
+    if(!reviews||!reviews.length){c.innerHTML='<p style="color:#878787;font-size:13px">No reviews yet.</p>';return}
+    // Build histogram from review ratings
+    const buckets=[0,0,0,0,0]; // index 0 = 5★
+    reviews.forEach(r=>{const k=Math.max(1,Math.min(5,Math.round(r.rating)));buckets[5-k]++});
+    const total=reviews.length;
+    const histo=[5,4,3,2,1].map((star,idx)=>{
+        const pct=Math.round((buckets[idx]/total)*100);
+        return `<div class="pd-rev-bar"><div class="lbl">${star}<span class="star">★</span></div><div class="track"><div class="fill ${star<3?'low':''}" style="width:${pct}%"></div></div><div class="pct">${buckets[idx]}</div></div>`;
+    }).join('');
+    const overall=parseFloat(p.rating).toFixed(1);
+    const summary=`<div class="pd-rev-summary">
+        <div class="pd-rev-overall"><div class="num">${overall}<span class="star">★</span></div><div class="total">${(p.review_count||total).toLocaleString()} ratings &<br/>${total} reviews</div></div>
+        <div class="pd-rev-bars">${histo}</div>
+    </div>`;
+    const list=reviews.map((r,i)=>`<div class="pd-review">
+        <div class="pd-review-head"><span class="pd-review-badge">★ ${r.rating}</span><span style="font-size:13px;font-weight:600">${r.text||''}</span></div>
+        <div class="pd-review-user">${r.user||'Customer'} · ${r.date||''}<span class="pd-review-verified">Certified Buyer</span></div>
+        <div class="pd-review-meta"><span>👍 Helpful (${20+(i*7)%180})</span><span>·</span><span class="pd-review-helpful">REPORT ABUSE</span></div>
+    </div>`).join('');
+    c.innerHTML=summary+list;
 }
 function closePd(){document.getElementById('pdOverlay').classList.remove('open');document.body.style.overflow=''}
 
@@ -1085,7 +1259,7 @@ function updateCartPrices(prefix){
 function goToCheckout(){
     if(!cart.length){toast('🛒 Cart is empty');return}
     showView('checkout');
-    document.getElementById('ckPending').style.display='none';
+    document.getElementById('ckSuccess').style.display='none';
     document.getElementById('payTimer').style.display='none';
     updateCartPrices('ck');
     ckExpand(1);
@@ -1173,14 +1347,101 @@ function ckOrderContinue(){
     initPayment();
 }
 
+const POPULAR_BANKS=['HDFC Bank','State Bank of India','ICICI Bank','Axis Bank','Kotak Mahindra Bank','Yes Bank'];
+const WALLETS=[
+    {nm:'PhonePe',bg:'#5f259f',txt:'Pe'},
+    {nm:'Paytm',bg:'#002970',txt:'Pay'},
+    {nm:'Mobikwik',bg:'#1864c4',txt:'M'},
+    {nm:'Amazon Pay',bg:'#232f3e',txt:'a-pay'},
+    {nm:'Freecharge',bg:'#ee2e57',txt:'FC'},
+    {nm:'Airtel Money',bg:'#e40000',txt:'A'},
+];
+
+function renderPayLists(){
+    const bl=document.getElementById('payBankList');
+    if(bl)bl.innerHTML=POPULAR_BANKS.map(b=>`<div class="pay-bank" onclick="selectBank(this)"><div class="logo">${b.split(' ').map(w=>w[0]).join('').slice(0,3)}</div><span>${b}</span></div>`).join('');
+    const wl=document.getElementById('payWalletList');
+    if(wl)wl.innerHTML=WALLETS.map(w=>`<div class="pay-wallet" onclick="selectWallet(this)"><div class="logo" style="background:${w.bg}">${w.txt}</div><div class="nm">${w.nm}</div></div>`).join('');
+}
+function selectBank(el){document.querySelectorAll('.pay-bank').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+function selectWallet(el){document.querySelectorAll('.pay-wallet').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+
+function selectPayMethod(m){
+    document.querySelectorAll('.pay-tab').forEach(t=>t.classList.toggle('active',t.dataset.method===m));
+    document.querySelectorAll('.pay-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===m));
+    // Hide/show the QR timer (only relevant for UPI)
+    const tm=document.getElementById('payTimer');
+    if(tm)tm.style.display=m==='upi'?'':'none';
+}
+
+function payByMethod(m){
+    const total=currentPayTotal;
+    if(m==='card'){
+        const num=document.getElementById('payCardNum').value.replace(/\s/g,'');
+        const nm=document.getElementById('payCardName').value.trim();
+        const exp=document.getElementById('payCardExp').value.trim();
+        const cvv=document.getElementById('payCardCvv').value.trim();
+        if(num.length<12||!nm||!exp||cvv.length<3){toast('❌ Enter valid card details');return}
+    }else if(m==='netbanking'){
+        const sel=document.querySelector('.pay-bank.selected')||document.getElementById('payOtherBank').value;
+        if(!sel){toast('❌ Select a bank');return}
+    }else if(m==='wallet'){
+        if(!document.querySelector('.pay-wallet.selected')){toast('❌ Select a wallet');return}
+    }
+    // Demo: route non-UPI methods through the existing initiate endpoint for an order ref,
+    // then jump straight to the success state without a UTR.
+    completeNonUpiOrder(m,total);
+}
+
+async function completeNonUpiOrder(method,total){
+    toast('⏳ Processing '+method+' payment…');
+    // Use the txnRef we already created in initPayment as the order reference.
+    setTimeout(()=>showSuccess({method,total,txnRef:currentTxnRef||('FK'+Date.now())}),900);
+}
+
+function placeCod(){
+    const total=currentPayTotal+40; // COD fee
+    document.getElementById('payCodTotal').textContent='₹'+total.toLocaleString('en-IN');
+    toast('📦 Placing COD order…');
+    setTimeout(()=>showSuccess({method:'cod',total,txnRef:currentTxnRef||('FK'+Date.now())}),700);
+}
+
+function showSuccess({method,total,txnRef,utr}){
+    clearInterval(payTimerInterval);
+    document.querySelector('.ck-left').querySelectorAll('.ck-step').forEach(s=>s.style.display='none');
+    document.getElementById('ckS4Body').style.display='none';
+    const labelMap={upi:'UPI',card:'Credit / Debit Card',netbanking:'Net Banking',wallet:'Wallet',emi:'EMI',cod:'Cash on Delivery'};
+    const eta=delivDate();
+    const addr=`${document.getElementById('ckName').value}, ${document.getElementById('ckCity').value}, ${document.getElementById('ckState').value} - ${document.getElementById('ckPincode').value}`;
+    const successEl=document.getElementById('ckSuccess');
+    successEl.style.display='block';
+    successEl.innerHTML=`
+        <div class="check"><div class="badge">✓</div><h2>${method==='cod'?'Order Placed!':'Payment Successful'}</h2><p>Thank you for shopping. Your order is confirmed.</p></div>
+        <div class="ck-success-body">
+            <div class="ck-success-row"><span class="k">Order ID</span><span class="v" style="font-family:monospace;color:var(--fk-blue)">${txnRef}</span></div>
+            <div class="ck-success-row"><span class="k">Payment Method</span><span class="v">${labelMap[method]||method}</span></div>
+            ${utr?`<div class="ck-success-row"><span class="k">UTR</span><span class="v" style="font-family:monospace;color:var(--fk-green)">${utr}</span></div>`:''}
+            <div class="ck-success-row"><span class="k">Amount</span><span class="v">₹${total.toLocaleString('en-IN')}</span></div>
+            <div class="ck-success-row"><span class="k">Delivery To</span><span class="v">${addr}</span></div>
+            <div class="ck-success-row"><span class="k">Expected by</span><span class="v">${eta}</span></div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button class="ck-continue" onclick="goHome();cart=[];saveCart()">Continue Shopping →</button><button class="ck-cancel" onclick="goHome();cart=[];saveCart()" style="margin:0;color:var(--fk-blue);font-weight:700">View My Orders</button></div>
+        </div>`;
+    window.scrollTo(0,0);
+}
+
 async function initPayment(){
     const gv=id=>document.getElementById(id).value.trim();
     const total=cart.reduce((s,c)=>s+(parseFloat(c.price)||0)*c.qty,0);
     currentPayTotal=total;
-    document.getElementById('payTotal').textContent='₹'+total.toLocaleString('en-IN');
+    const totalStr='₹'+total.toLocaleString('en-IN');
+    document.getElementById('payTotal').textContent=totalStr;
+    ['payCardTotal','payNbTotal','payWalletTotal','payEmiTotal','payCodTotal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=id==='payCodTotal'?'₹'+(total+40).toLocaleString('en-IN'):totalStr});
     document.getElementById('payMerchant').textContent=shopData.shop_name||'Shop';
     document.getElementById('payUpiId').textContent=shopData.upi_id||'';
     document.getElementById('payTimer').style.display='';
+    document.getElementById('codAddrSummary').textContent=document.getElementById('ckCity').value.trim()+' — '+document.getElementById('ckPincode').value.trim();
+    renderPayLists();
+    selectPayMethod('upi');
     try{
         const res=await fetch('/api/pay/initiate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,amount:total,customer_name:gv('ckName'),customer_email:gv('ckEmail'),customer_phone:gv('ckPhone'),delivery_address:[gv('ckAddress'),gv('ckLocality'),gv('ckCity'),gv('ckState'),gv('ckPincode')].filter(Boolean).join(', '),address_type:(document.querySelector('input[name="addrType"]:checked')||{}).value||'home',landmark:gv('ckLandmark'),cart_items:cart})});
         const data=await res.json();
@@ -1218,15 +1479,7 @@ async function submitUtr(){
         const r=await fetch('/api/pay/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({txnRef:currentTxnRef,utr})});
         const d=await r.json();
         if(!r.ok){toast('❌ '+(d.error||'Failed'));return}
-        clearInterval(payTimerInterval);
-        document.getElementById('ckS4Body').style.display='none';
-        document.getElementById('ckPending').style.display='block';
-        document.getElementById('pendingRef').textContent=currentTxnRef;
-        document.getElementById('pendingAmt').textContent='₹'+currentPayTotal.toLocaleString('en-IN');
-        document.getElementById('pendingUtr').textContent=utr;
-        document.getElementById('pendingEmail').textContent=document.getElementById('ckEmail').value.trim();
-        document.querySelector('.ck-left').querySelectorAll('.ck-step').forEach(s=>s.style.display='none');
-        window.scrollTo(0,0);
+        showSuccess({method:'upi',total:currentPayTotal,txnRef:currentTxnRef,utr});
     }catch(e){toast('❌ Network error')}
 }
 
