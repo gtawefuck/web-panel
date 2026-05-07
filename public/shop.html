@@ -7,7 +7,8 @@
     <title id="shopTitle">Flipkart — Best Offers Online</title>
     <meta name="description" content="Best deals on electronics, fashion, home appliances and more." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
         rel="stylesheet" />
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -17,7 +18,7 @@
             --fk-green:#388e3c;--fk-red:#ff6161;--fk-orange:#ff9f00;--fk-fb-orange:#fb641b;
             --fk-dark:#212121;--fk-text:#212121;--radius:2px;--shadow:0 1px 1px 0 rgba(0,0,0,.1);
         }
-        body{font-family:'Inter',Roboto,Arial,sans-serif;background:var(--fk-bg);color:var(--fk-text);min-height:100vh;-webkit-font-smoothing:antialiased}
+        body{font-family:'Roboto','Inter',Arial,sans-serif;background:var(--fk-bg);color:var(--fk-text);min-height:100vh;-webkit-font-smoothing:antialiased;letter-spacing:.1px}
         a{text-decoration:none;color:inherit;cursor:pointer}
         button{cursor:pointer;font-family:inherit}
 
@@ -131,7 +132,7 @@
         .p-card{border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;padding:20px 16px 18px;cursor:pointer;transition:transform .2s, box-shadow .2s;position:relative;display:flex;flex-direction:column;background:#fff}
         .p-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:1;transform:translateY(-1px)}
         .p-card-img-wrap{text-align:center;margin-bottom:14px;position:relative;height:170px;display:flex;align-items:center;justify-content:center}
-        .p-card img{max-width:100%;max-height:170px;object-fit:contain;margin:0 auto;display:block;mix-blend-mode:multiply}
+        .p-card img{max-width:100%;max-height:170px;object-fit:contain;margin:0 auto;display:block}
         .p-card-name{font-size:14px;font-weight:400;color:#212121;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
         .p-card-rating{display:inline-flex;align-items:center;gap:6px;margin-bottom:6px}
         .p-card-rating .badge{background:var(--fk-green);color:#fff;font-size:11px;font-weight:700;padding:2px 5px 2px 4px;border-radius:3px;display:inline-flex;align-items:center;gap:2px;line-height:1.3}
@@ -174,9 +175,11 @@
         .login-signup a{color:var(--fk-blue);font-weight:700;font-size:13px}
 
         /* ══════ PRODUCT DETAIL PAGE (Flipkart style) ══════ */
-        .pd-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);display:none;overflow-y:auto}
-        .pd-overlay.open{display:block}
-        .pd-page{max-width:1200px;margin:0 auto;padding:16px 10px;min-height:100vh}
+        .pd-page{display:none;background:var(--fk-bg);min-height:100vh}
+        .pd-page.active{display:block}
+        .pd-page-inner{max-width:1248px;margin:0 auto;padding:16px 10px}
+        .pd-back{display:inline-flex;align-items:center;gap:6px;color:var(--fk-blue);font-size:13px;font-weight:600;cursor:pointer;padding:10px 4px 12px;text-transform:uppercase;letter-spacing:.3px}
+        .pd-back:hover{text-decoration:underline}
         .pd-top{display:flex;gap:0;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
         .pd-left{width:420px;flex-shrink:0;padding:24px;border-right:1px solid #f0f0f0;position:sticky;top:16px;align-self:flex-start}
         .pd-img-main{width:100%;aspect-ratio:1;object-fit:contain;border:1px solid #f0f0f0;border-radius:2px;padding:16px;margin-bottom:16px;background:#fff}
@@ -223,7 +226,8 @@
         .pd-review-badge{background:var(--fk-green);color:#fff;font-size:11px;font-weight:700;padding:2px 5px;border-radius:3px;display:inline-flex;align-items:center;gap:2px}
         .pd-review-text{font-size:14px;color:#212121;line-height:1.5}
         .pd-review-user{font-size:12px;color:var(--fk-gray);margin-top:6px}
-        .pd-close{position:fixed;top:16px;right:16px;z-index:210;background:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center}
+        .pd-go-cart{background:#388e3c !important}
+        .pd-go-cart:hover{background:#2e7d32 !important}
         .pd-similar{margin-top:16px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 
         /* ══════ CART PAGE (Flipkart style: full page, not drawer) ══════ */
@@ -475,7 +479,6 @@
                 <input type="text" id="searchInput" placeholder="Search for Products, Brands and More" onkeyup="filterProducts()" />
             </div>
             <div class="fk-hdr-links">
-                <button class="fk-login-btn" onclick="openLogin()">Login</button>
                 <a class="fk-hdr-link">Become a Seller</a>
                 <a class="fk-hdr-link">More <span class="dd">▾</span></a>
                 <a class="fk-hdr-link fk-cart-wrap" onclick="openCartPage()">
@@ -583,7 +586,7 @@
                         </div>
                         <div id="cartItemsContainer"></div>
                         <div class="cart-place-order" id="cartPlaceWrap" style="display:none">
-                            <button class="cart-place-btn" onclick="openLogin()">PLACE ORDER</button>
+                            <button class="cart-place-btn" onclick="goToCheckout()">PLACE ORDER</button>
                         </div>
                     </div>
                 </div>
@@ -817,10 +820,10 @@
     </footer>
 </div>
 
-<!-- PRODUCT DETAIL OVERLAY -->
-<div class="pd-overlay" id="pdOverlay">
-    <button class="pd-close" onclick="closePd()">✕</button>
-    <div class="pd-page">
+<!-- PRODUCT DETAIL PAGE -->
+<div class="pd-page" id="pdPage">
+    <div class="pd-page-inner">
+        <a class="pd-back" onclick="goHome()">← Back to results</a>
         <div class="pd-top">
             <div class="pd-left">
                 <div class="pd-gallery">
@@ -828,7 +831,7 @@
                     <div class="pd-img-stage"><img id="pdImg" src="" alt="product" /></div>
                 </div>
                 <div class="pd-actions">
-                    <button class="pd-btn-cart" onclick="pdAddCart()">🛒 ADD TO CART</button>
+                    <button class="pd-btn-cart" id="pdActionCart" onclick="pdActionCart()">🛒 ADD TO CART</button>
                     <button class="pd-btn-buy" onclick="pdBuyNow()">⚡ BUY NOW</button>
                 </div>
             </div>
@@ -945,6 +948,7 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 
 async function init(){
     loadCart();
+    isLoggedIn=true; // login UI is hidden in this build, treat every visitor as authenticated
     try{
         const res=await fetch(`/api/shop/info/${slug}`);
         if(res.status===410){document.getElementById('loadingScreen').style.display='none';document.getElementById('expiredPage').style.display='flex';return}
@@ -1087,22 +1091,18 @@ function showView(view){
     document.getElementById('mainContent').style.display=view==='home'?'':'none';
     document.getElementById('cartPage').classList.toggle('active',view==='cart');
     document.getElementById('ckPage').classList.toggle('active',view==='checkout');
+    document.getElementById('pdPage').classList.toggle('active',view==='product');
     document.getElementById('shopFooter').style.display=view==='home'?'':'none';
     if(view!=='home')window.scrollTo(0,0);
 }
-function goHome(){showView('home');closePd()}
+function goHome(){showView('home')}
 
-// Login Modal
-function openLogin(){document.getElementById('loginOverlay').classList.add('open');document.body.style.overflow='hidden'}
-function closeLogin(){document.getElementById('loginOverlay').classList.remove('open');document.body.style.overflow=''}
-function loginContinue(){
-    const email=document.getElementById('loginEmail').value.trim();
-    if(!email){toast('❌ Enter email or mobile number');return}
-    isLoggedIn=true;closeLogin();toast('✅ Logged in successfully');
-    if(cart.length)openCartPage();
-}
+// Login is bypassed in this build — the modal is kept in DOM for backward compat but never shown.
+function openLogin(){isLoggedIn=true}
+function closeLogin(){const o=document.getElementById('loginOverlay');if(o)o.classList.remove('open');document.body.style.overflow=''}
+function loginContinue(){isLoggedIn=true;closeLogin()}
 
-// Product Detail
+// Product Detail Page
 function openPd(id){
     id=parseInt(id);
     const p=allProducts.find(x=>parseInt(x.id)===id);if(!p)return;
@@ -1110,6 +1110,7 @@ function openPd(id){
     const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
     const dd=delivDate();
     document.getElementById('pdImg').src=p.image_url;
+    syncPdActionBtn();
     // image gallery — same product image used as 4 thumbnails (placeholder for multiple angles)
     const thumbs=document.getElementById('pdThumbs');
     if(thumbs){
@@ -1143,9 +1144,16 @@ function openPd(id){
     }
     const reviews=typeof p.reviews==='string'?JSON.parse(p.reviews):(p.reviews||[]);
     renderPdReviews(reviews,p);
-    document.getElementById('pdOverlay').classList.add('open');document.body.style.overflow='hidden';
+    showView('product');
 }
 function pdSwapImg(el,src){document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('pdImg').src=src}
+
+function syncPdActionBtn(){
+    const btn=document.getElementById('pdActionCart');if(!btn||!currentProduct)return;
+    const inCart=cart.some(c=>c.id===currentProduct.id);
+    if(inCart){btn.innerHTML='→ GO TO CART';btn.classList.add('pd-go-cart')}
+    else{btn.innerHTML='🛒 ADD TO CART';btn.classList.remove('pd-go-cart')}
+}
 
 function renderPdReviews(reviews,p){
     const c=document.getElementById('pdReviews');if(!c)return;
@@ -1170,21 +1178,21 @@ function renderPdReviews(reviews,p){
     </div>`).join('');
     c.innerHTML=summary+list;
 }
-function closePd(){document.getElementById('pdOverlay').classList.remove('open');document.body.style.overflow=''}
+function closePd(){showView('home')}
 
-function pdAddCart(){
+// Combined ADD TO CART / GO TO CART button (toggles based on whether the product is already in cart)
+function pdActionCart(){
     if(!currentProduct)return;
-    if(!isLoggedIn){closePd();openLogin();return}
     const ex=cart.find(c=>c.id===currentProduct.id);
-    if(ex){ex.qty++}else{cart.push({id:currentProduct.id,name:currentProduct.name,price:parseFloat(currentProduct.price),original_price:parseFloat(currentProduct.original_price),image_url:currentProduct.image_url,qty:1})}
-    saveCart();toast('✅ Added to cart');closePd();openCartPage();
+    if(ex){openCartPage();return}
+    cart.push({id:currentProduct.id,name:currentProduct.name,price:parseFloat(currentProduct.price),original_price:parseFloat(currentProduct.original_price),image_url:currentProduct.image_url,qty:1});
+    saveCart();syncPdActionBtn();toast('✅ 1 item added to cart');
 }
 function pdBuyNow(){
     if(!currentProduct)return;
-    if(!isLoggedIn){closePd();openLogin();return}
     const ex=cart.find(c=>c.id===currentProduct.id);
     if(!ex){cart.push({id:currentProduct.id,name:currentProduct.name,price:parseFloat(currentProduct.price),original_price:parseFloat(currentProduct.original_price),image_url:currentProduct.image_url,qty:1})}
-    saveCart();closePd();goToCheckout();
+    saveCart();goToCheckout();
 }
 
 // Cart Page
@@ -1249,10 +1257,12 @@ function updateCartPrices(prefix){
 function goToCheckout(){
     if(!cart.length){toast('🛒 Cart is empty');return}
     showView('checkout');
+    isLoggedIn=true;
     document.getElementById('ckSuccess').style.display='none';
     document.getElementById('payTimer').style.display='none';
+    document.getElementById('ckS1').style.display='none'; // Login step is bypassed
     updateCartPrices('ck');
-    ckExpand(1);
+    ckExpand(2);
     renderCkOrderItems();
 }
 
