@@ -22,61 +22,65 @@
         a{text-decoration:none;color:inherit;cursor:pointer}
         button{cursor:pointer;font-family:inherit}
 
-        /* ══════ HEADER ══════ */
-        .fk-header{background:var(--fk-blue);position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.18)}
-        .fk-header-inner{max-width:1248px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:0;height:55px}
-        .fk-logo-wrap{display:flex;flex-direction:column;align-items:flex-start;min-width:80px;margin-right:32px;cursor:pointer;text-decoration:none;line-height:1}
-        .fk-logo{color:#fff;font-size:22px;font-weight:700;font-style:italic;letter-spacing:-.4px;line-height:1}
-        .fk-logo-sub{display:flex;align-items:center;gap:3px;margin-top:1px}
-        .fk-logo-sub span{font-size:11px;font-style:italic;color:#f1f5fb;font-weight:400}
-        .fk-logo-sub em{font-style:italic;font-weight:700;font-size:11px;color:var(--fk-yellow)}
-        .fk-logo-sub .star{display:inline-block;width:10px;height:10px;background:var(--fk-yellow);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);margin-left:1px}
-        .fk-search{flex:1;display:flex;background:#f0f5ff;border-radius:2px;overflow:hidden;max-width:560px;margin:0 16px;height:36px;align-items:center}
-        .fk-search input{flex:1;padding:0 16px;height:100%;border:none;outline:none;font-size:14px;font-family:inherit;color:#212121;background:transparent}
-        .fk-search input::placeholder{color:#9aa6b8}
-        .fk-search-btn{background:none;border:none;padding:0 14px;height:100%;display:flex;align-items:center;color:var(--fk-blue);font-size:16px;cursor:pointer}
-        .fk-hdr-links{display:flex;gap:40px;align-items:center;margin-left:auto}
-        .fk-hdr-link{color:#fff;font-size:14px;font-weight:600;white-space:nowrap;padding:6px 0;position:relative;display:flex;align-items:center;gap:4px;cursor:pointer}
-        .fk-hdr-link:hover{opacity:.92}
-        .fk-hdr-link .dd{font-size:9px;margin-left:2px;opacity:.95}
-        .fk-login-btn{background:#fff;color:var(--fk-blue);border:none;padding:6px 36px;font-weight:600;font-size:14px;border-radius:2px;white-space:nowrap;cursor:pointer}
-        .fk-login-btn:hover{background:#f5f7fa}
-        .fk-cart-wrap{display:flex;align-items:center;gap:6px;color:#fff;font-size:14px;font-weight:600;position:relative;cursor:pointer}
-        .fk-cart-icon{font-size:16px;position:relative;display:inline-flex}
+        /* ══════ HEADER (modern flipkart.com white) ══════ */
+        .fk-header{background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 1px 2px rgba(0,0,0,.08);border-bottom:1px solid #f0f0f0}
+        .fk-header-inner{max-width:1366px;margin:0 auto;padding:0 64px;display:flex;align-items:center;gap:0;height:64px}
+        .fk-logo-wrap{display:flex;flex-direction:column;align-items:flex-start;min-width:120px;margin-right:24px;cursor:pointer;text-decoration:none;line-height:1}
+        .fk-logo{color:var(--fk-blue);font-size:28px;font-weight:700;font-style:italic;letter-spacing:-.5px;line-height:1}
+        .fk-logo-sub{display:flex;align-items:center;gap:3px;margin-top:2px}
+        .fk-logo-sub span{font-size:12px;font-style:italic;color:#878787;font-weight:400}
+        .fk-logo-sub em{font-style:italic;font-weight:700;font-size:12px;color:var(--fk-blue);text-decoration:underline;text-underline-offset:2px}
+        .fk-logo-sub .star{display:inline-block;width:11px;height:11px;background:var(--fk-yellow);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);margin-left:2px}
+        .fk-search{flex:1;display:flex;background:#f0f5fd;border-radius:2px;overflow:hidden;max-width:680px;margin:0 24px;height:40px;align-items:center;border:1px solid #f0f5fd;transition:border-color .15s}
+        .fk-search:focus-within{border-color:#dbe4f3;background:#f5f8fc}
+        .fk-search input{flex:1;padding:0 4px;height:100%;border:none;outline:none;font-size:14px;font-family:inherit;color:#212121;background:transparent;font-weight:400}
+        .fk-search input::placeholder{color:#878787}
+        .fk-search-btn{background:none;border:none;padding:0 14px;height:100%;display:flex;align-items:center;color:var(--fk-blue);font-size:18px;cursor:pointer}
+        .fk-hdr-links{display:flex;gap:32px;align-items:center;margin-left:auto}
+        .fk-hdr-link{color:#212121;font-size:15px;font-weight:500;white-space:nowrap;padding:6px 0;position:relative;display:flex;align-items:center;gap:6px;cursor:pointer}
+        .fk-hdr-link:hover{color:var(--fk-blue)}
+        .fk-hdr-link .dd{font-size:9px;margin-left:2px;opacity:.7}
+        .fk-hdr-link .ic{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:18px}
+        .fk-cart-wrap{display:flex;align-items:center;gap:8px;color:#212121;font-size:15px;font-weight:500;position:relative;cursor:pointer}
+        .fk-cart-icon{font-size:18px;position:relative;display:inline-flex}
         .fk-cart-count{position:absolute;top:-9px;right:-10px;background:var(--fk-fb-orange);color:#fff;border-radius:50%;min-width:18px;height:18px;padding:0 4px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+        .fk-hdr-kebab{color:#878787;font-size:22px;cursor:pointer;padding:6px 0;letter-spacing:1px;line-height:.4}
 
-        /* ══════ CATEGORY STRIP (like flipkart.com) ══════ */
-        .fk-cat-bar{background:#fff;box-shadow:0 1px 2px 0 rgba(0,0,0,.08);position:sticky;top:55px;z-index:90}
-        .fk-cat-bar-inner{max-width:1248px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;padding:6px 32px;gap:8px}
+        /* ══════ CATEGORY STRIP (modern flipkart.com white) ══════ */
+        .fk-cat-bar{background:#fff;box-shadow:0 1px 2px 0 rgba(0,0,0,.06);position:sticky;top:64px;z-index:90;border-bottom:1px solid #f0f0f0}
+        .fk-cat-bar-inner{max-width:1366px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;padding:8px 64px;gap:0;justify-content:space-between}
         .fk-cat-bar-inner::-webkit-scrollbar{display:none}
-        .fk-cat-item{display:flex;flex-direction:column;align-items:center;padding:8px 18px 6px;cursor:pointer;min-width:96px;transition:color .15s;text-decoration:none;border-bottom:3px solid transparent;color:var(--fk-dark)}
+        .fk-cat-item{display:flex;flex-direction:column;align-items:center;padding:6px 14px;cursor:pointer;transition:color .15s;text-decoration:none;color:var(--fk-dark);flex:0 0 auto}
         .fk-cat-item:hover{color:var(--fk-blue)}
-        .fk-cat-item.active{color:var(--fk-blue);border-bottom-color:var(--fk-blue)}
-        .fk-cat-item-icon{width:64px;height:64px;border-radius:50%;background:#f5f7fa;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:6px;border:1px solid #eef0f3}
+        .fk-cat-item.active{color:var(--fk-blue)}
+        .fk-cat-item-icon{width:60px;height:60px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:4px;border-radius:50%;background:#fff}
         .fk-cat-item-icon img{width:100%;height:100%;object-fit:cover}
-        .fk-cat-item-icon .emoji{font-size:30px;line-height:1}
-        .fk-cat-item-name{font-size:13px;font-weight:600;white-space:nowrap;text-align:center;letter-spacing:.1px}
-        .fk-cat-item-name .arr{font-size:8px;margin-left:3px;opacity:.6}
+        .fk-cat-item-icon .emoji{font-size:36px;line-height:1}
+        .fk-cat-item-name{font-size:14px;font-weight:600;white-space:nowrap;text-align:center;letter-spacing:.1px;display:inline-flex;align-items:center;gap:3px}
+        .fk-cat-item-name .arr{font-size:8px;opacity:.7}
 
         /* ══════ MAIN ══════ */
-        .fk-main{max-width:1248px;margin:0 auto;padding:12px 16px 24px}
+        .fk-main{max-width:1366px;margin:0 auto;padding:12px 16px 24px}
+        .fk-home-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+        .fk-home-row > .banner-wrap{flex:1;min-width:0}
+        .fk-home-row > .side-promo{flex:0 0 240px;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);align-self:stretch;display:flex;flex-direction:column}
+        .side-promo-inner{padding:18px 16px;background:linear-gradient(150deg,#1565c0 0%,#1976d2 50%,#42a5f5 100%);color:#fff;flex:1;display:flex;flex-direction:column;justify-content:space-between;min-height:296px}
+        .side-promo h3{font-size:18px;font-weight:700;margin-bottom:4px}
+        .side-promo .sp-sub{font-size:13px;opacity:.92;margin-bottom:14px}
+        .side-promo .sp-art{font-size:72px;text-align:center;margin:18px 0}
+        .side-promo .sp-cta{font-size:13px;font-weight:700;background:rgba(255,255,255,.18);padding:8px 14px;border-radius:2px;align-self:flex-start;backdrop-filter:blur(4px)}
 
-        /* ══════ BANNER ══════ */
-        .banner-wrap{position:relative;border-radius:var(--radius);overflow:hidden;margin-bottom:12px;height:296px;background:#e4e4e4}
-        .banner-slide{position:absolute;inset:0;display:flex;align-items:stretch;opacity:0;transition:opacity .5s;pointer-events:none}
+        /* ══════ HERO BANNER (real-image, full-bleed like flipkart.com) ══════ */
+        .banner-wrap{position:relative;border-radius:var(--radius);overflow:hidden;height:296px;background:#e4e4e4;box-shadow:var(--shadow)}
+        .banner-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .5s;pointer-events:none}
         .banner-slide.active{opacity:1;pointer-events:auto}
-        .banner-content{padding:48px 56px;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center}
-        .banner-art{flex:0 0 42%;position:relative;display:flex;align-items:center;justify-content:center;padding-right:48px}
-        .banner-art .art-bg{position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08);right:60px;top:50%;transform:translateY(-50%)}
-        .banner-art .art-emoji{font-size:160px;position:relative;z-index:2;filter:drop-shadow(0 8px 24px rgba(0,0,0,.25))}
-        .banner-art .art-tile{position:absolute;background:rgba(255,255,255,.18);backdrop-filter:blur(4px);border-radius:14px;padding:10px 14px;font-size:13px;font-weight:700;color:#fff;letter-spacing:.5px;box-shadow:0 4px 12px rgba(0,0,0,.18)}
-        .banner-art .art-tile.t1{top:18%;right:8%}
-        .banner-art .art-tile.t2{bottom:18%;right:18%}
+        .banner-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,.18) 45%,rgba(0,0,0,0) 60%);}
+        .banner-content{position:absolute;inset:0;padding:42px 56px;z-index:1;display:flex;flex-direction:column;justify-content:center;max-width:560px}
         .banner-tag{background:var(--fk-yellow);color:#1a1a1a;font-size:11px;font-weight:800;padding:5px 12px;border-radius:2px;display:inline-block;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;align-self:flex-start}
-        .banner-h1{color:#fff;font-size:42px;font-weight:900;line-height:1.05;letter-spacing:-1px;text-shadow:0 2px 12px rgba(0,0,0,.18)}
+        .banner-h1{color:#fff;font-size:38px;font-weight:900;line-height:1.05;letter-spacing:-.6px;text-shadow:0 2px 12px rgba(0,0,0,.45)}
         .banner-h1 em{color:var(--fk-yellow);font-style:normal;display:block;margin-top:6px}
-        .banner-p{color:rgba(255,255,255,.92);font-size:15px;margin-top:14px;font-weight:500;letter-spacing:.2px}
-        .banner-cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--fk-yellow);color:#1a1a1a;font-weight:800;font-size:14px;padding:12px 30px;border-radius:2px;border:none;align-self:flex-start;box-shadow:0 4px 12px rgba(255,229,0,.35);letter-spacing:.3px}
+        .banner-p{color:rgba(255,255,255,.96);font-size:15px;margin-top:14px;font-weight:500;letter-spacing:.2px;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+        .banner-cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--fk-yellow);color:#1a1a1a;font-weight:800;font-size:14px;padding:12px 30px;border-radius:2px;border:none;align-self:flex-start;box-shadow:0 4px 12px rgba(0,0,0,.3);letter-spacing:.3px}
         .banner-cta:hover{background:var(--fk-yellow-dark);transform:translateY(-1px)}
         .banner-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
         .banner-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
@@ -479,12 +483,12 @@
                 <input type="text" id="searchInput" placeholder="Search for Products, Brands and More" onkeyup="filterProducts()" />
             </div>
             <div class="fk-hdr-links">
-                <a class="fk-hdr-link">Become a Seller</a>
-                <a class="fk-hdr-link">More <span class="dd">▾</span></a>
                 <a class="fk-hdr-link fk-cart-wrap" onclick="openCartPage()">
                     <span class="fk-cart-icon">🛒<span class="fk-cart-count" id="cartCount">0</span></span>
                     <span>Cart</span>
                 </a>
+                <a class="fk-hdr-link"><span class="ic">🏪</span><span>Become a Seller</span></a>
+                <a class="fk-hdr-kebab" title="More">⋮</a>
             </div>
         </div>
     </header>
@@ -496,57 +500,52 @@
 
     <!-- SHOP CONTENT (home view) -->
     <main class="fk-main" id="mainContent">
-        <!-- Banner -->
-        <div class="banner-wrap" id="bannerWrap">
-            <div class="banner-slide active" style="background:linear-gradient(110deg,#0a1657 0%,#173db8 38%,#2874f0 70%,#3a8dff 100%)">
-                <div class="banner-content">
-                    <div class="banner-tag">🔥 Limited time · Ends Soon</div>
-                    <h1 class="banner-h1" id="bannerH1">Big Billion Days<em>Up to 80% OFF</em></h1>
-                    <p class="banner-p">On Electronics, Fashion, Home Appliances & more · Free Delivery · No-Cost EMI</p>
-                    <button class="banner-cta" onclick="filterCat('all')">Shop Now →</button>
+        <!-- Banner row: hero carousel + side promo (like real flipkart.com) -->
+        <div class="fk-home-row">
+            <div class="banner-wrap" id="bannerWrap">
+                <div class="banner-slide active" style="background-image:linear-gradient(135deg,rgba(20,30,80,.55),rgba(40,116,240,.25)),url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1600&q=80')">
+                    <div class="banner-content">
+                        <div class="banner-tag">🔥 Limited time · Ends Soon</div>
+                        <h1 class="banner-h1" id="bannerH1">Big Billion Days<em>Up to 80% OFF</em></h1>
+                        <p class="banner-p">Electronics, Fashion, Home Appliances & more · Free Delivery · No-Cost EMI</p>
+                        <button class="banner-cta" onclick="filterCat('all')">Shop Now →</button>
+                    </div>
                 </div>
-                <div class="banner-art">
-                    <span class="art-bg"></span>
-                    <span class="art-emoji">🛍️</span>
-                    <div class="art-tile t1">10% Bank Off</div>
-                    <div class="art-tile t2">Free Delivery</div>
+                <div class="banner-slide" style="background-image:linear-gradient(135deg,rgba(120,12,28,.55),rgba(229,57,53,.25)),url('https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=1600&q=80')">
+                    <div class="banner-content">
+                        <div class="banner-tag">⚡ Flash Deal · Today Only</div>
+                        <h1 class="banner-h1">Electronics Mega Sale<em>Starting at ₹499</em></h1>
+                        <p class="banner-p">Smartphones, Laptops, Audio, Wearables · Top brands</p>
+                        <button class="banner-cta" onclick="filterCat('Electronics')">Shop Electronics →</button>
+                    </div>
+                </div>
+                <div class="banner-slide" style="background-image:linear-gradient(135deg,rgba(13,58,20,.55),rgba(67,160,71,.25)),url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80')">
+                    <div class="banner-content">
+                        <div class="banner-tag">🏠 Home Fest · Bestsellers</div>
+                        <h1 class="banner-h1">Home Appliances<em>Extra 40% OFF</em></h1>
+                        <p class="banner-p">AC, Washing Machines, Kitchen · Free Install · 2-yr Warranty</p>
+                        <button class="banner-cta" onclick="filterCat('Home Appliances')">Shop Home →</button>
+                    </div>
+                </div>
+                <button class="banner-nav prev" onclick="goSlide(currentSlide-1)" aria-label="Previous">‹</button>
+                <button class="banner-nav next" onclick="goSlide(currentSlide+1)" aria-label="Next">›</button>
+                <div class="banner-dots" id="bannerDots"></div>
+            </div>
+            <div class="side-promo">
+                <div class="side-promo-inner">
+                    <div>
+                        <h3>Flipkart Travel</h3>
+                        <div class="sp-sub">Up to 25% off</div>
+                    </div>
+                    <div class="sp-art">✈️</div>
+                    <div>
+                        <div style="font-size:14px;font-weight:700;margin-bottom:2px">Sale on Air India</div>
+                        <div style="font-size:12px;opacity:.92;margin-bottom:10px">Code: <strong>FLYFK</strong></div>
+                        <span class="sp-cta">BOOK NOW →</span>
+                    </div>
                 </div>
             </div>
-            <div class="banner-slide" style="background:linear-gradient(110deg,#7a0a26 0%,#b71c1c 35%,#e53935 70%,#ff7043 100%)">
-                <div class="banner-content">
-                    <div class="banner-tag">⚡ Flash Deal · Today Only</div>
-                    <h1 class="banner-h1">Electronics Mega Sale<em>Starting at ₹499</em></h1>
-                    <p class="banner-p">Smartphones, Laptops, Audio, Wearables & more from top brands</p>
-                    <button class="banner-cta" onclick="filterCat('Electronics')">Shop Electronics →</button>
-                </div>
-                <div class="banner-art">
-                    <span class="art-bg"></span>
-                    <span class="art-emoji">📱</span>
-                    <div class="art-tile t1">No-Cost EMI</div>
-                    <div class="art-tile t2">Up to ₹15k Off</div>
-                </div>
-            </div>
-            <div class="banner-slide" style="background:linear-gradient(110deg,#0d3a14 0%,#1b5e20 35%,#43a047 70%,#7cca6e 100%)">
-                <div class="banner-content">
-                    <div class="banner-tag">🏠 Home Fest · Bestsellers</div>
-                    <h1 class="banner-h1">Home Appliances<em>Extra 40% OFF</em></h1>
-                    <p class="banner-p">AC, Washing Machines, Kitchen Appliances · Easy Installation · 2-yr Warranty</p>
-                    <button class="banner-cta" onclick="filterCat('Home Appliances')">Shop Home →</button>
-                </div>
-                <div class="banner-art">
-                    <span class="art-bg"></span>
-                    <span class="art-emoji">🏠</span>
-                    <div class="art-tile t1">Free Install</div>
-                    <div class="art-tile t2">2yr Warranty</div>
-                </div>
-            </div>
-            <button class="banner-nav prev" onclick="goSlide(currentSlide-1)" aria-label="Previous">‹</button>
-            <button class="banner-nav next" onclick="goSlide(currentSlide+1)" aria-label="Next">›</button>
-            <div class="banner-dots" id="bannerDots"></div>
         </div>
-
-        <!-- Deal Strip -->
-        <div class="deal-strip" id="dealStrip"></div>
 
         <!-- Top Offers (horizontal scroll like flipkart.com) -->
         <div class="top-offers" id="topOffersBox" style="display:none">
@@ -970,7 +969,6 @@ function render(){
     if(shopData.banner_text){document.getElementById('bannerH1').innerHTML=shopData.banner_text}
     const cats=[...new Set(allProducts.map(p=>p.category))];
     renderCatBar(cats);
-    renderDealStrip(cats);
     renderTopOffers();
     renderProducts();
     updateCartBadge();
