@@ -956,6 +956,21 @@ const catImages = {
 };
 function catImg(cat){return catImages[cat] || ''}
 
+// Cascading image fallback: when a product image 404s, swap to a category-specific
+// Unsplash photo. If that ALSO fails, swap to an inline SVG placeholder.
+// Stops onerror loops by clearing the handler at each step.
+const PROD_FALLBACK_SVG="data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#f5f5f5"/><g fill="#cfd8dc"><rect x="50" y="60" width="100" height="80" rx="6"/><circle cx="80" cy="92" r="8"/><path d="M70 130 l20 -20 l16 12 l24 -28 l30 36 z"/></g></svg>');
+function prodImgFallback(el,cat){
+    const fb=catImages[cat||'']||'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&q=80';
+    el.onerror=function(){this.onerror=null;this.src=PROD_FALLBACK_SVG};
+    el.src=fb;
+}
+function prodImg(p,size){
+    const s=size||400;
+    if(p.image_url&&/^https?:\/\//.test(p.image_url))return p.image_url;
+    return catImages[p.category]||`https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=${s}&q=80`;
+}
+
 function getSavedAddr(){return JSON.parse(localStorage.getItem('fk_addr_'+slug)||'[]')}
 function saveAddr(l){localStorage.setItem('fk_addr_'+slug,JSON.stringify(l))}
 function loadCart(){cart=JSON.parse(localStorage.getItem('fk_cart_'+slug)||'[]')}
@@ -1031,7 +1046,7 @@ function renderTopOffers(){
     track.innerHTML=top.map(p=>{
         const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
         return `<a class="to-card" onclick="openPd(${p.id})">
-            <div class="to-card-img"><img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'" /></div>
+            <div class="to-card-img"><img src="${prodImg(p)}" alt="${p.name}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>
             <div class="to-card-off">Upto ${disc}% off</div>
             <div class="to-card-name">${p.name}</div>
             <div class="to-card-from">From ₹${parseInt(p.price).toLocaleString('en-IN')}</div>
@@ -1118,7 +1133,7 @@ function renderHomeStrips(cats){
                     ${items.map(p=>{
                         const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
                         return `<a class="to-card" onclick="openPd(${p.id})">
-                            <div class="to-card-img"><img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'" /></div>
+                            <div class="to-card-img"><img src="${prodImg(p)}" alt="${p.name}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>
                             <div class="to-card-off">Upto ${disc}% off</div>
                             <div class="to-card-name">${p.name}</div>
                             <div class="to-card-from">From \u20b9${parseInt(p.price).toLocaleString('en-IN')}</div>
@@ -1145,7 +1160,7 @@ function renderProducts(){
         const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
         const dd=delivDate();
         return `<div class="p-card" onclick="openPd(${p.id})">
-            <div class="p-card-img-wrap"><img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'" /></div>
+            <div class="p-card-img-wrap"><img src="${prodImg(p)}" alt="${p.name}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>
             <div class="p-card-name">${p.name}</div>
             <div class="p-card-rating"><span class="badge ${p.rating<4?'low':''}">★ ${parseFloat(p.rating).toFixed(1)}</span><span class="count">(${p.review_count.toLocaleString()})</span></div>
             <div class="p-card-price"><span class="now">₹${parseInt(p.price).toLocaleString('en-IN')}</span><span class="was">₹${parseInt(p.original_price).toLocaleString('en-IN')}</span><span class="off">${disc}% off</span></div>
@@ -1207,12 +1222,15 @@ function openPd(id){
     currentProduct=p;
     const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
     const dd=delivDate();
-    document.getElementById('pdImg').src=p.image_url;
+    const pImg=prodImg(p);
+    const pdImgEl=document.getElementById('pdImg');
+    pdImgEl.onerror=function(){prodImgFallback(this,p.category)};
+    pdImgEl.src=pImg;
     syncPdActionBtn();
     // image gallery — same product image used as 4 thumbnails (placeholder for multiple angles)
     const thumbs=document.getElementById('pdThumbs');
     if(thumbs){
-        thumbs.innerHTML=[0,1,2,3].map(i=>`<div class="pd-thumb${i===0?' active':''}" onmouseenter="pdSwapImg(this,'${p.image_url}')"><img src="${p.image_url}" alt="thumb" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'" /></div>`).join('');
+        thumbs.innerHTML=[0,1,2,3].map(i=>`<div class="pd-thumb${i===0?' active':''}" onmouseenter="pdSwapImg(this,'${pImg}')"><img src="${pImg}" alt="thumb" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>`).join('');
     }
     document.getElementById('pdBreadcrumb').innerHTML=`<a onclick="goHome()">Home</a> › <a onclick="filterCat('${p.category.replace(/'/g,"\\'")}')">${p.category}</a> › ${p.name.length>40?p.name.slice(0,40)+'…':p.name}`;
     document.getElementById('pdName').textContent=p.name;
@@ -1253,27 +1271,47 @@ function syncPdActionBtn(){
     else{btn.innerHTML='🛒 ADD TO CART';btn.classList.remove('pd-go-cart')}
 }
 
+// Distribute total ratings (e.g. 45,921) across 5 buckets so the average ~= overall rating.
+// Returns counts in [5★, 4★, 3★, 2★, 1★] order, summing to `total`.
+function ratingHistogram(total,avg){
+    if(!total||total<=0)return [0,0,0,0,0];
+    avg=Math.max(1,Math.min(5,parseFloat(avg)||4));
+    // Heuristic distribution that matches typical Flipkart PDPs (top-heavy when avg is high).
+    let weights;
+    if(avg>=4.5)      weights=[0.74,0.18,0.04,0.02,0.02];
+    else if(avg>=4.0) weights=[0.58,0.27,0.08,0.04,0.03];
+    else if(avg>=3.5) weights=[0.40,0.32,0.16,0.08,0.04];
+    else if(avg>=3.0) weights=[0.22,0.28,0.28,0.14,0.08];
+    else if(avg>=2.5) weights=[0.10,0.18,0.30,0.26,0.16];
+    else              weights=[0.05,0.10,0.20,0.30,0.35];
+    // Round to integers and reconcile so the sum equals `total`.
+    const raw=weights.map(w=>w*total);
+    const out=raw.map(Math.round);
+    let diff=total-out.reduce((a,b)=>a+b,0);
+    let i=0;while(diff!==0){out[i%5]+=diff>0?1:-1;diff+=diff>0?-1:1;i++;if(i>200)break}
+    return out;
+}
 function renderPdReviews(reviews,p){
     const c=document.getElementById('pdReviews');if(!c)return;
-    if(!reviews||!reviews.length){c.innerHTML='<p style="color:#878787;font-size:13px">No reviews yet.</p>';return}
-    // Build histogram from review ratings
-    const buckets=[0,0,0,0,0]; // index 0 = 5★
-    reviews.forEach(r=>{const k=Math.max(1,Math.min(5,Math.round(r.rating)));buckets[5-k]++});
-    const total=reviews.length;
+    reviews=reviews||[];
+    const ratingsTotal=parseInt(p.review_count)||0;
+    const buckets=ratingsTotal>0?ratingHistogram(ratingsTotal,p.rating):[0,0,0,0,0];
     const histo=[5,4,3,2,1].map((star,idx)=>{
-        const pct=Math.round((buckets[idx]/total)*100);
-        return `<div class="pd-rev-bar"><div class="lbl">${star}<span class="star">★</span></div><div class="track"><div class="fill ${star<3?'low':''}" style="width:${pct}%"></div></div><div class="pct">${buckets[idx]}</div></div>`;
+        const pct=ratingsTotal>0?Math.round((buckets[idx]/ratingsTotal)*100):0;
+        return `<div class="pd-rev-bar"><div class="lbl">${star}<span class="star">★</span></div><div class="track"><div class="fill ${star<3?'low':''}" style="width:${pct}%"></div></div><div class="pct">${buckets[idx].toLocaleString('en-IN')}</div></div>`;
     }).join('');
     const overall=parseFloat(p.rating).toFixed(1);
+    // Flipkart PDPs typically show ~12% of ratings translate into written reviews.
+    const reviewsCount=Math.max(reviews.length,Math.round(ratingsTotal*0.12));
     const summary=`<div class="pd-rev-summary">
-        <div class="pd-rev-overall"><div class="num">${overall}<span class="star">★</span></div><div class="total">${(p.review_count||total).toLocaleString()} ratings &<br/>${total} reviews</div></div>
+        <div class="pd-rev-overall"><div class="num">${overall}<span class="star">★</span></div><div class="total">${ratingsTotal.toLocaleString('en-IN')} Ratings &amp;<br/>${reviewsCount.toLocaleString('en-IN')} Reviews</div></div>
         <div class="pd-rev-bars">${histo}</div>
     </div>`;
-    const list=reviews.map((r,i)=>`<div class="pd-review">
+    const list=reviews.length?reviews.map((r,i)=>`<div class="pd-review">
         <div class="pd-review-head"><span class="pd-review-badge">★ ${r.rating}</span><span style="font-size:13px;font-weight:600">${r.text||''}</span></div>
         <div class="pd-review-user">${r.user||'Customer'} · ${r.date||''}<span class="pd-review-verified">Certified Buyer</span></div>
         <div class="pd-review-meta"><span>👍 Helpful (${20+(i*7)%180})</span><span>·</span><span class="pd-review-helpful">REPORT ABUSE</span></div>
-    </div>`).join('');
+    </div>`).join(''):'';
     c.innerHTML=summary+list;
 }
 function closePd(){showView('home')}
