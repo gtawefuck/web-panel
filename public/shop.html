@@ -107,6 +107,18 @@
         .to-head-left{display:flex;align-items:baseline;gap:14px}
         .to-head h2{font-size:22px;font-weight:600;color:var(--fk-dark);letter-spacing:-.2px}
         .to-head .to-sub{font-size:13px;color:var(--fk-gray);font-weight:500}
+        .top-offers .view-all{background:var(--fk-blue);color:#fff;padding:9px 22px;border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.4px;box-shadow:0 1px 2px rgba(40,116,240,.25)}
+        .top-offers .view-all:hover{background:var(--fk-blue-dark)}
+
+        /* ══════ MID-PAGE PROMO TILES (3 image promos, like flipkart.com home) ══════ */
+        .promo-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+        .promo-tile{position:relative;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;height:170px;cursor:pointer;display:flex;align-items:flex-end;color:#fff;text-decoration:none;background-size:cover;background-position:center;transition:transform .2s, box-shadow .2s}
+        .promo-tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.18);transform:translateY(-2px)}
+        .promo-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.55) 100%)}
+        .promo-tile-body{position:relative;z-index:2;padding:18px 20px}
+        .promo-tile-body .pt-eyebrow{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;background:var(--fk-yellow);color:#1a1a1a;display:inline-block;padding:3px 8px;border-radius:2px;margin-bottom:8px}
+        .promo-tile-body h4{font-size:20px;font-weight:800;line-height:1.15;letter-spacing:-.3px;margin-bottom:4px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+        .promo-tile-body .pt-sub{font-size:13px;font-weight:500;opacity:.95;text-shadow:0 1px 6px rgba(0,0,0,.4)}
         .to-track-wrap{position:relative}
         .to-track{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;padding:0 0 18px;scroll-behavior:smooth}
         .to-track::-webkit-scrollbar{display:none}
@@ -554,7 +566,7 @@
                     <h2>Top Offers · Hand-picked Deals</h2>
                     <span class="to-sub">Lowest prices guaranteed</span>
                 </div>
-                <button class="view-all" onclick="filterCat('all')" style="background:var(--fk-blue);color:#fff;padding:8px 20px;border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.4px">VIEW ALL</button>
+                <button class="view-all" onclick="filterCat('all')">VIEW ALL</button>
             </div>
             <div class="to-track-wrap">
                 <button class="to-arrow prev" onclick="scrollOffers(-1)" id="toArrowPrev" aria-label="Scroll left">‹</button>
@@ -563,11 +575,17 @@
             </div>
         </div>
 
-        <!-- Products -->
-        <div class="sec-box">
+        <!-- Mid-page promo tiles (3 image promos, like flipkart.com home) -->
+        <div class="promo-tiles" id="promoTiles"></div>
+
+        <!-- Category-grouped horizontal strips (Best of Electronics, Beauty &c, ...) -->
+        <div id="homeStrips"></div>
+
+        <!-- Full grid: Best Deals on Top Products / Search results / Category browse -->
+        <div class="sec-box" id="gridBox">
             <div class="sec-head">
                 <div class="sec-title" id="secTitle">Best Deals on Top Products</div>
-                <button class="view-all" onclick="filterCat('all')" style="background:var(--fk-blue);color:#fff;padding:9px 22px;border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.4px">VIEW ALL</button>
+                <button class="view-all" onclick="filterCat('all')">VIEW ALL</button>
             </div>
             <div class="products-grid" id="productsGrid"></div>
         </div>
@@ -970,6 +988,8 @@ function render(){
     const cats=[...new Set(allProducts.map(p=>p.category))];
     renderCatBar(cats);
     renderTopOffers();
+    renderPromoTiles();
+    renderHomeStrips(cats);
     renderProducts();
     updateCartBadge();
     startBanner();
@@ -1033,6 +1053,86 @@ function updateOffersArrows(){
     if(!prev||!next)return;
     prev.classList.toggle('disabled',track.scrollLeft<=4);
     next.classList.toggle('disabled',track.scrollLeft+track.clientWidth>=track.scrollWidth-4);
+}
+
+// Mid-page 3-up image promos (like flipkart.com home)
+const PROMO_TILE_DATA=[
+    {eyebrow:'Electronics Sale',title:'Up to 70% OFF',sub:'Smartphones, laptops, audio',cat:'Electronics',img:'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=900&q=80'},
+    {eyebrow:'Fashion Days',title:'Min 50% OFF',sub:'Top brands · New season',cat:'Fashion',img:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80'},
+    {eyebrow:'Home Fest',title:'Starting ₹299',sub:'Furniture, kitchen, appliances',cat:'Home Appliances',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80'}
+];
+function renderPromoTiles(){
+    const box=document.getElementById('promoTiles');if(!box)return;
+    const cats=new Set(allProducts.map(p=>p.category));
+    const tiles=PROMO_TILE_DATA.filter(t=>cats.has(t.cat)||t.cat==='Fashion');
+    box.innerHTML=(tiles.length?tiles:PROMO_TILE_DATA).slice(0,3).map(t=>
+        `<a class="promo-tile" style="background-image:url('${t.img}')" onclick="filterCat('${t.cat.replace(/'/g,"\\'")}')">
+            <div class="promo-tile-body">
+                <span class="pt-eyebrow">${t.eyebrow}</span>
+                <h4>${t.title}</h4>
+                <div class="pt-sub">${t.sub}</div>
+            </div>
+        </a>`
+    ).join('');
+}
+
+// Multiple horizontal product strips per category (like flipkart.com home)
+const STRIP_LABELS={
+    'Electronics':{title:'Best of Electronics',sub:'Top brands · Lowest prices'},
+    'Mobiles':{title:'Best of Mobiles',sub:'New launches · Top picks'},
+    'Fashion':{title:'Fashion Top Deals',sub:'New season · Up to 80% off'},
+    'Home Appliances':{title:'Appliances for Your Home',sub:'Up to 65% off · Free install'},
+    'Kitchen Appliances':{title:'Kitchen Essentials',sub:'Mixers, microwaves, toasters'},
+    'Furniture':{title:'Furniture Bestsellers',sub:'Sofas, beds, dining sets'},
+    'Sports & Fitness':{title:'Sports, Fitness & Wellness',sub:'Top picks for your routine'},
+    'Wellness':{title:'Wellness & Personal Care',sub:'Self-care must-haves'},
+    'Personal Care':{title:'Beauty, Personal Care & More',sub:'Min 30% off'},
+    'Grooming':{title:'Beauty, Personal Care & More',sub:'Min 30% off'},
+    'Books':{title:'Books, Media & Stationery',sub:'Curated picks'},
+    'Stationery':{title:'Books, Media & Stationery',sub:'Curated picks'},
+    'Gaming':{title:'Gaming Zone',sub:'Consoles, accessories & more'},
+    'Toys & Games':{title:'Toys, Kids Fashion & More',sub:'Up to 70% off'},
+    'Smart Home':{title:'Smart Home Gadgets',sub:'Make your home smarter'},
+    'Travel':{title:'Travel Essentials',sub:'Bags, gadgets & more'},
+    'Gifts':{title:'Gifts You\u2019ll Love',sub:'For every occasion'}
+};
+function renderHomeStrips(cats){
+    const wrap=document.getElementById('homeStrips');if(!wrap)return;
+    // Pick the top categories by product count, max 4 strips
+    const counts=cats.map(c=>({c,n:allProducts.filter(p=>p.category===c).length}))
+        .sort((a,b)=>b.n-a.n).slice(0,4);
+    wrap.innerHTML=counts.map((entry,idx)=>{
+        const c=entry.c;
+        const meta=STRIP_LABELS[c]||{title:c,sub:'Top picks · Lowest prices'};
+        const items=allProducts.filter(p=>p.category===c).slice(0,12);
+        if(!items.length)return '';
+        const trackId=`stripTrack_${idx}`;
+        return `<div class="top-offers">
+            <div class="to-head">
+                <div class="to-head-left"><h2>${meta.title}</h2><span class="to-sub">${meta.sub}</span></div>
+                <button class="view-all" onclick="filterCat('${c.replace(/'/g,"\\'")}')">VIEW ALL</button>
+            </div>
+            <div class="to-track-wrap">
+                <button class="to-arrow prev" onclick="scrollStrip('${trackId}',-1)" aria-label="Scroll left">‹</button>
+                <div class="to-track" id="${trackId}">
+                    ${items.map(p=>{
+                        const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
+                        return `<a class="to-card" onclick="openPd(${p.id})">
+                            <div class="to-card-img"><img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'" /></div>
+                            <div class="to-card-off">Upto ${disc}% off</div>
+                            <div class="to-card-name">${p.name}</div>
+                            <div class="to-card-from">From \u20b9${parseInt(p.price).toLocaleString('en-IN')}</div>
+                        </a>`;
+                    }).join('')}
+                </div>
+                <button class="to-arrow next" onclick="scrollStrip('${trackId}',1)" aria-label="Scroll right">›</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+function scrollStrip(id,dir){
+    const track=document.getElementById(id);if(!track)return;
+    track.scrollBy({left:dir*Math.min(track.clientWidth-60,820),behavior:'smooth'});
 }
 
 function delivDate(){const d=new Date();d.setDate(d.getDate()+3+Math.floor(Math.random()*2));return d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'})}
