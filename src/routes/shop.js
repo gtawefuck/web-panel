@@ -561,4 +561,228 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
 });
 
 
+// POST /api/shop/fetch-flipkart-category — fetch multiple products from a category/search page
+router.post('/fetch-flipkart-category', requireAuth, async (req, res) => {
+    const { url } = req.body;
+    if (!url || !url.includes('flipkart')) {
+        return res.status(400).json({ success: false, error: 'Valid Flipkart URL required.' });
+    }
+
+    const cheerio = require('cheerio');
+    const axios = require('axios');
+
+    let resolvedUrl = url;
+    if (url.includes('dl.flipkart.com')) {
+        try {
+            const headRes = await axios.head(url, {
+                maxRedirects: 10, timeout: 10000,
+                headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36' }
+            });
+            resolvedUrl = headRes.request?.res?.responseUrl || headRes.request?._redirectable?._currentUrl || url;
+        } catch (e) {
+            if (e.response?.headers?.location) resolvedUrl = e.response.headers.location;
+            else if (e.request?._redirectable?._currentUrl) resolvedUrl = e.request._redirectable._currentUrl;
+        }
+        if (resolvedUrl.startsWith('//')) resolvedUrl = 'https:' + resolvedUrl;
+        if (!resolvedUrl.includes('flipkart.com')) resolvedUrl = url;
+    }
+
+    function fixImgUrl(u) {
+        if (!u) return '';
+        if (u.startsWith('//')) u = 'https:' + u;
+        u = u.replace(/\/\d+\/\d+\?/, '/416/416?').replace(/\/128\//, '/416/');
+        return u;
+    }
+
+    function extractCategoryProducts($) {
+        const products = [];
+        const seenNames = new Set();
+
+        // Flipkart category page product cards
+        const cardSelectors = [
+            'div._1AtVbE', 'div._4ddWXP', 'div._2kHMtA', 'div._1xHGtK._373qXS',
+            'a._1fQZEK', 'div._13oc-S', 'div.slAVV4', 'div._1sdMkc',
+            'a.CGtC98', 'div.tUxRFH', 'div._75nlfW', 'div.cPHDOP'
+        ];
+
+        for (const sel of cardSelectors) {
+            $(sel).each((i, el) => {
+                if (products.length >= 30) return false;
+
+                let name = '';
+                for (const ns of ['div._4rR01T', 'a.s1Q9rs', 'a.IRpwTa', 'div.KzDlHZ', 'a.WKTcLC']) {
+                    name = $(el).find(ns).first().text().trim();
+                    if (name && name.length > 3) break;
+                }
+                if (!name) {
+                    name = $(el).find('a[title]').first().attr('title') || '';
+                }
+                if (!name || name.length < 3 || seenNames.has(name)) return;
+                seenNames.add(name);
+
+                let imageUrl = '';
+                for (const is of ['img._396cs4', 'img.DByuf4', 'img._2r_T1I', 'img']) {
+                    imageUrl = $(el).find(is).first().attr('src') || '';
+                    if (imageUrl) break;
+                }
+                imageUrl = fixImgUrl(imageUrl);
+
+                let priceStr = '';
+                for (const ps of ['div._30jeq3', 'div.Nx9bqj']) {
+                    priceStr = $(el).find(ps).first().text().trim();
+                    if (priceStr) break;
+                }
+                let origPriceStr = '';
+                for (const os of ['div._3I9_wc', 'div.yRaY8j']) {
+                    origPriceStr = $(el).find(os).first().text().trim();
+                    if (origPriceStr) break;
+                }
+                const price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+                const original_price = parseInt(origPriceStr.replace(/[^0-9]/g, '')) || price;
+
+                let ratingStr = '';
+                for (const rs of ['div._3LWZlK', 'div.XQDdHH', 'span.Y1HWO0']) {
+                    ratingStr = $(el).find(rs).first().text().trim();
+                    if (ratingStr) break;
+                }
+                const rating = parseFloat(ratingStr) || 4.0;
+
+                let reviewCountStr = '';
+                const rcEl = $(el).find('span._2_R_DZ, span.Wphh3N').first().text().trim();
+                const rcMatch = rcEl.match(/([\d,]+)/);
+                const review_count = rcMatch ? parseInt(rcMatch[1].replace(/,/g, '')) : 0;
+
+                let category = '';
+                const breadcrumbs = $('a._2whKao, a.R0cyWM, div._1MR4o5 a');
+                breadcrumbs.each((j, bc) => {
+                    const t = $(bc).text().trim();
+                    if (t && t !== 'Home' && !t.includes('flipkart') && t.length > 1) category = t;
+                });
+
+                let productLink = '';
+                const linkEl = $(el).find('a[href*="/p/"]').first();
+                if (linkEl.length) {
+                    productLink = linkEl.attr('href');
+                    if (productLink && !productLink.startsWith('http')) {
+                        productLink = 'https://www.flipkart.com' + productLink;
+                    }
+                }
+
+                if (name && (price > 0 || imageUrl)) {
+                    products.push({
+                        name, image_url: imageUrl, price, original_price,
+                        rating, review_count,
+                        category: category || 'General',
+                        description: name,
+                        brand: name.split(/\s+/)[0] || '',
+                        product_url: productLink
+                    });
+                }
+            });
+            if (products.length > 0) break;
+        }
+        return products;
+    }
+
+    // Attempt 1: Axios
+    try {
+        const { data: html } = await axios.get(resolvedUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+            },
+            timeout: 15000, maxRedirects: 10
+        });
+        const $ = cheerio.load(html);
+        const products = extractCategoryProducts($);
+        if (products.length > 0) {
+            return res.json({ success: true, products, count: products.length });
+        }
+    } catch (e) {
+        console.log('Category axios fetch failed:', e.message);
+    }
+
+    // Attempt 2: Puppeteer
+    let browser = null;
+    try {
+        const puppeteer = require('puppeteer-extra');
+        const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+        puppeteer.use(StealthPlugin());
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled']
+        });
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1366, height: 768 });
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+        await page.goto(resolvedUrl, { waitUntil: 'networkidle2', timeout: 30000 });
+        await new Promise(r => setTimeout(r, 3000));
+        // Scroll down to load more products
+        await page.evaluate(() => window.scrollBy(0, 2000));
+        await new Promise(r => setTimeout(r, 1500));
+        const html = await page.content();
+        const $ = cheerio.load(html);
+        const products = extractCategoryProducts($);
+        if (products.length > 0) {
+            return res.json({ success: true, products, count: products.length });
+        }
+        res.status(404).json({ success: false, error: 'No products found on this page. Try a different category URL.' });
+    } catch (error) {
+        console.error('Category puppeteer error:', error.message);
+        res.status(500).json({ success: false, error: 'Could not fetch category. Try again later.' });
+    } finally {
+        if (browser) await browser.close();
+    }
+});
+
+// POST /api/shop/bulk-add — add multiple products at once
+router.post('/bulk-add', requireAuth, (req, res) => {
+    const { tgId } = req.session.user;
+    const shop = db.prepare('SELECT * FROM shops WHERE tg_id = ?').get(tgId);
+    if (!shop) return res.status(404).json({ error: 'No shop found.' });
+
+    const { products } = req.body;
+    if (!Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({ error: 'products array required.' });
+    }
+
+    const insert = db.prepare(
+        'INSERT INTO products (shop_id, name, category, image_url, price, original_price, discount, description, rating, review_count, reviews) VALUES (?,?,?,?,?,?,?,?,?,?,?)'
+    );
+
+    const added = [];
+    const insertMany = db.transaction((items) => {
+        for (const p of items) {
+            if (!p.name || !p.image_url) continue;
+            const price = parseInt(p.price) || 0;
+            const op = parseInt(p.original_price) || price;
+            const discount = op > 0 ? Math.max(0, Math.round(((op - price) / op) * 100)) : 0;
+            const reviewsEnvelope = {
+                reviews: p.reviews || [],
+                images: p.images || [],
+                highlights: p.highlights || [],
+                specifications: p.specifications || [],
+                ratings_breakdown: p.ratings_breakdown || {},
+                brand: p.brand || '',
+            };
+            const result = insert.run(
+                shop.id, p.name, p.category || 'General', p.image_url,
+                price, op, discount, p.description || p.name,
+                parseFloat(p.rating) || 4.0, parseInt(p.review_count) || 0,
+                JSON.stringify(reviewsEnvelope)
+            );
+            added.push({ id: result.lastInsertRowid, name: p.name });
+        }
+    });
+
+    try {
+        insertMany(products.slice(0, 50)); // Max 50 at a time
+        res.json({ success: true, added, count: added.length });
+    } catch (err) {
+        console.error('Bulk add error:', err);
+        res.status(500).json({ error: 'Failed to add products.' });
+    }
+});
+
 module.exports = router;

@@ -677,6 +677,14 @@
             </button>
         </div>
 
+        <!-- Flipkart Import nav (visible for all authenticated) -->
+        <div class="nav-section" id="navImport" style="display:none">
+            <div class="nav-label">Import</div>
+            <button class="nav-item" onclick="showPage('fkimport')">
+                <span class="icon">📥</span> Flipkart Import
+            </button>
+        </div>
+
         <!-- Admin nav items (hidden for regular users) -->
         <div class="nav-section" id="navAdmin" style="display:none">
             <div class="nav-label">Management</div>
@@ -1049,6 +1057,96 @@
                     </div>
                 </div>
                 <div class="product-edit-grid" id="productEditGrid"></div>
+            </div>
+        </div>
+
+        <!-- Flipkart Import Page -->
+        <div class="page" id="page-fkimport">
+            <div class="page-header">
+                <h2>📥 Flipkart Import</h2>
+                <p>Paste any Flipkart product or category/search link to fetch and import products automatically.</p>
+            </div>
+
+            <!-- URL Input Section -->
+            <div class="section-card" style="margin-bottom:20px">
+                <div style="padding:24px">
+                    <label class="ed-label" style="margin-bottom:10px">Flipkart URL</label>
+                    <div style="display:flex;gap:10px;margin-bottom:12px">
+                        <input class="ed-input" id="fkImportUrl" type="url"
+                            placeholder="Paste Flipkart product or category link (e.g. https://www.flipkart.com/... or https://dl.flipkart.com/...)"
+                            style="flex:1" />
+                        <button class="btn btn-primary" id="btnFkImport" onclick="startFlipkartImport()"
+                            style="white-space:nowrap;padding:0 24px;font-size:15px">
+                            🔍 Fetch
+                        </button>
+                    </div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+                        <span style="font-size:12px;color:var(--text-muted)">Supports:</span>
+                        <span style="font-size:11px;background:rgba(59,130,246,0.1);color:#60a5fa;padding:3px 10px;border-radius:99px;font-weight:600">Product URLs</span>
+                        <span style="font-size:11px;background:rgba(16,185,129,0.1);color:#10b981;padding:3px 10px;border-radius:99px;font-weight:600">Category Pages</span>
+                        <span style="font-size:11px;background:rgba(245,158,11,0.1);color:#f59e0b;padding:3px 10px;border-radius:99px;font-weight:600">Search Results</span>
+                        <span style="font-size:11px;background:rgba(139,92,246,0.1);color:#8b5cf6;padding:3px 10px;border-radius:99px;font-weight:600">Share Links (dl.flipkart.com)</span>
+                    </div>
+                    <div id="fkImportStatus" style="margin-top:12px;display:none;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600"></div>
+                </div>
+            </div>
+
+            <!-- Single Product Preview (shown when a product URL is detected) -->
+            <div class="section-card" id="fkSinglePreview" style="display:none;margin-bottom:20px">
+                <div class="section-head">
+                    <div class="flex-between">
+                        <h3>Product Preview</h3>
+                        <button class="btn btn-primary btn-sm" id="btnAddSingle" onclick="addSingleFromImport()">➕ Add to My Shop</button>
+                    </div>
+                </div>
+                <div style="padding:20px">
+                    <div style="display:flex;gap:24px;flex-wrap:wrap">
+                        <div style="flex:0 0 200px">
+                            <img id="fkPrevImg" src="" style="width:200px;height:200px;object-fit:contain;background:#f5f5f5;border-radius:8px;border:1px solid var(--border)" />
+                            <div id="fkPrevGallery" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"></div>
+                        </div>
+                        <div style="flex:1;min-width:280px">
+                            <div id="fkPrevBrand" style="font-size:12px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:4px"></div>
+                            <div id="fkPrevName" style="font-size:18px;font-weight:800;margin-bottom:8px;line-height:1.3"></div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                                <span id="fkPrevRating" style="background:#388e3c;color:#fff;padding:2px 8px;border-radius:3px;font-size:13px;font-weight:700"></span>
+                                <span id="fkPrevReviewCount" style="font-size:13px;color:var(--text-muted)"></span>
+                            </div>
+                            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px">
+                                <span id="fkPrevPrice" style="font-size:28px;font-weight:800"></span>
+                                <span id="fkPrevOrigPrice" style="font-size:16px;color:var(--text-muted);text-decoration:line-through"></span>
+                                <span id="fkPrevDiscount" style="font-size:14px;color:#388e3c;font-weight:700"></span>
+                            </div>
+                            <div id="fkPrevCategory" style="font-size:13px;color:var(--text-muted);margin-bottom:12px"></div>
+                            <div id="fkPrevHighlights" style="margin-bottom:12px"></div>
+                            <div id="fkPrevDesc" style="font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px"></div>
+                        </div>
+                    </div>
+                    <!-- Specifications preview -->
+                    <div id="fkPrevSpecs" style="margin-top:16px"></div>
+                    <!-- Reviews preview -->
+                    <div id="fkPrevReviews" style="margin-top:16px"></div>
+                </div>
+            </div>
+
+            <!-- Category/Bulk Preview (shown when a category URL is detected) -->
+            <div class="section-card" id="fkBulkPreview" style="display:none;margin-bottom:20px">
+                <div class="section-head">
+                    <div class="flex-between">
+                        <h3 id="fkBulkTitle">Products Found</h3>
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <button class="btn btn-secondary btn-sm" onclick="toggleSelectAll()">☑ Select All</button>
+                            <button class="btn btn-primary btn-sm" id="btnBulkAdd" onclick="bulkAddFromImport()">📥 Import Selected</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-edit-grid" id="fkBulkGrid" style="padding:16px"></div>
+            </div>
+
+            <!-- Import History -->
+            <div class="section-card" id="fkImportHistory" style="display:none">
+                <div class="section-head"><h3>Recent Imports</h3></div>
+                <div id="fkImportLog" style="padding:16px;font-size:13px;color:var(--text-muted)"></div>
             </div>
         </div>
 

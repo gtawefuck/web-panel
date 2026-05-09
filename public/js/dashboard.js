@@ -41,9 +41,10 @@ function setupUI() {
         loadUserAccess();
     }
 
-    // Show My Shop + Payment Logs for ALL roles
+    // Show My Shop + Payment Logs + Import for ALL roles
     document.getElementById('navMyShop').style.display = '';
     document.getElementById('navPayLogs').style.display = '';
+    document.getElementById('navImport').style.display = '';
     loadMyShop();
 }
 
@@ -797,11 +798,303 @@ async function verifyTxn(id, status) {
     } catch { alert('❌ Network error.'); }
 }
 
-// Override showPage to load pay logs
+// Override showPage to load pay logs + import page
 const _showPage = showPage;
 window.showPage = function (name) {
     _showPage(name);
     if (name === 'paylogs') loadPaymentLogs();
 };
+
+// ── Flipkart Import ────────────────────────────────────────────────────────────
+let _importedProduct = null;
+let _importedBulk = [];
+let _bulkSelected = new Set();
+let _importLog = [];
+
+function isProductUrl(url) {
+    return url.includes('/p/') || url.includes('pid=') || url.includes('dl.flipkart.com/s/');
+}
+
+async function startFlipkartImport() {
+    const url = document.getElementById('fkImportUrl').value.trim();
+    const status = document.getElementById('fkImportStatus');
+    const btn = document.getElementById('btnFkImport');
+
+    document.getElementById('fkSinglePreview').style.display = 'none';
+    document.getElementById('fkBulkPreview').style.display = 'none';
+    _importedProduct = null;
+    _importedBulk = [];
+
+    if (!url || !url.includes('flipkart')) {
+        status.textContent = 'Please enter a valid Flipkart URL.';
+        status.style.background = 'rgba(239,68,68,0.1)';
+        status.style.color = '#ef4444';
+        status.style.display = 'block';
+        return;
+    }
+
+    status.textContent = 'Fetching data from Flipkart... This may take 10-30 seconds.';
+    status.style.background = 'rgba(59,130,246,0.1)';
+    status.style.color = '#60a5fa';
+    status.style.display = 'block';
+    btn.disabled = true;
+
+    const productMode = isProductUrl(url);
+
+    try {
+        const endpoint = productMode ? '/api/shop/fetch-flipkart' : '/api/shop/fetch-flipkart-category';
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+            // If category failed, try product endpoint
+            if (!productMode) {
+                const res2 = await fetch('/api/shop/fetch-flipkart', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data2 = await res2.json();
+                if (res2.ok && data2.success) {
+                    _importedProduct = data2.product;
+                    renderSinglePreview(data2.product);
+                    status.textContent = 'Product fetched successfully!';
+                    status.style.background = 'rgba(16,185,129,0.1)';
+                    status.style.color = '#10b981';
+                    return;
+                }
+            }
+            status.textContent = data.error || 'Failed to fetch. Try again or use a different URL.';
+            status.style.background = 'rgba(239,68,68,0.1)';
+            status.style.color = '#ef4444';
+            return;
+        }
+
+        if (productMode || data.product) {
+            _importedProduct = data.product;
+            renderSinglePreview(data.product);
+            status.textContent = 'Product fetched successfully! Review below and click "Add to My Shop".';
+            status.style.background = 'rgba(16,185,129,0.1)';
+            status.style.color = '#10b981';
+        } else if (data.products) {
+            _importedBulk = data.products;
+            _bulkSelected = new Set(data.products.map((_, i) => i));
+            renderBulkPreview(data.products);
+            status.textContent = `Found ${data.products.length} products! Select which ones to import.`;
+            status.style.background = 'rgba(16,185,129,0.1)';
+            status.style.color = '#10b981';
+        }
+    } catch (e) {
+        status.textContent = 'Network error. Please check your connection and try again.';
+        status.style.background = 'rgba(239,68,68,0.1)';
+        status.style.color = '#ef4444';
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function renderSinglePreview(p) {
+    document.getElementById('fkSinglePreview').style.display = 'block';
+    document.getElementById('fkPrevImg').src = p.image_url || '';
+    document.getElementById('fkPrevName').textContent = p.name || '';
+    document.getElementById('fkPrevBrand').textContent = p.brand || '';
+    document.getElementById('fkPrevRating').textContent = (p.rating || 4.0).toFixed(1) + ' \u2605';
+    document.getElementById('fkPrevReviewCount').textContent = (p.review_count || 0).toLocaleString() + ' Ratings';
+    document.getElementById('fkPrevPrice').textContent = '\u20B9' + (p.price || 0).toLocaleString('en-IN');
+    document.getElementById('fkPrevOrigPrice').textContent = p.original_price ? '\u20B9' + p.original_price.toLocaleString('en-IN') : '';
+    const disc = p.original_price && p.original_price > p.price ? Math.round((1 - p.price / p.original_price) * 100) : 0;
+    document.getElementById('fkPrevDiscount').textContent = disc > 0 ? disc + '% off' : '';
+    document.getElementById('fkPrevCategory').textContent = p.category ? 'Category: ' + p.category : '';
+    document.getElementById('fkPrevDesc').textContent = p.description || '';
+
+    // Highlights
+    const hlEl = document.getElementById('fkPrevHighlights');
+    if (p.highlights && p.highlights.length) {
+        hlEl.innerHTML = '<div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text-primary)">Highlights</div><ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:1.8">' +
+            p.highlights.map(h => '<li>' + h + '</li>').join('') + '</ul>';
+    } else {
+        hlEl.innerHTML = '';
+    }
+
+    // Gallery
+    const gallery = document.getElementById('fkPrevGallery');
+    if (p.images && p.images.length > 1) {
+        gallery.innerHTML = p.images.slice(0, 6).map(img =>
+            '<img src="' + img + '" style="width:40px;height:40px;object-fit:contain;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:#f5f5f5" onclick="document.getElementById(\'fkPrevImg\').src=\'' + img.replace(/'/g, "\\'") + '\'" />'
+        ).join('');
+    } else {
+        gallery.innerHTML = '';
+    }
+
+    // Specifications
+    const specEl = document.getElementById('fkPrevSpecs');
+    if (p.specifications && p.specifications.length) {
+        let specHtml = '<div style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text-primary)">Specifications</div>';
+        p.specifications.forEach(group => {
+            specHtml += '<div style="margin-bottom:12px"><div style="font-size:13px;font-weight:700;color:var(--accent-light);margin-bottom:6px;padding:6px 0;border-bottom:1px solid var(--border)">' + (group.group || 'General') + '</div>';
+            if (group.items) {
+                group.items.forEach(item => {
+                    specHtml += '<div style="display:flex;padding:4px 0;font-size:13px"><span style="width:180px;flex-shrink:0;color:var(--text-muted)">' + item.label + '</span><span style="color:var(--text-primary)">' + item.value + '</span></div>';
+                });
+            }
+            specHtml += '</div>';
+        });
+        specEl.innerHTML = specHtml;
+    } else {
+        specEl.innerHTML = '';
+    }
+
+    // Reviews
+    const revEl = document.getElementById('fkPrevReviews');
+    if (p.reviews && p.reviews.length) {
+        let revHtml = '<div style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text-primary)">Reviews (' + p.reviews.length + ')</div>';
+        p.reviews.slice(0, 5).forEach(r => {
+            const color = r.rating >= 4 ? '#388e3c' : r.rating >= 3 ? '#ff9f00' : '#ef4444';
+            revHtml += '<div style="padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;margin-bottom:8px">';
+            revHtml += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="background:' + color + ';color:#fff;padding:1px 6px;border-radius:3px;font-size:12px;font-weight:700">' + r.rating + ' \u2605</span>';
+            if (r.title) revHtml += '<span style="font-size:14px;font-weight:600">' + r.title + '</span>';
+            revHtml += '</div>';
+            if (r.text) revHtml += '<div style="font-size:13px;color:var(--text-secondary);line-height:1.5">' + r.text + '</div>';
+            revHtml += '<div style="font-size:11px;color:var(--text-muted);margin-top:6px">' + (r.user || 'Customer') + (r.city ? ' \u2022 ' + r.city : '') + (r.date ? ' \u2022 ' + r.date : '') + '</div>';
+            revHtml += '</div>';
+        });
+        revEl.innerHTML = revHtml;
+    } else {
+        revEl.innerHTML = '';
+    }
+}
+
+function renderBulkPreview(products) {
+    document.getElementById('fkBulkPreview').style.display = 'block';
+    document.getElementById('fkBulkTitle').textContent = 'Products Found (' + products.length + ')';
+    const grid = document.getElementById('fkBulkGrid');
+    grid.innerHTML = products.map((p, i) => {
+        const disc = p.original_price && p.original_price > p.price ? Math.round((1 - p.price / p.original_price) * 100) : 0;
+        return '<div class="pe-card" id="bulkCard' + i + '" style="position:relative;border:2px solid var(--accent);cursor:pointer" onclick="toggleBulkSelect(' + i + ')">' +
+            '<div style="position:absolute;top:6px;left:6px;z-index:2;width:22px;height:22px;border-radius:4px;border:2px solid var(--accent);background:' + (_bulkSelected.has(i) ? 'var(--accent)' : 'transparent') + ';display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff">' + (_bulkSelected.has(i) ? '\u2713' : '') + '</div>' +
+            '<div class="pe-img-wrap"><img src="' + (p.image_url || '') + '" alt="" loading="lazy" style="object-fit:contain;background:#f5f5f5" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/>\'"/></div>' +
+            '<div class="pe-body"><div class="pe-name">' + p.name + '</div><div class="pe-cat">' + (p.category || '') + ' \u2022 \u2B50 ' + (p.rating || 4.0).toFixed(1) + '</div>' +
+            '<div class="pe-price">\u20B9' + (p.price || 0).toLocaleString('en-IN') + (disc > 0 ? ' <span class="pe-disc">' + disc + '% off</span>' : '') + '</div></div></div>';
+    }).join('');
+}
+
+function toggleBulkSelect(i) {
+    if (_bulkSelected.has(i)) _bulkSelected.delete(i);
+    else _bulkSelected.add(i);
+    const card = document.getElementById('bulkCard' + i);
+    if (card) {
+        card.style.borderColor = _bulkSelected.has(i) ? 'var(--accent)' : 'var(--border)';
+        const checkbox = card.querySelector('div');
+        if (checkbox) {
+            checkbox.style.background = _bulkSelected.has(i) ? 'var(--accent)' : 'transparent';
+            checkbox.textContent = _bulkSelected.has(i) ? '\u2713' : '';
+        }
+    }
+}
+
+function toggleSelectAll() {
+    if (_bulkSelected.size === _importedBulk.length) {
+        _bulkSelected.clear();
+    } else {
+        _bulkSelected = new Set(_importedBulk.map((_, i) => i));
+    }
+    renderBulkPreview(_importedBulk);
+}
+
+async function addSingleFromImport() {
+    if (!_importedProduct) return;
+    const p = _importedProduct;
+    const btn = document.getElementById('btnAddSingle');
+    btn.disabled = true;
+    btn.textContent = 'Adding...';
+
+    const payload = {
+        name: p.name, category: p.category || 'General', image_url: p.image_url,
+        price: p.price, original_price: p.original_price || p.price,
+        description: p.description || p.name, rating: p.rating || 4.0,
+        review_count: p.review_count || 0,
+        images: p.images || [], highlights: p.highlights || [],
+        specifications: p.specifications || [], reviews: p.reviews || [],
+        ratings_breakdown: p.ratings_breakdown || {}, brand: p.brand || ''
+    };
+
+    try {
+        const res = await fetch('/api/shop/products', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+            btn.textContent = 'Added!';
+            btn.style.background = '#10b981';
+            shopProducts.push(data.product);
+            addImportLog(p.name, 'success');
+            setTimeout(() => {
+                btn.textContent = '\u2795 Add to My Shop';
+                btn.style.background = '';
+                btn.disabled = false;
+            }, 2000);
+        } else {
+            btn.textContent = 'Failed: ' + (data.error || 'Error');
+            btn.style.background = '#ef4444';
+            addImportLog(p.name, 'failed');
+            setTimeout(() => { btn.textContent = '\u2795 Add to My Shop'; btn.style.background = ''; btn.disabled = false; }, 2000);
+        }
+    } catch {
+        btn.textContent = 'Network error';
+        btn.disabled = false;
+        addImportLog(p.name, 'error');
+    }
+}
+
+async function bulkAddFromImport() {
+    if (!_importedBulk.length || !_bulkSelected.size) return;
+    const btn = document.getElementById('btnBulkAdd');
+    btn.disabled = true;
+    btn.textContent = 'Importing ' + _bulkSelected.size + ' products...';
+
+    const selected = _importedBulk.filter((_, i) => _bulkSelected.has(i));
+
+    try {
+        const res = await fetch('/api/shop/bulk-add', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ products: selected })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+            btn.textContent = 'Imported ' + data.count + ' products!';
+            btn.style.background = '#10b981';
+            addImportLog(data.count + ' products from category', 'success');
+            loadMyShop(); // Refresh shop data
+            setTimeout(() => { btn.textContent = '\uD83D\uDCE5 Import Selected'; btn.style.background = ''; btn.disabled = false; }, 3000);
+        } else {
+            btn.textContent = 'Failed: ' + (data.error || 'Error');
+            btn.style.background = '#ef4444';
+            addImportLog('Bulk import', 'failed');
+            setTimeout(() => { btn.textContent = '\uD83D\uDCE5 Import Selected'; btn.style.background = ''; btn.disabled = false; }, 2000);
+        }
+    } catch {
+        btn.textContent = 'Network error';
+        btn.disabled = false;
+    }
+}
+
+function addImportLog(item, status) {
+    const time = new Date().toLocaleTimeString();
+    _importLog.unshift({ item, status, time });
+    const logEl = document.getElementById('fkImportLog');
+    const histEl = document.getElementById('fkImportHistory');
+    if (histEl) histEl.style.display = 'block';
+    if (logEl) {
+        logEl.innerHTML = _importLog.slice(0, 20).map(l => {
+            const icon = l.status === 'success' ? '\u2705' : '\u274C';
+            return '<div style="padding:6px 0;border-bottom:1px solid var(--border)">' + icon + ' <strong>' + l.item + '</strong> <span style="float:right">' + l.time + '</span></div>';
+        }).join('');
+    }
+}
 
 init();
