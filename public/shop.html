@@ -369,6 +369,33 @@ img{max-width:100%}
 .fk-sort-btn:hover{color:var(--fk-blue)}
 .fk-sort-btn.active{color:var(--fk-blue);border-bottom-color:var(--fk-blue);font-weight:600}
 @media(max-width:992px){.fk-filter-sidebar{display:none !important}}
+/* Deals of the Day */
+.fk-dotd{background:#fff;margin-bottom:10px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-dotd-head{display:flex;align-items:center;padding:12px 16px 8px;gap:16px;border-bottom:1px solid #f0f0f0}
+.fk-dotd-head h2{font-size:22px;font-weight:600;color:#212121}
+.fk-dotd-timer{display:flex;align-items:center;gap:4px}
+.fk-dotd-timer .seg{background:#212121;color:#fff;padding:4px 8px;border-radius:3px;font-size:16px;font-weight:700;min-width:32px;text-align:center}
+.fk-dotd-timer .colon{font-size:16px;font-weight:700;color:#212121}
+/* Recently Viewed */
+.fk-rv{background:#fff;margin-bottom:10px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-rv-head{padding:12px 16px 8px;font-size:22px;font-weight:600;border-bottom:1px solid #f0f0f0}
+.fk-rv-track{display:flex;overflow-x:auto;scrollbar-width:none;padding:12px 0}
+.fk-rv-track::-webkit-scrollbar{display:none}
+.fk-rv-card{flex:0 0 160px;padding:12px;text-align:center;cursor:pointer;border-right:1px solid #f0f0f0}
+.fk-rv-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.fk-rv-card img{width:120px;height:120px;object-fit:contain;margin-bottom:8px}
+.fk-rv-card .name{font-size:13px;color:#212121;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.fk-rv-card .price{font-size:13px;font-weight:500;color:#212121;margin-top:4px}
+/* Top Offers Banner */
+.fk-top-offers{background:#fff;margin-bottom:10px;box-shadow:0 1px 1px rgba(0,0,0,.08);padding:0}
+.fk-top-offers-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 8px}
+.fk-top-offers-head h2{font-size:22px;font-weight:600}
+.fk-top-offers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0}
+.fk-offer-card{padding:16px;text-align:center;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:box-shadow .2s}
+.fk-offer-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.fk-offer-card img{width:140px;height:140px;object-fit:contain;margin-bottom:8px}
+.fk-offer-card .title{font-size:14px;font-weight:500;color:#212121}
+.fk-offer-card .sub{font-size:13px;color:var(--fk-green);font-weight:500}
 </style>
 </head>
 <body>
@@ -540,6 +567,80 @@ function scrollStrip(btn,dir){
     var track=btn.parentElement.querySelector('.fk-strip-track');
     track.scrollBy({left:dir*600,behavior:'smooth'});
 }
+var recentlyViewed=JSON.parse(localStorage.getItem('fk_rv')||'[]');
+function trackView(id){
+    recentlyViewed=recentlyViewed.filter(function(x){return x!==id});
+    recentlyViewed.unshift(id);
+    if(recentlyViewed.length>12)recentlyViewed=recentlyViewed.slice(0,12);
+    localStorage.setItem('fk_rv',JSON.stringify(recentlyViewed));
+}
+function renderRecentlyViewed(){
+    var rvProds=recentlyViewed.map(function(id){return products.find(function(p){return p.id===id})}).filter(Boolean);
+    if(!rvProds.length)return '';
+    var h='<div class="fk-rv"><div class="fk-rv-head">Recently Viewed</div><div class="fk-rv-track">';
+    rvProds.forEach(function(p){
+        h+='<div class="fk-rv-card" onclick="openPDP('+p.id+')"><img src="'+(p.image_url||'https://via.placeholder.com/120')+'" onerror="this.src=\'https://via.placeholder.com/120?text=Product\'"/><div class="name">'+p.name+'</div><div class="price">'+fmt(p.price)+'</div></div>';
+    });
+    h+='</div></div>';
+    return h;
+}
+function renderDealsOfDay(allProducts){
+    var deals=allProducts.filter(function(p){return p.original_price&&p.price<p.original_price}).sort(function(a,b){
+        var da=a.original_price?Math.round((1-a.price/a.original_price)*100):0;
+        var db=b.original_price?Math.round((1-b.price/b.original_price)*100):0;
+        return db-da;
+    }).slice(0,12);
+    if(!deals.length)return '';
+    var h='<div class="fk-dotd"><div class="fk-dotd-head"><h2>Deals of the Day</h2>';
+    h+='<div class="fk-dotd-timer"><span class="seg" id="dotdH">00</span><span class="colon">:</span><span class="seg" id="dotdM">00</span><span class="colon">:</span><span class="seg" id="dotdS">00</span></div>';
+    h+='<button class="view-all-btn" style="margin-left:auto;background:var(--fk-blue);color:#fff;border:none;padding:8px 20px;font-size:13px;font-weight:600;border-radius:2px;cursor:pointer" onclick="showAllDeals()">VIEW ALL</button>';
+    h+='</div><div class="fk-strip-track-wrap"><div class="fk-strip-track">';
+    deals.forEach(function(p){
+        var disc=Math.round((1-p.price/p.original_price)*100);
+        h+='<div class="fk-strip-card" onclick="openPDP('+p.id+')"><div class="fk-strip-card-img"><img src="'+(p.image_url||'https://via.placeholder.com/150')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/150?text=Product\'"/></div><div class="fk-strip-card-name">'+p.name+'</div><div class="fk-strip-card-off" style="color:var(--fk-green);font-weight:600">'+disc+'% off</div><div class="fk-strip-card-price">'+fmt(p.price)+' <span style="text-decoration:line-through;color:#878787;font-size:12px;font-weight:400">'+fmt(p.original_price)+'</span></div></div>';
+    });
+    h+='</div></div></div>';
+    return h;
+}
+function startDotdTimer(){
+    var now=new Date();var end=new Date(now);end.setHours(23,59,59,999);
+    function tick(){
+        var diff=end-new Date();if(diff<=0){diff=86399000;}
+        var h=Math.floor(diff/3600000);var m=Math.floor((diff%3600000)/60000);var s=Math.floor((diff%60000)/1000);
+        var eh=document.getElementById('dotdH'),em=document.getElementById('dotdM'),es=document.getElementById('dotdS');
+        if(eh){eh.textContent=String(h).padStart(2,'0');em.textContent=String(m).padStart(2,'0');es.textContent=String(s).padStart(2,'0');}
+    }
+    tick();setInterval(tick,1000);
+}
+function showAllDeals(){
+    var deals=products.filter(function(p){return p.original_price&&p.price<p.original_price}).sort(function(a,b){
+        var da=a.original_price?Math.round((1-a.price/a.original_price)*100):0;
+        var db=b.original_price?Math.round((1-b.price/b.original_price)*100):0;
+        return db-da;
+    });
+    document.getElementById('gridTitle').textContent='Deals of the Day';
+    currentGridProducts=deals;
+    populateBrandFilter(deals);
+    applyFilters();
+    showView('grid');
+}
+function renderTopOffers(allProducts){
+    var cats={};allProducts.forEach(function(p){if(!cats[p.category])cats[p.category]=[];cats[p.category].push(p);});
+    var catKeys=Object.keys(cats).slice(0,6);
+    if(!catKeys.length)return '';
+    var h='<div class="fk-top-offers"><div class="fk-top-offers-head"><h2>Top Offers</h2></div><div class="fk-top-offers-grid">';
+    catKeys.forEach(function(c){
+        var best=cats[c].sort(function(a,b){
+            var da=a.original_price?Math.round((1-a.price/a.original_price)*100):0;
+            var db=b.original_price?Math.round((1-b.price/b.original_price)*100):0;
+            return db-da;
+        })[0];
+        var disc=best.original_price?Math.round((1-best.price/best.original_price)*100):0;
+        h+='<div class="fk-offer-card" onclick="showCategory(\''+c.replace(/'/g,"\\'")+'\')" ><img src="'+(best.image_url||'https://via.placeholder.com/140')+'" onerror="this.src=\'https://via.placeholder.com/140?text='+encodeURIComponent(c)+'\'"/><div class="title">'+c+'</div>'+(disc?'<div class="sub">From '+fmt(best.price)+' | '+disc+'% off</div>':'<div class="sub">From '+fmt(best.price)+'</div>')+'</div>';
+    });
+    h+='</div></div>';
+    return h;
+}
 function renderHome(){
     var cats={};products.forEach(function(p){if(!cats[p.category])cats[p.category]=[];cats[p.category].push(p);});
     var catBar=document.getElementById('catBar');
@@ -561,8 +662,16 @@ function renderHome(){
     startBanner(banners.length);
     var content=document.getElementById('homeContent');
     var html='';
+    // Deals of the Day
+    html+=renderDealsOfDay(products);
+    // Top Offers grid
+    html+=renderTopOffers(products);
+    // Category strips
     Object.keys(cats).forEach(function(c){html+=renderStrip(c,cats[c]);});
+    // Recently Viewed
+    html+=renderRecentlyViewed();
     content.innerHTML=html;
+    startDotdTimer();
 }
 function startBanner(n){if(bannerTimer)clearInterval(bannerTimer);bannerTimer=setInterval(function(){bannerNav(1)},4000);}
 function bannerNav(d){
@@ -587,6 +696,7 @@ function bannerGo(i){
 function openPDP(id){
     var p=products.find(function(x){return x.id===id});
     if(!p)return;
+    trackView(id);
     var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
     var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){rev={};}
     var imgs=rev.images||[p.image_url||'https://via.placeholder.com/400'];
