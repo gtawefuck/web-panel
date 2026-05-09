@@ -945,7 +945,7 @@ async function init(){
 function render(){
     document.title=shopData.shop_name+' — Online Shopping India';
     document.getElementById('logoText').textContent=shopData.shop_name;
-    if(shopData.banner_text){document.getElementById('bannerH1').innerHTML=shopData.banner_text}
+    if(shopData.banner_text){const bh=document.getElementById('bannerH1');if(bh)bh.innerHTML=shopData.banner_text}
     const cats=[...new Set(allProducts.map(p=>p.category))];
     renderCatBar(cats);
     renderTopOffers();
@@ -1139,6 +1139,7 @@ function filterProducts(){
 function startBanner(){
     const slides=document.querySelectorAll('.banner-slide');
     const dotsC=document.getElementById('bannerDots');
+    if(!dotsC)return;
     dotsC.innerHTML=Array.from(slides).map((_,i)=>`<span class="banner-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
     bannerInterval=setInterval(()=>goSlide(currentSlide+1),4000);
 }
