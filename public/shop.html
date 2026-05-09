@@ -945,7 +945,7 @@ async function init(){
 function render(){
     document.title=shopData.shop_name+' — Online Shopping India';
     document.getElementById('logoText').textContent=shopData.shop_name;
-    if(shopData.banner_text){document.getElementById('bannerH1').innerHTML=shopData.banner_text}
+    const bannerH1=document.getElementById('bannerH1');if(shopData.banner_text&&bannerH1){bannerH1.innerHTML=shopData.banner_text}
     const cats=[...new Set(allProducts.map(p=>p.category))];
     renderCatBar(cats);
     renderTopOffers();
@@ -971,6 +971,7 @@ function hlCat(el){document.querySelectorAll('.fk-cat-item').forEach(x=>x.classL
 
 function renderDealStrip(cats){
     const strip=document.getElementById('dealStrip');
+    if(!strip)return;
     const offs=['Up to 80% off','From ₹499','Min 40% off','Extra 30% off','Top deals'];
     strip.innerHTML=cats.slice(0,5).map((c,i)=>{
         const img=catImg(c);
@@ -1138,7 +1139,9 @@ function filterProducts(){
 // Banner
 function startBanner(){
     const slides=document.querySelectorAll('.banner-slide');
+    if(!slides.length)return;
     const dotsC=document.getElementById('bannerDots');
+    if(!dotsC)return;
     dotsC.innerHTML=Array.from(slides).map((_,i)=>`<span class="banner-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
     bannerInterval=setInterval(()=>goSlide(currentSlide+1),4000);
 }
