@@ -1252,6 +1252,11 @@
                 <label class="form-label">Or Upload Image</label>
                 <input type="file" id="addProdImageFile" accept="image/*" onchange="handleAddProductImageUpload(event)" class="form-input" />
             </div>
+            <div class="form-group">
+                <label class="form-label">Additional Images (up to 5)</label>
+                <input type="file" id="addProdExtraImages" accept="image/*" multiple onchange="handleMultiImageUpload(event)" class="form-input" />
+                <div id="addExtraImagesPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                 <div class="form-group">
                     <label class="form-label">Sale Price (₹) *</label>
@@ -1270,6 +1275,30 @@
             <div class="form-group">
                 <label class="form-label">Rating (1-5)</label>
                 <input id="addProdRating" type="number" class="form-input" value="4.5" min="1" max="5" step="0.1" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Brand</label>
+                <input id="addProdBrand" type="text" class="form-input" placeholder="e.g. Samsung, Apple" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Highlights (one per line)</label>
+                <textarea id="addProdHighlights" class="form-input" rows="3" placeholder="128 GB ROM&#10;16.51 cm (6.5 inch) Display&#10;50MP + 8MP Camera"></textarea>
+            </div>
+            <!-- Reviews Section -->
+            <div class="form-group" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px">
+                <label class="form-label" style="font-size:14px">Customer Reviews</label>
+                <div id="addReviewsList"></div>
+                <div style="display:grid;grid-template-columns:auto 1fr;gap:8px;margin-top:8px;align-items:start">
+                    <select id="addReviewRating" class="form-input" style="width:80px;padding:6px 8px">
+                        <option value="5">5 ★</option><option value="4">4 ★</option><option value="3">3 ★</option><option value="2">2 ★</option><option value="1">1 ★</option>
+                    </select>
+                    <input id="addReviewTitle" type="text" class="form-input" placeholder="Review title" style="padding:6px 8px" />
+                </div>
+                <textarea id="addReviewText" class="form-input" rows="2" placeholder="Write review text..." style="margin-top:8px"></textarea>
+                <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+                    <input id="addReviewAuthor" type="text" class="form-input" placeholder="Reviewer name" style="flex:1;padding:6px 8px" />
+                    <button class="btn btn-primary btn-sm" onclick="addReviewToList()" type="button" style="white-space:nowrap">+ Add Review</button>
+                </div>
             </div>
             <div class="alert" id="addProductAlert"></div>
             <button class="btn btn-primary btn-full" onclick="addProduct()">➕ Add Product</button>

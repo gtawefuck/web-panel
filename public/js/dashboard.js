@@ -536,6 +536,18 @@ function openAddProductModal() {
     document.getElementById('addFkStatus').style.display = 'none';
     document.getElementById('addProductAlert').style.display = 'none';
     document.getElementById('addProdImageFile').value = '';
+    const brandEl = document.getElementById('addProdBrand');
+    if (brandEl) brandEl.value = '';
+    const highlightsEl = document.getElementById('addProdHighlights');
+    if (highlightsEl) highlightsEl.value = '';
+    const extraImgs = document.getElementById('addProdExtraImages');
+    if (extraImgs) extraImgs.value = '';
+    const extraPrev = document.getElementById('addExtraImagesPreview');
+    if (extraPrev) extraPrev.innerHTML = '';
+    _addExtraImageUrls = [];
+    _addReviews = [];
+    const reviewsList = document.getElementById('addReviewsList');
+    if (reviewsList) reviewsList.innerHTML = '';
     openModal('addProductModal');
 }
 
@@ -563,6 +575,61 @@ function calcEditDiscount() {
     } else {
         el.style.display = 'none';
     }
+}
+
+// ── Multi-Image Upload & Reviews ──────────────────────────────────────────────
+let _addExtraImageUrls = [];
+let _addReviews = [];
+
+async function handleMultiImageUpload(e) {
+    const files = Array.from(e.target.files).slice(0, 5);
+    const preview = document.getElementById('addExtraImagesPreview');
+    for (const file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const res = await fetch('/api/shop/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (res.ok && data.url) {
+                _addExtraImageUrls.push(data.url);
+                const img = document.createElement('img');
+                img.src = data.url;
+                img.style.cssText = 'width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';
+                preview.appendChild(img);
+            }
+        } catch { /* skip failed */ }
+    }
+}
+
+function addReviewToList() {
+    const rating = parseInt(document.getElementById('addReviewRating').value) || 5;
+    const title = document.getElementById('addReviewTitle').value.trim();
+    const text = document.getElementById('addReviewText').value.trim();
+    const author = document.getElementById('addReviewAuthor').value.trim() || 'Anonymous';
+    if (!text) return;
+    _addReviews.push({ rating, title, text, author });
+    document.getElementById('addReviewTitle').value = '';
+    document.getElementById('addReviewText').value = '';
+    document.getElementById('addReviewAuthor').value = '';
+    renderAddReviewsList();
+}
+
+function removeAddReview(idx) {
+    _addReviews.splice(idx, 1);
+    renderAddReviewsList();
+}
+
+function renderAddReviewsList() {
+    const el = document.getElementById('addReviewsList');
+    if (!_addReviews.length) { el.innerHTML = ''; return; }
+    el.innerHTML = _addReviews.map((r, i) =>
+        `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;margin-bottom:4px;background:rgba(255,255,255,.05);border-radius:6px;font-size:13px">
+            <span style="background:#388e3c;color:#fff;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:700">${r.rating}★</span>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.title || r.text.slice(0, 40)}</span>
+            <span style="color:var(--text-muted);font-size:11px">${r.author}</span>
+            <button onclick="removeAddReview(${i})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;padding:0 4px">×</button>
+        </div>`
+    ).join('');
 }
 
 async function handleAddProductImageUpload(e) {
@@ -669,8 +736,17 @@ async function addProduct() {
         return;
     }
 
-    // Include rich scraped data if available
+    // Include rich scraped data if available, plus manually entered data
     const payload = { name, category, image_url, price, original_price, description, rating };
+
+    // Manual fields
+    const brandEl = document.getElementById('addProdBrand');
+    const highlightsEl = document.getElementById('addProdHighlights');
+    const manualBrand = brandEl ? brandEl.value.trim() : '';
+    const manualHighlights = highlightsEl ? highlightsEl.value.trim().split('\n').filter(h => h.trim()) : [];
+    const manualImages = _addExtraImageUrls.length ? [image_url, ..._addExtraImageUrls] : [];
+    const manualReviews = _addReviews.slice();
+
     if (_lastScrapedProduct) {
         payload.review_count = _lastScrapedProduct.review_count || 0;
         payload.images = _lastScrapedProduct.images || [];
@@ -679,6 +755,15 @@ async function addProduct() {
         payload.reviews = _lastScrapedProduct.reviews || [];
         payload.ratings_breakdown = _lastScrapedProduct.ratings_breakdown || {};
         payload.brand = _lastScrapedProduct.brand || '';
+    }
+
+    // Override/merge with manual entries
+    if (manualBrand) payload.brand = manualBrand;
+    if (manualHighlights.length) payload.highlights = manualHighlights;
+    if (manualImages.length) payload.images = manualImages;
+    if (manualReviews.length) {
+        payload.reviews = (payload.reviews || []).concat(manualReviews);
+        payload.review_count = (payload.review_count || 0) + manualReviews.length;
     }
 
     try {
