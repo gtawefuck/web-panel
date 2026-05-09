@@ -902,7 +902,7 @@ let visitorLat = null, visitorLng = null, visitorCity = '', visitorCountry = '';
 let bannerInterval = null, currentSlide = 0, isLoggedIn = false;
 let currentTxnRef = null, payTimerInterval = null, currentPayTotal = 0, currentUpiUri = null;
 
-const catEmojis = {'Electronics':'📱','Home Appliances':'🏠','Fashion':'👗','Sports & Fitness':'💪','Books':'📚','Furniture':'🛋️','Personal Care':'✨','Toys & Games':'🎮','Gaming':'🕹️','Garden & Outdoors':'🌿','Grocery':'🛒','Mobiles':'📲','Beauty':'💄','Appliances':'🔌','Travel':'✈️','Accessories':'👜','Gifts':'🎁','Wellness':'💆','Kitchen Appliances':'🍳','Grooming':'💇','Smart Home':'🏡','Stationery':'✏️'};
+const catEmojis = {'Electronics':'📱','Home Appliances':'🏠','Fashion':'👗','Sports & Fitness':'💪','Books':'📚','Furniture':'🛋️','Personal Care':'✨','Toys & Games':'🎮','Gaming':'🕹️','Garden & Outdoors':'🌿','Grocery':'🛒','Mobiles':'📲','Beauty':'💄','Appliances':'🔌','Travel':'✈️','Accessories':'👜','Gifts':'🎁','Wellness':'💆','Kitchen Appliances':'🍳','Grooming':'💇','Smart Home':'🏡','Stationery':'✏️','Laptops':'💻','Televisions':'📺'};
 
 const catImages = {};
 function catImg(cat){return ''}
@@ -1036,7 +1036,11 @@ const STRIP_LABELS={
     'Toys & Games':{title:'Toys, Kids Fashion & More',sub:'Up to 70% off'},
     'Smart Home':{title:'Smart Home Gadgets',sub:'Make your home smarter'},
     'Travel':{title:'Travel Essentials',sub:'Bags, gadgets & more'},
-    'Gifts':{title:'Gifts You\u2019ll Love',sub:'For every occasion'}
+    'Gifts':{title:'Gifts You\u2019ll Love',sub:'For every occasion'},
+    'Laptops':{title:'Best of Laptops',sub:'Work & gaming · Top brands'},
+    'Televisions':{title:'Best of Televisions',sub:'Smart TVs · Up to 50% off'},
+    'Beauty':{title:'Beauty, Skin & Hair Care',sub:'Min 30% off · Top brands'},
+    'Grocery':{title:'Grocery Essentials',sub:'Daily needs · Best prices'}
 };
 function renderHomeStrips(cats){
     const wrap=document.getElementById('homeStrips');if(!wrap)return;
