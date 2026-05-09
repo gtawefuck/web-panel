@@ -54,7 +54,11 @@ function flattenProduct(p) {
         specifications: parsed.specifications || [],
         ratings_breakdown: parsed.ratings_breakdown || null,
         brand: parsed.brand || '',
-        color_variants: parsed.color_variants || []
+        color_variants: parsed.color_variants || [],
+        sizes: parsed.sizes || [],
+        colors: parsed.colors || parsed.color_variants || [],
+        video_url: parsed.video_url || '',
+        a_plus_images: parsed.a_plus_images || []
     };
 }
 
@@ -107,7 +111,8 @@ router.post('/products', requireAuth, (req, res) => {
     if (!shop) return res.status(404).json({ error: 'No shop found.' });
 
     const { name, category, image_url, price, original_price, description, rating, review_count,
-            images, highlights, specifications, reviews: reviewsData, ratings_breakdown, brand } = req.body;
+            images, highlights, specifications, reviews: reviewsData, ratings_breakdown, brand,
+            sizes, colors, color_variants, video_url, a_plus_images } = req.body;
     if (!name || !category || !image_url || price == null || original_price == null) {
         return res.status(400).json({ error: 'name, category, image_url, price, and original_price are required.' });
     }
@@ -126,6 +131,11 @@ router.post('/products', requireAuth, (req, res) => {
         specifications: Array.isArray(specifications) ? specifications : [],
         ratings_breakdown: ratings_breakdown || {},
         brand: brand || '',
+        sizes: Array.isArray(sizes) ? sizes : (typeof sizes === 'string' && sizes ? sizes.split(',').map(s => s.trim()) : []),
+        colors: Array.isArray(colors) ? colors : (Array.isArray(color_variants) ? color_variants : (typeof colors === 'string' && colors ? colors.split(',').map(s => s.trim()) : [])),
+        color_variants: Array.isArray(color_variants) ? color_variants : (Array.isArray(colors) ? colors : []),
+        video_url: video_url || '',
+        a_plus_images: Array.isArray(a_plus_images) ? a_plus_images : (typeof a_plus_images === 'string' && a_plus_images ? a_plus_images.split(',').map(s => s.trim()) : []),
     };
     const reviews = JSON.stringify(reviewsEnvelope);
 
@@ -255,16 +265,271 @@ router.get('/visitors', requireAuth, (req, res) => {
     res.json({ visitors });
 });
 
-// POST /api/shop/fetch-flipkart — fetch details from a given URL
-// Uses axios+cheerio first (fast), falls back to puppeteer if blocked
-router.post('/fetch-flipkart', requireAuth, async (req, res) => {
-    const { url } = req.body;
-    if (!url || !url.includes('flipkart')) {
-        return res.status(400).json({ success: false, error: 'Valid Flipkart URL required.' });
+// POST /api/shop/fetch-product — universal product fetcher (Flipkart + Amazon)
+router.post('/fetch-product', requireAuth, async (req, res) => {
+    const { url, custom_price } = req.body;
+    if (!url) {
+        return res.status(400).json({ success: false, error: 'Product URL required.' });
+    }
+
+    const isAmazon = url.includes('amazon.in') || url.includes('amazon.com') || url.includes('amzn.');
+    const isFlipkart = url.includes('flipkart');
+
+    if (!isAmazon && !isFlipkart) {
+        return res.status(400).json({ success: false, error: 'Only Flipkart and Amazon URLs are supported.' });
     }
 
     const cheerio = require('cheerio');
     const axios = require('axios');
+
+    if (isAmazon) {
+        // ─── Amazon scraping ───
+        let resolvedUrl = url;
+        if (url.includes('amzn.')) {
+            try {
+                const headRes = await axios.head(url, {
+                    maxRedirects: 10, timeout: 10000,
+                    headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36' }
+                });
+                resolvedUrl = headRes.request?.res?.responseUrl || headRes.request?._redirectable?._currentUrl || url;
+            } catch (e) {
+                if (e.response?.headers?.location) resolvedUrl = e.response.headers.location;
+                else if (e.request?._redirectable?._currentUrl) resolvedUrl = e.request._redirectable._currentUrl;
+            }
+        }
+
+        function extractAmazonProduct($) {
+            const pageText = $('body').text();
+            if (pageText.includes('Enter the characters you see below') || pageText.includes('Robot Check')) return null;
+
+            // Name
+            let name = $('#productTitle').text().trim();
+            if (!name) name = $('span#productTitle, h1#title span').text().trim();
+
+            // Main image
+            let imageUrl = '';
+            const imgData = $('img#landingImage, img#imgBlkFront').attr('data-old-hires') ||
+                            $('img#landingImage, img#imgBlkFront').attr('src') || '';
+            imageUrl = imgData;
+            if (!imageUrl) imageUrl = $('meta[property="og:image"]').attr('content') || '';
+
+            // All gallery images
+            const images = [];
+            const seenImgs = new Set();
+            // Try to extract from image data JSON in script tags
+            const scripts = $('script').toArray();
+            for (const s of scripts) {
+                const text = $(s).html() || '';
+                const match = text.match(/'colorImages'\s*:\s*\{[^}]*'initial'\s*:\s*(\[[\s\S]*?\])\s*\}/);
+                if (match) {
+                    try {
+                        const imgArr = JSON.parse(match[1]);
+                        imgArr.forEach(img => {
+                            const hiRes = img.hiRes || img.large || img.thumb || '';
+                            if (hiRes && !seenImgs.has(hiRes)) { seenImgs.add(hiRes); images.push(hiRes); }
+                        });
+                    } catch (_) {}
+                }
+            }
+            // Fallback: scrape from image thumbnails
+            if (!images.length) {
+                $('li.imageThumbnail img, div.imgTagWrapper img, img.s-image').each((i, el) => {
+                    let src = $(el).attr('src') || '';
+                    src = src.replace(/\._[A-Z]+\d+_\./, '._SL1500_.');
+                    if (src && !seenImgs.has(src)) { seenImgs.add(src); images.push(src); }
+                });
+            }
+            if (imageUrl && !seenImgs.has(imageUrl)) images.unshift(imageUrl);
+            if (!images.length && imageUrl) images.push(imageUrl);
+
+            // Price
+            let priceStr = '';
+            for (const sel of ['span.a-price-whole', 'span#priceblock_ourprice', 'span#priceblock_dealprice', 'span.priceToPay span.a-price-whole']) {
+                priceStr = $(sel).first().text().trim();
+                if (priceStr) break;
+            }
+            let origPriceStr = '';
+            $('span.a-price.a-text-price span.a-offscreen, span.priceBlockStrikePriceString').each((i, el) => {
+                if (!origPriceStr) origPriceStr = $(el).text().trim();
+            });
+
+            const price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+            const original_price = parseInt(origPriceStr.replace(/[^0-9]/g, '')) || price;
+
+            // Rating
+            let ratingStr = $('span.a-icon-alt').first().text().trim();
+            const rating = parseFloat(ratingStr) || 4.0;
+
+            // Review count
+            let reviewCountStr = $('span#acrCustomerReviewCount').text().trim();
+            const review_count = parseInt(reviewCountStr.replace(/[^0-9]/g, '')) || 0;
+
+            // Brand
+            let brand = $('a#bylineInfo').text().trim().replace(/^(Visit the |Brand: )/, '').replace(/ Store$/, '');
+            if (!brand) brand = $('tr.po-brand td.a-span9 span').text().trim();
+
+            // Category from breadcrumbs
+            let category = '';
+            $('ul.a-unordered-list.a-horizontal a.a-link-normal').each((i, el) => {
+                const t = $(el).text().trim();
+                if (t && t.length > 1) category = t;
+            });
+
+            // Highlights / bullet points
+            const highlights = [];
+            $('ul.a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item, div#feature-bullets ul li span').each((i, el) => {
+                const t = $(el).text().trim();
+                if (t && t.length > 5 && !t.includes('Click here') && !t.includes('Make sure')) highlights.push(t);
+            });
+
+            // Description
+            let description = highlights.length ? highlights.slice(0, 5).join(' | ') : '';
+            if (!description) description = $('div#productDescription p').text().trim();
+            if (!description) description = $('meta[name="description"]').attr('content') || '';
+
+            // Sizes / variants
+            const sizes = [];
+            $('li[data-dp-url] span.a-size-base.swatch-title-text, select#native_dropdown_selected_size_name option').each((i, el) => {
+                const t = $(el).text().trim();
+                if (t && t !== 'Select' && !sizes.includes(t)) sizes.push(t);
+            });
+            // Also extract from variation dimensions
+            $('span.selection, span.a-dropdown-prompt').each((i, el) => {
+                const t = $(el).text().trim();
+                if (t && t.length < 30 && !sizes.includes(t)) sizes.push(t);
+            });
+
+            // Colors
+            const colors = [];
+            $('li[data-dp-url] img.imgSwatch, li.swatchAvailable img.imgSwatch').each((i, el) => {
+                const alt = $(el).attr('alt') || '';
+                if (alt && !colors.includes(alt)) colors.push(alt);
+            });
+            // Fallback
+            if (!colors.length) {
+                $('span.swatch-title-text-display, li.swatchAvailable span.a-declarative').each((i, el) => {
+                    const t = $(el).text().trim();
+                    if (t && t.length < 40 && !colors.includes(t)) colors.push(t);
+                });
+            }
+
+            // Video URL
+            let videoUrl = '';
+            for (const s of scripts) {
+                const text = $(s).html() || '';
+                const vidMatch = text.match(/"url"\s*:\s*"(https:\/\/[^"]*\.mp4[^"]*)"/);
+                if (vidMatch) { videoUrl = vidMatch[1]; break; }
+            }
+
+            // A+ content images
+            const aPlusImages = [];
+            const seenAPlus = new Set();
+            $('div#aplus img, div.aplus-module img, div#dpx-aplus-product-description_feature_div img').each((i, el) => {
+                let src = $(el).attr('data-src') || $(el).attr('src') || '';
+                if (src && src.startsWith('http') && !seenAPlus.has(src) && !src.includes('sprite') && !src.includes('icon')) {
+                    seenAPlus.add(src);
+                    aPlusImages.push(src);
+                }
+            });
+
+            // Specifications
+            const specifications = [];
+            const techItems = [];
+            $('table.a-keyvalue tr, table#productDetails_techSpec_section_1 tr, table#productDetails_detailBullets_sections1 tr').each((i, el) => {
+                const label = $(el).find('th, td.a-span3').first().text().trim();
+                const value = $(el).find('td.a-span9, td:last-child').text().trim();
+                if (label && value && label !== value) techItems.push({ label, value });
+            });
+            if (techItems.length) specifications.push({ group: 'Technical Details', items: techItems });
+
+            // Reviews
+            const reviews = [];
+            $('div[data-hook="review"]').each((i, el) => {
+                if (i >= 10) return false;
+                const rVal = parseFloat($(el).find('i.review-rating span.a-icon-alt').text()) || 5;
+                const title = $(el).find('a[data-hook="review-title"] span:last-child, span[data-hook="review-title"]').text().trim();
+                const text = $(el).find('span[data-hook="review-body"] span').text().trim();
+                const user = $(el).find('span.a-profile-name').text().trim();
+                if (title || text) reviews.push({ rating: rVal, title, text, user: user || 'Amazon Customer' });
+            });
+
+            return {
+                name: name || 'Product',
+                image_url: images[0] || imageUrl,
+                images: images.slice(0, 5),
+                price: price > 0 ? price : undefined,
+                original_price: original_price > 0 ? original_price : undefined,
+                description: description.trim(),
+                rating,
+                review_count,
+                brand,
+                category: category || 'General',
+                highlights,
+                specifications,
+                reviews,
+                ratings_breakdown: {},
+                sizes,
+                colors,
+                color_variants: colors,
+                video_url: videoUrl,
+                a_plus_images: aPlusImages
+            };
+        }
+
+        // Try axios first
+        try {
+            const { data: html } = await axios.get(resolvedUrl, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                },
+                timeout: 15000, maxRedirects: 10
+            });
+            const $ = cheerio.load(html);
+            const product = extractAmazonProduct($);
+            if (product && product.name && product.name !== 'Product' && product.name.length > 3) {
+                if (custom_price) product.price = parseInt(custom_price);
+                return res.json({ success: true, product });
+            }
+        } catch (e) {
+            console.log('Amazon axios fetch failed:', e.message);
+        }
+
+        // Fallback: Puppeteer
+        let browser = null;
+        try {
+            const puppeteer = require('puppeteer-extra');
+            const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+            puppeteer.use(StealthPlugin());
+            browser = await puppeteer.launch({
+                headless: 'new',
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled']
+            });
+            const page = await browser.newPage();
+            await page.setViewport({ width: 1366, height: 768 });
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+            await page.goto(resolvedUrl, { waitUntil: 'networkidle2', timeout: 30000 });
+            await new Promise(r => setTimeout(r, 3000));
+            const html = await page.content();
+            const $ = cheerio.load(html);
+            const product = extractAmazonProduct($);
+            if (product) {
+                if (custom_price) product.price = parseInt(custom_price);
+                return res.json({ success: true, product });
+            }
+            res.status(403).json({ success: false, error: 'Amazon blocked the request. Try again.' });
+        } catch (error) {
+            console.error('Amazon puppeteer error:', error.message);
+            res.status(500).json({ success: false, error: 'Could not fetch from Amazon. Try again.' });
+        } finally {
+            if (browser) await browser.close();
+        }
+        return;
+    }
+
+    // ─── Flipkart scraping (existing logic, enhanced) ───
 
     // Resolve dl.flipkart.com short links to actual product URLs
     let resolvedUrl = url;
@@ -450,6 +715,68 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
             ratings_breakdown[star] = count;
         });
 
+        // Color variants
+        const color_variants = [];
+        $('li._4lDvGd, li._3V2wfe, a._3GnIPe, li.XEk3tC').each((i, el) => {
+            const t = $(el).attr('title') || $(el).find('div').text().trim();
+            if (t && t.length < 40 && !color_variants.includes(t)) color_variants.push(t);
+        });
+        // Also check the dimensions row
+        $('div._3Nuiag a, a._1fGeJ5, div._3V2wfe div').each((i, el) => {
+            const txt = $(el).text().trim();
+            if (txt && txt.length < 30 && !color_variants.includes(txt) && !txt.match(/^\d+$/)) {
+                // Check if this looks like a color name
+                const colorish = /^[A-Z][a-z]/.test(txt) || txt.includes('Black') || txt.includes('White') || txt.includes('Blue') || txt.includes('Red') || txt.includes('Green') || txt.includes('Gold') || txt.includes('Silver') || txt.includes('Grey') || txt.includes('Purple');
+                if (colorish) color_variants.push(txt);
+            }
+        });
+
+        // Sizes / variants
+        const sizes = [];
+        $('a._1fGeJ5, li._4lDvGd a, div._3Nuiag a').each((i, el) => {
+            const t = $(el).text().trim();
+            // Check if it looks like a size (numbers, GB, RAM, etc.)
+            if (t && t.length < 30 && !sizes.includes(t)) {
+                const sizeish = /\d+\s*(GB|TB|MB|RAM|ROM|inch|cm|mm|kg|g|L|M|S|XL|XXL|XS)/i.test(t) || /^[SMLX]{1,3}$/.test(t);
+                if (sizeish) sizes.push(t);
+            }
+        });
+        // Also from specification values
+        specifications.forEach(group => {
+            if (group.items) {
+                group.items.forEach(item => {
+                    if (/RAM|Storage|Internal/i.test(item.label)) {
+                        const v = item.value.trim();
+                        if (v && !sizes.includes(v)) sizes.push(v);
+                    }
+                });
+            }
+        });
+
+        // Video URL
+        let videoUrl = '';
+        const allScripts = $('script').toArray();
+        for (const s of allScripts) {
+            const txt = $(s).html() || '';
+            const vidMatch = txt.match(/"url"\s*:\s*"(https?:\/\/[^"]*\.mp4[^"]*)"/);
+            if (vidMatch) { videoUrl = vidMatch[1]; break; }
+            const vidMatch2 = txt.match(/"videoUrl"\s*:\s*"(https?:\/\/[^"]*)/);
+            if (vidMatch2) { videoUrl = vidMatch2[1]; break; }
+        }
+
+        // A+ content images (rich product description images below main content)
+        const aPlusImages = [];
+        const seenAPlus = new Set();
+        $('div._2fQJnc img, div._3k-BhJ img, div.xFVion img, div._2E51Ij img, div._2DsaLU img, div._3Rrcbo img').each((i, el) => {
+            let src = $(el).attr('data-src') || $(el).attr('src') || '';
+            if (src.startsWith('//')) src = 'https:' + src;
+            src = src.replace(/\/\d+\/\d+\?/, '/832/832?');
+            if (src && src.startsWith('http') && !seenAPlus.has(src) && !src.includes('sprite') && !src.includes('icon')) {
+                seenAPlus.add(src);
+                aPlusImages.push(src);
+            }
+        });
+
         return {
             name: name || 'Product',
             image_url: imageUrl,
@@ -464,7 +791,12 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
             highlights,
             specifications,
             reviews,
-            ratings_breakdown
+            ratings_breakdown,
+            sizes,
+            colors: color_variants,
+            color_variants,
+            video_url: videoUrl,
+            a_plus_images: aPlusImages
         };
     }
 
@@ -485,6 +817,7 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         const $ = cheerio.load(html);
         const product = extractProduct($);
         if (product && product.name && product.name !== 'Product' && product.name.length > 3) {
+            if (custom_price) product.price = parseInt(custom_price);
             return res.json({ success: true, product });
         }
     } catch (e) {
@@ -506,6 +839,7 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         const $ = cheerio.load(html);
         const product = extractProduct($);
         if (product && product.name && product.name !== 'Product' && product.name.length > 3) {
+            if (custom_price) product.price = parseInt(custom_price);
             return res.json({ success: true, product });
         }
     } catch (e) {
@@ -551,6 +885,7 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
             });
         }
 
+        if (custom_price) product.price = parseInt(custom_price);
         res.json({ success: true, product });
     } catch (error) {
         console.error('Flipkart puppeteer fetch error:', error.message);
@@ -559,6 +894,8 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         if (browser) await browser.close();
     }
 });
+
+
 
 
 // POST /api/shop/fetch-flipkart-category — fetch multiple products from a category/search page
@@ -765,6 +1102,11 @@ router.post('/bulk-add', requireAuth, (req, res) => {
                 specifications: p.specifications || [],
                 ratings_breakdown: p.ratings_breakdown || {},
                 brand: p.brand || '',
+                sizes: p.sizes || [],
+                colors: p.colors || p.color_variants || [],
+                color_variants: p.color_variants || p.colors || [],
+                video_url: p.video_url || '',
+                a_plus_images: p.a_plus_images || [],
             };
             const result = insert.run(
                 shop.id, p.name, p.category || 'General', p.image_url,
