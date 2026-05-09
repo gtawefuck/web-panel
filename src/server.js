@@ -28,6 +28,11 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/shop', require('./routes/shop'));
 app.use('/api/pay', require('./routes/pay'));
 
+// Split-screen comparison tool
+app.get('/compare', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'compare.html'));
+});
+
 // Per-user Flipkart shop pages — /shop/:slug
 app.get('/shop/:slug', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'shop.html'));

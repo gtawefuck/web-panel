@@ -346,6 +346,8 @@ img{max-width:100%}
     .fk-cat-link .emoji-icon{font-size:36px;line-height:48px;height:48px}
     .fk-banner{height:130px}
     .fk-ck-row{grid-template-columns:1fr}
+    .fk-pdp-inner{flex-direction:column}
+    .fk-pdp-left,.fk-pdp-right{width:100%;max-width:100%}
     .fk-pdp-actions{flex-direction:column;padding:0}
     .fk-pdp-gallery{flex-direction:column-reverse}
     .fk-pdp-thumbs{flex-direction:row;width:100%;overflow-x:auto}
@@ -354,17 +356,108 @@ img{max-width:100%}
     .fk-pay-tab{border-left:none;border-bottom:3px solid transparent;white-space:nowrap;padding:10px 16px}
     .fk-pay-tab.active{border-bottom-color:var(--fk-blue);border-left:none}
     .fk-strip-card{flex:0 0 calc(100%/3);min-width:150px}
+    .fk-cart-inner{flex-direction:column}
+    .fk-cart-left,.fk-cart-right{width:100%}
+    .fk-ck-inner{flex-direction:column}
+    .fk-ck-left,.fk-ck-right{width:100%}
+    .fk-pdp-zoom-result{display:none !important}
+    .fk-dotd-head{flex-wrap:wrap;gap:8px}
+    .fk-top-offers-grid{grid-template-columns:repeat(2,1fr)}
+    .fk-bt-items{flex-direction:column;align-items:stretch}
+    .fk-bt-plus{text-align:center}
+    .fk-bt-total{margin-left:0;margin-top:12px;text-align:center}
+    .fk-ymal-card{flex:0 0 150px}
+    #sortBar{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+    #sortBar::-webkit-scrollbar{display:none}
+    .fk-sort-btn{white-space:nowrap;padding:8px 12px;font-size:13px}
 }
 @media(max-width:480px){
     .fk-logo{font-size:16px}
+    .fk-header-inner{padding:0 8px;gap:8px}
     .fk-login-btn{padding:4px 12px;font-size:14px}
-    .fk-grid{grid-template-columns:1fr 1fr}
+    .fk-grid{grid-template-columns:1fr 1fr;gap:4px}
+    .fk-grid-card{padding:8px}
     .fk-grid-card-img{width:100px;height:120px}
     .fk-strip-card{flex:0 0 50%;min-width:130px}
     .fk-strip-card-img{width:100px;height:100px}
     .fk-footer-top{grid-template-columns:1fr}
+    .fk-top-offers-grid{grid-template-columns:1fr 1fr}
+    .fk-offer-card{padding:10px}
+    .fk-offer-card img{width:100px;height:100px}
+    .fk-subheader-inner{gap:0}
+    .fk-cat-link{padding:6px 8px}
+    .cat-img{width:48px;height:48px}
+    .fk-cat-link-name{font-size:12px}
+    .fk-pdp-title{font-size:16px}
+    .fk-pdp-price{font-size:22px}
 }
 
+.fk-sort-btn{background:none;border:none;padding:8px 16px;font-size:14px;font-weight:500;color:#212121;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
+.fk-sort-btn:hover{color:var(--fk-blue)}
+.fk-sort-btn.active{color:var(--fk-blue);border-bottom-color:var(--fk-blue);font-weight:600}
+@media(max-width:992px){.fk-filter-sidebar{display:none !important}}
+/* Deals of the Day */
+.fk-dotd{background:#fff;margin-bottom:10px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-dotd-head{display:flex;align-items:center;padding:12px 16px 8px;gap:16px;border-bottom:1px solid #f0f0f0}
+.fk-dotd-head h2{font-size:22px;font-weight:600;color:#212121}
+.fk-dotd-timer{display:flex;align-items:center;gap:4px}
+.fk-dotd-timer .seg{background:#212121;color:#fff;padding:4px 8px;border-radius:3px;font-size:16px;font-weight:700;min-width:32px;text-align:center}
+.fk-dotd-timer .colon{font-size:16px;font-weight:700;color:#212121}
+/* Recently Viewed */
+.fk-rv{background:#fff;margin-bottom:10px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-rv-head{padding:12px 16px 8px;font-size:22px;font-weight:600;border-bottom:1px solid #f0f0f0}
+.fk-rv-track{display:flex;overflow-x:auto;scrollbar-width:none;padding:12px 0}
+.fk-rv-track::-webkit-scrollbar{display:none}
+.fk-rv-card{flex:0 0 160px;padding:12px;text-align:center;cursor:pointer;border-right:1px solid #f0f0f0}
+.fk-rv-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.fk-rv-card img{width:120px;height:120px;object-fit:contain;margin-bottom:8px}
+.fk-rv-card .name{font-size:13px;color:#212121;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.fk-rv-card .price{font-size:13px;font-weight:500;color:#212121;margin-top:4px}
+/* Top Offers Banner */
+.fk-top-offers{background:#fff;margin-bottom:10px;box-shadow:0 1px 1px rgba(0,0,0,.08);padding:0}
+.fk-top-offers-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 8px}
+.fk-top-offers-head h2{font-size:22px;font-weight:600}
+.fk-top-offers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0}
+.fk-offer-card{padding:16px;text-align:center;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:box-shadow .2s}
+.fk-offer-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.fk-offer-card img{width:140px;height:140px;object-fit:contain;margin-bottom:8px}
+.fk-offer-card .title{font-size:14px;font-weight:500;color:#212121}
+.fk-offer-card .sub{font-size:13px;color:var(--fk-green);font-weight:500}
+/* PDP Image Zoom */
+.fk-pdp-main-img{position:relative;overflow:hidden}
+.fk-pdp-main-img img{transition:transform .1s ease}
+.fk-pdp-zoom-lens{display:none;position:absolute;width:200px;height:200px;border:2px solid var(--fk-blue);background:rgba(40,116,240,.1);cursor:crosshair;z-index:10;pointer-events:none}
+.fk-pdp-zoom-result{display:none;position:absolute;top:0;left:calc(100% + 16px);width:400px;height:400px;border:1px solid #e0e0e0;background:#fff;overflow:hidden;z-index:20;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.fk-pdp-main-img:hover .fk-pdp-zoom-result{display:block}
+/* Color Variants */
+.fk-color-variants{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.fk-color-swatch{width:48px;height:48px;border:2px solid #e0e0e0;border-radius:4px;cursor:pointer;padding:2px;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
+.fk-color-swatch:hover,.fk-color-swatch.active{border-color:var(--fk-blue)}
+.fk-color-swatch img{width:100%;height:100%;object-fit:contain}
+/* You Might Also Like */
+.fk-ymal{padding:24px;border-top:8px solid var(--fk-bg)}
+.fk-ymal h3{font-size:22px;font-weight:500;margin-bottom:16px}
+.fk-ymal-track{display:flex;overflow-x:auto;scrollbar-width:none;gap:0}
+.fk-ymal-track::-webkit-scrollbar{display:none}
+.fk-ymal-card{flex:0 0 200px;padding:16px;text-align:center;cursor:pointer;border-right:1px solid #f0f0f0}
+.fk-ymal-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.fk-ymal-card img{width:140px;height:140px;object-fit:contain;margin-bottom:8px}
+.fk-ymal-card .name{font-size:13px;color:#212121;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
+.fk-ymal-card .price{font-size:14px;font-weight:500;margin-top:4px}
+.fk-ymal-card .off{font-size:13px;color:var(--fk-green);font-weight:500}
+/* Bought Together */
+.fk-bought-together{padding:24px;border-top:8px solid var(--fk-bg)}
+.fk-bought-together h3{font-size:22px;font-weight:500;margin-bottom:16px}
+.fk-bt-items{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.fk-bt-card{width:180px;padding:16px;text-align:center;cursor:pointer}
+.fk-bt-card img{width:120px;height:120px;object-fit:contain;margin-bottom:8px}
+.fk-bt-card .name{font-size:13px;color:#212121;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.fk-bt-card .price{font-size:14px;font-weight:500;margin-top:4px}
+.fk-bt-plus{font-size:28px;font-weight:300;color:#878787;padding:0 8px}
+.fk-bt-total{background:#f5f5f5;padding:16px 24px;border-radius:4px;margin-left:16px}
+.fk-bt-total .total-price{font-size:20px;font-weight:600;margin-bottom:8px}
+.fk-bt-total .total-save{font-size:14px;color:var(--fk-green);margin-bottom:12px}
+.fk-bt-total button{background:var(--fk-orange);color:#fff;border:none;padding:12px 24px;font-size:14px;font-weight:600;border-radius:2px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -409,12 +502,66 @@ img{max-width:100%}
 </header>
 <nav class="fk-subheader"><div class="fk-subheader-inner" id="catBar"></div></nav>
 <div id="homeView"><div class="fk-banner" id="bannerWrap"></div><div class="fk-main" id="homeContent"></div></div>
-<div id="gridView" style="display:none"><div class="fk-main"><div class="fk-grid-section"><div class="fk-grid-head"><h2 id="gridTitle">All Products</h2><button class="view-all-btn" onclick="goHome()" style="background:none;color:var(--fk-blue);border:1px solid var(--fk-blue)">&#8592; Back</button></div><div class="fk-grid" id="productsGrid"></div></div></div></div>
+<div id="gridView" style="display:none"><div class="fk-main" style="display:flex;gap:10px;align-items:flex-start">
+<!-- Filter Sidebar -->
+<div class="fk-filter-sidebar" id="filterSidebar" style="width:240px;flex-shrink:0;background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08);position:sticky;top:120px">
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center">Filters <button onclick="clearFilters()" style="background:none;border:none;color:var(--fk-blue);font-size:13px;font-weight:600;cursor:pointer">CLEAR ALL</button></div>
+  <div id="filterPills" style="padding:8px 16px;display:none;flex-wrap:wrap;gap:6px;border-bottom:1px solid #f0f0f0"></div>
+  <!-- Price filter -->
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Price</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="number" id="filterMinPrice" placeholder="Min" style="width:80px;padding:6px 8px;border:1px solid #c2c2c2;border-radius:2px;font-size:13px" onchange="applyFilters()"/>
+      <span style="color:#878787">to</span>
+      <input type="number" id="filterMaxPrice" placeholder="Max" style="width:80px;padding:6px 8px;border:1px solid #c2c2c2;border-radius:2px;font-size:13px" onchange="applyFilters()"/>
+    </div>
+  </div>
+  <!-- Brand filter -->
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Brand</div>
+    <div id="brandFilters"></div>
+  </div>
+  <!-- Rating filter -->
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Customer Ratings</div>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="ratingFilter" value="4" onchange="applyFilters()"/> 4&#9733; &amp; above</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="ratingFilter" value="3" onchange="applyFilters()"/> 3&#9733; &amp; above</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="ratingFilter" value="0" onchange="applyFilters()" checked/> All</label>
+  </div>
+  <!-- Discount filter -->
+  <div style="padding:12px 16px">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Discount</div>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="50" onchange="applyFilters()"/> 50% or more</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="30" onchange="applyFilters()"/> 30% or more</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="10" onchange="applyFilters()"/> 10% or more</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="0" onchange="applyFilters()" checked/> All</label>
+  </div>
+</div>
+<!-- Main grid area -->
+<div style="flex:1;min-width:0">
+<div class="fk-grid-section">
+  <div class="fk-grid-head">
+    <h2 id="gridTitle">All Products</h2>
+    <button class="view-all-btn" onclick="goHome()" style="background:none;color:var(--fk-blue);border:1px solid var(--fk-blue)">&#8592; Back</button>
+  </div>
+  <!-- Sort bar -->
+  <div id="sortBar" style="display:flex;align-items:center;gap:0;padding:10px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;background:#fff">
+    <span style="font-weight:500;margin-right:16px;color:#878787">Sort By</span>
+    <button class="fk-sort-btn active" onclick="sortProducts('relevance',this)">Relevance</button>
+    <button class="fk-sort-btn" onclick="sortProducts('popularity',this)">Popularity</button>
+    <button class="fk-sort-btn" onclick="sortProducts('price_asc',this)">Price — Low to High</button>
+    <button class="fk-sort-btn" onclick="sortProducts('price_desc',this)">Price — High to Low</button>
+    <button class="fk-sort-btn" onclick="sortProducts('newest',this)">Newest First</button>
+  </div>
+  <div class="fk-grid" id="productsGrid"></div>
+</div>
+</div>
+</div></div>
 <div class="fk-pdp" id="pdpView"><div class="fk-main" id="pdpContent"></div></div>
 <div class="fk-cart-page" id="cartPage"><div class="fk-cart-inner"><div class="fk-cart-left"><div class="fk-cart-box"><div class="fk-cart-hdr"><h2 id="cartTitle">My Cart (0)</h2></div><div id="cartItems"></div><div class="fk-cart-place" id="cartPlaceWrap" style="display:none"><button onclick="goToCheckout()">PLACE ORDER</button></div></div></div><div class="fk-cart-right"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="cpCount">0</span> items)</span><span id="cpSubtotal">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="cpDiscount">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total Amount</span><span id="cpTotal">&#8377;0</span></div></div><div class="fk-price-save" id="cpSave"></div></div></div></div></div>
 <div class="fk-ck-page" id="ckPage"><div class="fk-ck-inner"><div class="fk-ck-left">
 <div class="fk-ck-step" id="ckS1"><div class="fk-ck-step-head active" id="ckS1H" onclick="ckExpand(1)"><span class="fk-ck-step-num">1</span><span class="fk-ck-step-label">LOGIN</span><span class="fk-ck-step-check" id="ckS1C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS1Sum"></div><div class="fk-ck-step-body show" id="ckS1B"><div style="max-width:360px"><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Email/Mobile</label><input class="fk-ck-input" id="ckEmail1" placeholder="Email or Mobile"/></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Password</label><input class="fk-ck-input" id="ckPass1" type="password" placeholder="Password"/></div><p style="font-size:12px;color:#878787;margin-bottom:16px;line-height:1.5">By continuing, you agree to Flipkart Terms of Use and Privacy Policy.</p><button class="fk-ck-continue" onclick="ckLogin()" style="width:100%">CONTINUE</button></div></div></div>
-<div class="fk-ck-step" id="ckS2"><div class="fk-ck-step-head" id="ckS2H" onclick="ckExpand(2)"><span class="fk-ck-step-num">2</span><span class="fk-ck-step-label">DELIVERY ADDRESS</span><span class="fk-ck-step-check" id="ckS2C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS2Sum"></div><div class="fk-ck-step-body" id="ckS2B"><div style="font-size:14px;font-weight:600;color:var(--fk-blue);text-transform:uppercase;margin-bottom:16px">ADD A NEW ADDRESS</div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Name</label><input class="fk-ck-input" id="ckName" placeholder="Full Name"/></div><div class="fk-ck-group"><label class="fk-ck-label">Mobile</label><input class="fk-ck-input" id="ckPhone" type="tel" placeholder="10-digit" maxlength="10"/></div></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Pincode</label><input class="fk-ck-input" id="ckPincode" placeholder="6 digits" maxlength="6"/></div><div class="fk-ck-group"><label class="fk-ck-label">Locality</label><input class="fk-ck-input" id="ckLocality" placeholder="Locality"/></div></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Address</label><textarea class="fk-ck-input" id="ckAddress" placeholder="Flat, Building, Street" rows="2" style="resize:vertical;min-height:50px"></textarea></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">City</label><input class="fk-ck-input" id="ckCity" placeholder="City"/></div><div class="fk-ck-group"><label class="fk-ck-label">State</label><select class="fk-ck-input" id="ckState" style="height:44px"><option value="">Select</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option><option>Telangana</option><option>Kerala</option><option>Punjab</option><option>Haryana</option><option>Bihar</option><option>Madhya Pradesh</option><option>Andhra Pradesh</option></select></div></div><div style="display:flex;gap:12px;margin-top:8px;margin-bottom:14px"><label class="addr-type"><input type="radio" name="addrType" value="Home" checked/><span>Home</span></label><label class="addr-type"><input type="radio" name="addrType" value="Work"/><span>Work</span></label></div><button class="fk-ck-continue" onclick="ckAddr()">SAVE AND DELIVER HERE</button></div></div>
+<div class="fk-ck-step" id="ckS2"><div class="fk-ck-step-head" id="ckS2H" onclick="ckExpand(2)"><span class="fk-ck-step-num">2</span><span class="fk-ck-step-label">DELIVERY ADDRESS</span><span class="fk-ck-step-check" id="ckS2C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS2Sum"></div><div class="fk-ck-step-body" id="ckS2B"><div id="ckSavedAddr" style="display:none;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f0f0f0"></div><div style="font-size:14px;font-weight:600;color:var(--fk-blue);text-transform:uppercase;margin-bottom:16px">ADD A NEW ADDRESS</div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Name</label><input class="fk-ck-input" id="ckName" placeholder="Full Name"/></div><div class="fk-ck-group"><label class="fk-ck-label">Mobile</label><input class="fk-ck-input" id="ckPhone" type="tel" placeholder="10-digit" maxlength="10"/></div></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Pincode</label><input class="fk-ck-input" id="ckPincode" placeholder="6 digits" maxlength="6"/></div><div class="fk-ck-group"><label class="fk-ck-label">Locality</label><input class="fk-ck-input" id="ckLocality" placeholder="Locality"/></div></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Address</label><textarea class="fk-ck-input" id="ckAddress" placeholder="Flat, Building, Street" rows="2" style="resize:vertical;min-height:50px"></textarea></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">City</label><input class="fk-ck-input" id="ckCity" placeholder="City"/></div><div class="fk-ck-group"><label class="fk-ck-label">State</label><select class="fk-ck-input" id="ckState" style="height:44px"><option value="">Select</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option><option>Telangana</option><option>Kerala</option><option>Punjab</option><option>Haryana</option><option>Bihar</option><option>Madhya Pradesh</option><option>Andhra Pradesh</option></select></div></div><div style="display:flex;gap:12px;margin-top:8px;margin-bottom:14px"><label class="addr-type"><input type="radio" name="addrType" value="Home" checked/><span>Home</span></label><label class="addr-type"><input type="radio" name="addrType" value="Work"/><span>Work</span></label></div><button class="fk-ck-continue" onclick="ckAddr()">SAVE AND DELIVER HERE</button></div></div>
 <div class="fk-ck-step" id="ckS3"><div class="fk-ck-step-head" id="ckS3H" onclick="ckExpand(3)"><span class="fk-ck-step-num">3</span><span class="fk-ck-step-label">ORDER SUMMARY</span><span class="fk-ck-step-check" id="ckS3C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS3Sum"></div><div class="fk-ck-step-body" id="ckS3B" style="padding:0"><div id="ckOrderItems" style="padding:24px"></div><div style="padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end"><button class="fk-ck-continue" onclick="ckOrder()">CONTINUE</button></div></div></div>
 <div class="fk-ck-step" id="ckS4"><div class="fk-ck-step-head" id="ckS4H"><span class="fk-ck-step-num">4</span><span class="fk-ck-step-label">PAYMENT OPTIONS</span></div><div class="fk-ck-step-body" id="ckS4B" style="padding:0"><div class="fk-pay-layout"><div class="fk-pay-tabs"><div class="fk-pay-tab active" onclick="payTab(this,'upi')">UPI</div><div class="fk-pay-tab" onclick="payTab(this,'card')">Credit/Debit Card</div><div class="fk-pay-tab" onclick="payTab(this,'nb')">Net Banking</div><div class="fk-pay-tab" onclick="payTab(this,'wallet')">Wallet</div><div class="fk-pay-tab" onclick="payTab(this,'cod')">Cash on Delivery</div></div><div class="fk-pay-content" id="payContent"><div id="payUpi"><h4 style="font-size:16px;margin-bottom:16px">Pay using UPI</h4><div class="fk-ck-group" style="max-width:360px;margin-bottom:16px"><label class="fk-ck-label">UPI ID</label><input class="fk-ck-input" id="upiInput" placeholder="yourname@upi"/></div><button class="fk-ck-continue" onclick="payConfirm()">PAY &#8377;<span id="payAmt">0</span></button></div><div id="payCard" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Card Details</h4><div class="fk-ck-group" style="max-width:360px;margin-bottom:14px"><label class="fk-ck-label">Card Number</label><input class="fk-ck-input" placeholder="XXXX XXXX XXXX XXXX"/></div><div class="fk-ck-row" style="max-width:360px"><div class="fk-ck-group"><label class="fk-ck-label">Expiry</label><input class="fk-ck-input" placeholder="MM/YY"/></div><div class="fk-ck-group"><label class="fk-ck-label">CVV</label><input class="fk-ck-input" type="password" placeholder="CVV" maxlength="3"/></div></div><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payNb" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Net Banking</h4><div style="display:flex;flex-direction:column;gap:8px;max-width:360px"><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb" checked/> HDFC Bank</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> ICICI Bank</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> SBI</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> Axis Bank</label></div><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payWallet" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Wallets</h4><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer;max-width:360px"><input type="radio" name="wallet" checked/> PhonePe</label><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payCod" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Cash on Delivery</h4><p style="font-size:14px;line-height:1.6;margin-bottom:16px">A nominal fee of &#8377;5 will be charged.</p><button class="fk-ck-continue" onclick="payConfirm()">CONFIRM ORDER</button></div></div></div></div></div>
 </div><div class="fk-cart-right" style="width:380px;flex-shrink:0"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="ckPCount">0</span> items)</span><span id="ckPSub">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="ckPDisc">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total</span><span id="ckPTotal">&#8377;0</span></div></div><div class="fk-price-save" id="ckPSave"></div></div></div></div></div>
@@ -453,15 +600,6 @@ function showView(v){
     window.scrollTo(0,0);
 }
 function goHome(){showView('home');document.querySelectorAll('.fk-cat-link').forEach(function(l){l.classList.remove('active')});}
-function showCategory(cat){
-    document.getElementById('gridTitle').textContent=cat;
-    var prods=products.filter(function(p){return p.category===cat});
-    renderGrid(prods);
-    showView('grid');
-    document.querySelectorAll('.fk-cat-link').forEach(function(l){
-        l.classList.toggle('active',l.dataset.cat===cat);
-    });
-}
 function renderGrid(prods){
     var g=document.getElementById('productsGrid');
     g.innerHTML=prods.map(function(p){
@@ -491,6 +629,80 @@ function scrollStrip(btn,dir){
     var track=btn.parentElement.querySelector('.fk-strip-track');
     track.scrollBy({left:dir*600,behavior:'smooth'});
 }
+var recentlyViewed=JSON.parse(localStorage.getItem('fk_rv')||'[]');
+function trackView(id){
+    recentlyViewed=recentlyViewed.filter(function(x){return x!==id});
+    recentlyViewed.unshift(id);
+    if(recentlyViewed.length>12)recentlyViewed=recentlyViewed.slice(0,12);
+    localStorage.setItem('fk_rv',JSON.stringify(recentlyViewed));
+}
+function renderRecentlyViewed(){
+    var rvProds=recentlyViewed.map(function(id){return products.find(function(p){return p.id===id})}).filter(Boolean);
+    if(!rvProds.length)return '';
+    var h='<div class="fk-rv"><div class="fk-rv-head">Recently Viewed</div><div class="fk-rv-track">';
+    rvProds.forEach(function(p){
+        h+='<div class="fk-rv-card" onclick="openPDP('+p.id+')"><img src="'+(p.image_url||'https://via.placeholder.com/120')+'" onerror="this.src=\'https://via.placeholder.com/120?text=Product\'"/><div class="name">'+p.name+'</div><div class="price">'+fmt(p.price)+'</div></div>';
+    });
+    h+='</div></div>';
+    return h;
+}
+function renderDealsOfDay(allProducts){
+    var deals=allProducts.filter(function(p){return p.original_price&&p.price<p.original_price}).sort(function(a,b){
+        var da=a.original_price?Math.round((1-a.price/a.original_price)*100):0;
+        var db=b.original_price?Math.round((1-b.price/b.original_price)*100):0;
+        return db-da;
+    }).slice(0,12);
+    if(!deals.length)return '';
+    var h='<div class="fk-dotd"><div class="fk-dotd-head"><h2>Deals of the Day</h2>';
+    h+='<div class="fk-dotd-timer"><span class="seg" id="dotdH">00</span><span class="colon">:</span><span class="seg" id="dotdM">00</span><span class="colon">:</span><span class="seg" id="dotdS">00</span></div>';
+    h+='<button class="view-all-btn" style="margin-left:auto;background:var(--fk-blue);color:#fff;border:none;padding:8px 20px;font-size:13px;font-weight:600;border-radius:2px;cursor:pointer" onclick="showAllDeals()">VIEW ALL</button>';
+    h+='</div><div class="fk-strip-track-wrap"><div class="fk-strip-track">';
+    deals.forEach(function(p){
+        var disc=Math.round((1-p.price/p.original_price)*100);
+        h+='<div class="fk-strip-card" onclick="openPDP('+p.id+')"><div class="fk-strip-card-img"><img src="'+(p.image_url||'https://via.placeholder.com/150')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/150?text=Product\'"/></div><div class="fk-strip-card-name">'+p.name+'</div><div class="fk-strip-card-off" style="color:var(--fk-green);font-weight:600">'+disc+'% off</div><div class="fk-strip-card-price">'+fmt(p.price)+' <span style="text-decoration:line-through;color:#878787;font-size:12px;font-weight:400">'+fmt(p.original_price)+'</span></div></div>';
+    });
+    h+='</div></div></div>';
+    return h;
+}
+function startDotdTimer(){
+    var now=new Date();var end=new Date(now);end.setHours(23,59,59,999);
+    function tick(){
+        var diff=end-new Date();if(diff<=0){diff=86399000;}
+        var h=Math.floor(diff/3600000);var m=Math.floor((diff%3600000)/60000);var s=Math.floor((diff%60000)/1000);
+        var eh=document.getElementById('dotdH'),em=document.getElementById('dotdM'),es=document.getElementById('dotdS');
+        if(eh){eh.textContent=String(h).padStart(2,'0');em.textContent=String(m).padStart(2,'0');es.textContent=String(s).padStart(2,'0');}
+    }
+    tick();setInterval(tick,1000);
+}
+function showAllDeals(){
+    var deals=products.filter(function(p){return p.original_price&&p.price<p.original_price}).sort(function(a,b){
+        var da=a.original_price?Math.round((1-a.price/a.original_price)*100):0;
+        var db=b.original_price?Math.round((1-b.price/b.original_price)*100):0;
+        return db-da;
+    });
+    document.getElementById('gridTitle').textContent='Deals of the Day';
+    currentGridProducts=deals;
+    populateBrandFilter(deals);
+    applyFilters();
+    showView('grid');
+}
+function renderTopOffers(allProducts){
+    var cats={};allProducts.forEach(function(p){if(!cats[p.category])cats[p.category]=[];cats[p.category].push(p);});
+    var catKeys=Object.keys(cats).slice(0,6);
+    if(!catKeys.length)return '';
+    var h='<div class="fk-top-offers"><div class="fk-top-offers-head"><h2>Top Offers</h2></div><div class="fk-top-offers-grid">';
+    catKeys.forEach(function(c){
+        var best=cats[c].sort(function(a,b){
+            var da=a.original_price?Math.round((1-a.price/a.original_price)*100):0;
+            var db=b.original_price?Math.round((1-b.price/b.original_price)*100):0;
+            return db-da;
+        })[0];
+        var disc=best.original_price?Math.round((1-best.price/best.original_price)*100):0;
+        h+='<div class="fk-offer-card" onclick="showCategory(\''+c.replace(/'/g,"\\'")+'\')" ><img src="'+(best.image_url||'https://via.placeholder.com/140')+'" onerror="this.src=\'https://via.placeholder.com/140?text='+encodeURIComponent(c)+'\'"/><div class="title">'+c+'</div>'+(disc?'<div class="sub">From '+fmt(best.price)+' | '+disc+'% off</div>':'<div class="sub">From '+fmt(best.price)+'</div>')+'</div>';
+    });
+    h+='</div></div>';
+    return h;
+}
 function renderHome(){
     var cats={};products.forEach(function(p){if(!cats[p.category])cats[p.category]=[];cats[p.category].push(p);});
     var catBar=document.getElementById('catBar');
@@ -512,8 +724,16 @@ function renderHome(){
     startBanner(banners.length);
     var content=document.getElementById('homeContent');
     var html='';
+    // Deals of the Day
+    html+=renderDealsOfDay(products);
+    // Top Offers grid
+    html+=renderTopOffers(products);
+    // Category strips
     Object.keys(cats).forEach(function(c){html+=renderStrip(c,cats[c]);});
+    // Recently Viewed
+    html+=renderRecentlyViewed();
     content.innerHTML=html;
+    startDotdTimer();
 }
 function startBanner(n){if(bannerTimer)clearInterval(bannerTimer);bannerTimer=setInterval(function(){bannerNav(1)},4000);}
 function bannerNav(d){
@@ -538,6 +758,7 @@ function bannerGo(i){
 function openPDP(id){
     var p=products.find(function(x){return x.id===id});
     if(!p)return;
+    trackView(id);
     var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
     var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){rev={};}
     var imgs=rev.images||[p.image_url||'https://via.placeholder.com/400'];
@@ -557,14 +778,23 @@ function openPDP(id){
     var h='<div class="fk-pdp-back" onclick="goBack()">&larr; Back to results</div>';
     h+='<div class="fk-pdp-inner"><div class="fk-pdp-left"><div class="fk-pdp-gallery"><div class="fk-pdp-thumbs">';
     imgs.forEach(function(img,i){h+='<div class="fk-pdp-thumb'+(i===0?' active':'')+'" onclick="pdpThumb(this,\''+img.replace(/'/g,"\\'")+'\')" ><img src="'+img+'" onerror="this.src=\'https://via.placeholder.com/56?text=img\'"/></div>';});
-    h+='</div><div class="fk-pdp-main-img"><img id="pdpMainImg" src="'+imgs[0]+'" onerror="this.src=\'https://via.placeholder.com/400?text=Product\'"/></div></div>';
+    h+='</div><div class="fk-pdp-main-img" onmousemove="pdpZoom(event)" onmouseleave="pdpZoomEnd()"><img id="pdpMainImg" src="'+imgs[0]+'" onerror="this.src=\'https://via.placeholder.com/400?text=Product\'"/><div class="fk-pdp-zoom-result" id="pdpZoomResult"></div></div></div>';
     h+='<div class="fk-pdp-actions"><button class="btn-cart" onclick="addToCart('+p.id+')"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="currentColor"/></svg> ADD TO CART</button><button class="btn-buy" onclick="addToCart('+p.id+');openCartPage()">&#9889; BUY NOW</button></div>';
     h+='<div style="display:flex;gap:16px;margin-top:12px;padding:0 0 0 64px"><button class="fk-share-btn" onclick="shareProduct(\''+encodeURIComponent(p.name)+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z" fill="#212121"/></svg> Share</button><button class="fk-share-btn" onclick="toggleWishlist('+p.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="'+(wishlist.includes(p.id)?'#ff4081':'none')+'" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#212121" stroke-width="1.5" fill="'+(wishlist.includes(p.id)?'#ff4081':'none')+'"/></svg> Wishlist</button></div>';
     h+='</div>';
     h+='<div class="fk-pdp-right">';
     h+='<div class="fk-pdp-breadcrumb">Home &gt; <span>'+p.category+'</span> &gt; <span>'+p.name.split(' ').slice(0,3).join(' ')+'</span></div>';
     h+='<div class="fk-pdp-title">'+(brand?brand+' ':'')+p.name+'</div>';
-    h+='<div class="fk-pdp-rating-row"><span class="fk-pdp-rating-badge">'+p.rating.toFixed(1)+' &#9733;</span><span class="fk-pdp-rating-count">'+ratingCount+' Ratings & '+reviewCount+' Reviews</span></div>';
+    h+='<div class="fk-pdp-rating-row"><span class="fk-pdp-rating-badge">'+p.rating.toFixed(1)+' &#9733;</span><span class="fk-pdp-rating-count">'+ratingCount+' Ratings & '+reviewCount+' Reviews</span>'+(p.review_count>100?'<span class="fk-pdp-bought">&#128293; '+Math.floor(p.review_count/10)+'+ bought in past month</span>':'')+'</div>';
+    // Color variants
+    var colorVars=rev.color_variants||[];
+    if(colorVars.length){
+        h+='<div style="margin-bottom:12px"><div style="font-size:14px;font-weight:500;margin-bottom:8px">Color</div><div class="fk-color-variants">';
+        colorVars.forEach(function(cv,i){
+            h+='<div class="fk-color-swatch'+(i===0?' active':'')+'" onclick="pdpColorSelect(this,\''+(cv.image||p.image_url).replace(/'/g,"\\'")+'\')" title="'+(cv.name||'Variant '+(i+1))+'"><img src="'+(cv.image||p.image_url)+'" onerror="this.parentElement.style.background=\''+(cv.hex||'#ccc')+'\'"/></div>';
+        });
+        h+='</div></div>';
+    }
     h+='<div class="fk-pdp-special">Special Price</div>';
     h+='<div class="fk-pdp-price-row"><span class="fk-pdp-price">'+fmt(p.price)+'</span>'+(p.original_price?'<span class="fk-pdp-mrp">'+fmt(p.original_price)+'</span><span class="fk-pdp-disc">'+disc+'% off</span>':'')+'</div>';
     if(p.price>3000)h+='<div class="fk-pdp-emi">EMI from '+fmt(Math.round(p.price/12))+'/month <a style="color:var(--fk-blue);cursor:pointer;font-size:13px">View Plans</a></div>';
@@ -621,8 +851,57 @@ function openPDP(id){
         h+='<div class="fk-review-card"><span class="fk-review-rating '+rc+'">'+r.rating+' &#9733;</span><span class="fk-review-title">'+(r.title||'')+'</span><div class="fk-review-text">'+r.text+'</div><div class="fk-review-meta"><span class="verified">'+r.author+'</span><span>Verified Purchase</span></div></div>';
     });
     h+='</div></div></div>';
+    // Frequently Bought Together
+    var btProds=products.filter(function(x){return x.category===p.category&&x.id!==p.id}).slice(0,2);
+    if(btProds.length>=2){
+        var btTotal=p.price+btProds[0].price+btProds[1].price;
+        var btOrigTotal=(p.original_price||p.price)+(btProds[0].original_price||btProds[0].price)+(btProds[1].original_price||btProds[1].price);
+        var btSave=btOrigTotal-btTotal;
+        h+='<div class="fk-bought-together"><h3>Frequently Bought Together</h3><div class="fk-bt-items">';
+        h+='<div class="fk-bt-card" onclick="openPDP('+p.id+')"><img src="'+(p.image_url||'')+'" onerror="this.src=\'https://via.placeholder.com/120\'"/><div class="name">'+p.name+'</div><div class="price">'+fmt(p.price)+'</div></div>';
+        h+='<span class="fk-bt-plus">+</span>';
+        h+='<div class="fk-bt-card" onclick="openPDP('+btProds[0].id+')"><img src="'+(btProds[0].image_url||'')+'" onerror="this.src=\'https://via.placeholder.com/120\'"/><div class="name">'+btProds[0].name+'</div><div class="price">'+fmt(btProds[0].price)+'</div></div>';
+        h+='<span class="fk-bt-plus">+</span>';
+        h+='<div class="fk-bt-card" onclick="openPDP('+btProds[1].id+')"><img src="'+(btProds[1].image_url||'')+'" onerror="this.src=\'https://via.placeholder.com/120\'"/><div class="name">'+btProds[1].name+'</div><div class="price">'+fmt(btProds[1].price)+'</div></div>';
+        h+='<span class="fk-bt-plus">=</span>';
+        h+='<div class="fk-bt-total"><div class="total-price">'+fmt(btTotal)+'</div>'+(btSave>0?'<div class="total-save">Save '+fmt(btSave)+'</div>':'')+'<button onclick="addToCart('+p.id+');addToCart('+btProds[0].id+');addToCart('+btProds[1].id+');toast(\'Added all 3 to cart\')">ADD ALL 3 TO CART</button></div>';
+        h+='</div></div>';
+    }
+    // You Might Also Like
+    var ymalProds=products.filter(function(x){return x.category===p.category&&x.id!==p.id}).sort(function(){return Math.random()-0.5}).slice(0,8);
+    if(ymalProds.length){
+        h+='<div class="fk-ymal"><h3>You Might Also Like</h3><div class="fk-ymal-track">';
+        ymalProds.forEach(function(yp){
+            var yd=yp.original_price?Math.round((1-yp.price/yp.original_price)*100):0;
+            h+='<div class="fk-ymal-card" onclick="openPDP('+yp.id+')"><img src="'+(yp.image_url||'https://via.placeholder.com/140')+'" onerror="this.src=\'https://via.placeholder.com/140?text=Product\'"/><div class="name">'+yp.name+'</div><div class="price">'+fmt(yp.price)+'</div>'+(yd?'<div class="off">'+yd+'% off</div>':'')+'</div>';
+        });
+        h+='</div></div>';
+    }
     document.getElementById('pdpContent').innerHTML=h;
     showView('pdp');
+}
+function pdpZoom(e){
+    var container=e.currentTarget;
+    var img=container.querySelector('#pdpMainImg');
+    var result=document.getElementById('pdpZoomResult');
+    if(!img||!result)return;
+    var rect=container.getBoundingClientRect();
+    var x=e.clientX-rect.left;var y=e.clientY-rect.top;
+    var xPct=(x/rect.width)*100;var yPct=(y/rect.height)*100;
+    result.style.backgroundImage='url('+img.src+')';
+    result.style.backgroundSize=(rect.width*2.5)+'px '+(rect.height*2.5)+'px';
+    result.style.backgroundPosition=xPct+'% '+yPct+'%';
+    result.style.display='block';
+}
+function pdpZoomEnd(){
+    var result=document.getElementById('pdpZoomResult');
+    if(result)result.style.display='none';
+}
+function pdpColorSelect(el,imgSrc){
+    document.querySelectorAll('.fk-color-swatch').forEach(function(s){s.classList.remove('active')});
+    el.classList.add('active');
+    var mainImg=document.getElementById('pdpMainImg');
+    if(mainImg)mainImg.src=imgSrc;
 }
 function pdpThumb(el,src){
     document.querySelectorAll('.fk-pdp-thumb').forEach(function(t){t.classList.remove('active')});
@@ -665,7 +944,7 @@ function renderCart(){
 }
 function goToCheckout(){
     if(cart.length===0){toast('Cart is empty');return;}
-    showView('checkout');ckExpand(1);updateCkPrice();
+    showView('checkout');ckExpand(1);updateCkPrice();loadSavedAddresses();
 }
 function updateCkPrice(){
     var totalQty=0,totalPrice=0,totalMRP=0;
@@ -691,9 +970,36 @@ function ckLogin(){
     document.getElementById('ckS1Sum').style.display='block';
     document.getElementById('ckS1Sum').textContent='Guest User';
 }
+var savedAddresses=JSON.parse(localStorage.getItem('fk_addresses')||'[]');
+function loadSavedAddresses(){
+    var container=document.getElementById('ckSavedAddr');
+    if(!container||!savedAddresses.length)return;
+    container.innerHTML='<div style="font-size:14px;font-weight:600;margin-bottom:10px;color:#212121">Saved Addresses</div>'+savedAddresses.map(function(a,i){
+        return '<div style="border:1px solid #e0e0e0;border-radius:4px;padding:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s" onclick="fillSavedAddr('+i+')" onmouseover="this.style.borderColor=\'#2874f0\'" onmouseout="this.style.borderColor=\'#e0e0e0\'">'
+        +'<div style="font-size:14px;font-weight:500">'+a.name+' <span style="font-size:12px;color:#878787;font-weight:400">'+a.phone+'</span></div>'
+        +'<div style="font-size:13px;color:#555;margin-top:4px">'+a.addr+', '+a.city+', '+a.state+' - '+a.pin+'</div>'
+        +'</div>';
+    }).join('');
+    container.style.display='block';
+}
+function fillSavedAddr(i){
+    var a=savedAddresses[i];if(!a)return;
+    document.getElementById('ckName').value=a.name;
+    document.getElementById('ckPhone').value=a.phone;
+    document.getElementById('ckPincode').value=a.pin;
+    document.getElementById('ckAddress').value=a.addr;
+    document.getElementById('ckCity').value=a.city;
+    document.getElementById('ckState').value=a.state;
+}
 function ckAddr(){
     var n=document.getElementById('ckName').value,ph=document.getElementById('ckPhone').value,pin=document.getElementById('ckPincode').value,addr=document.getElementById('ckAddress').value,city=document.getElementById('ckCity').value,state=document.getElementById('ckState').value;
     if(!n||!ph||!pin||!addr||!city||!state){toast('Please fill all fields');return;}
+    // Save address for future use
+    var exists=savedAddresses.some(function(a){return a.name===n&&a.pin===pin&&a.addr===addr});
+    if(!exists){
+        savedAddresses.push({name:n,phone:ph,pin:pin,addr:addr,city:city,state:state});
+        localStorage.setItem('fk_addresses',JSON.stringify(savedAddresses));
+    }
     ckExpand(3);
     document.getElementById('ckS2C').style.display='inline';
     document.getElementById('ckS2Sum').style.display='block';
@@ -719,9 +1025,34 @@ function payTab(el,id){
     document.getElementById(map[id]).style.display='block';
 }
 function payConfirm(){
-    toast('Order placed successfully!');
+    var orderNum='OD'+Date.now().toString().slice(-9)+Math.floor(Math.random()*100);
+    var totalPrice=0;
+    var orderItems=cart.map(function(ci){
+        var p=products.find(function(x){return x.id===ci.id});
+        if(!p)return null;
+        totalPrice+=p.price*ci.qty;
+        return {name:p.name,price:p.price,qty:ci.qty,img:p.image_url||''};
+    }).filter(Boolean);
     cart=[];saveCart();
-    setTimeout(function(){goHome()},1500);
+    var delDate=new Date();delDate.setDate(delDate.getDate()+Math.floor(Math.random()*3)+3);
+    var delStr=delDate.toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    var h='<div style="max-width:700px;margin:40px auto;padding:32px;background:#fff;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.1)">';
+    h+='<div style="text-align:center;margin-bottom:32px"><div style="font-size:64px;margin-bottom:16px">&#9989;</div>';
+    h+='<h2 style="font-size:22px;font-weight:600;color:#212121;margin-bottom:8px">Order Placed Successfully!</h2>';
+    h+='<div style="font-size:14px;color:#878787">Your order <strong style="color:#212121">'+orderNum+'</strong> has been placed</div></div>';
+    h+='<div style="background:#f5fff5;border:1px solid #c8e6c9;border-radius:4px;padding:16px;margin-bottom:24px;display:flex;align-items:center;gap:12px">';
+    h+='<svg width="24" height="24" viewBox="0 0 24 24" fill="#388e3c"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+    h+='<div><div style="font-weight:600;color:#388e3c">Delivery by '+delStr+'</div><div style="font-size:13px;color:#555">Your items are on the way!</div></div></div>';
+    h+='<div style="border-top:1px solid #f0f0f0;padding-top:16px;margin-bottom:16px"><h3 style="font-size:16px;font-weight:600;margin-bottom:12px">Order Summary</h3>';
+    orderItems.forEach(function(oi){
+        h+='<div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid #f0f0f0"><img src="'+oi.img+'" style="width:64px;height:64px;object-fit:contain;border:1px solid #f0f0f0;border-radius:4px" onerror="this.src=\'https://via.placeholder.com/64?text=Item\'"/><div style="flex:1"><div style="font-size:14px;color:#212121;margin-bottom:4px">'+oi.name+'</div><div style="font-size:13px;color:#878787">Qty: '+oi.qty+'</div></div><div style="font-size:14px;font-weight:500">'+fmt(oi.price*oi.qty)+'</div></div>';
+    });
+    h+='<div style="display:flex;justify-content:space-between;padding:16px 0;font-size:16px;font-weight:600"><span>Total Paid</span><span>'+fmt(totalPrice)+'</span></div></div>';
+    h+='<div style="text-align:center"><button onclick="goHome()" style="background:var(--fk-blue);color:#fff;border:none;padding:14px 48px;font-size:14px;font-weight:600;border-radius:2px;cursor:pointer">CONTINUE SHOPPING</button></div>';
+    h+='</div>';
+    document.getElementById('pdpContent').innerHTML=h;
+    showView('pdp');
+    updCartCount();
 }
 function onSearch(){
     var q=document.getElementById('searchInput').value.toLowerCase().trim();
@@ -740,7 +1071,9 @@ function doSearch(){
     if(!q){goHome();return;}
     var matches=products.filter(function(p){return p.name.toLowerCase().indexOf(q)!==-1||p.category.toLowerCase().indexOf(q)!==-1});
     document.getElementById('gridTitle').textContent='Search results for "'+q+'"';
-    renderGrid(matches);
+    currentGridProducts=matches;
+    populateBrandFilter(matches);
+    applyFilters();
     showView('grid');
 }
 function openLogin(){document.getElementById('loginModal').classList.add('show');}
@@ -771,6 +1104,113 @@ async function init(){
         if(ep){ep.style.display='flex';ep.querySelector('h2').textContent='Shop not found';ep.querySelector('p').textContent=e.message||'Unable to load shop data';}
     }
 }
+// ── Filter & Sort ──
+var currentGridProducts=[];
+var currentSort='relevance';
+var selectedBrands=[];
+
+function showCategory(cat){
+    document.getElementById('gridTitle').textContent=cat;
+    currentGridProducts=products.filter(function(p){return p.category===cat});
+    populateBrandFilter(currentGridProducts);
+    applyFilters();
+    showView('grid');
+    document.querySelectorAll('.fk-cat-link').forEach(function(l){
+        l.classList.toggle('active',l.dataset.cat===cat);
+    });
+}
+
+function populateBrandFilter(prods){
+    var brands={};
+    prods.forEach(function(p){
+        var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){}
+        var b=rev.brand||p.name.split(' ')[0]||'Other';
+        if(!brands[b])brands[b]=0;brands[b]++;
+    });
+    var el=document.getElementById('brandFilters');
+    selectedBrands=[];
+    el.innerHTML=Object.keys(brands).slice(0,8).map(function(b){
+        return '<label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="checkbox" value="'+b.replace(/"/g,'&quot;')+'" onchange="toggleBrand(this)"/> '+b+' <span style="color:#878787">('+brands[b]+')</span></label>';
+    }).join('');
+}
+
+function toggleBrand(el){
+    var b=el.value;
+    if(el.checked){if(selectedBrands.indexOf(b)===-1)selectedBrands.push(b);}
+    else{selectedBrands=selectedBrands.filter(function(x){return x!==b});}
+    applyFilters();
+}
+
+function applyFilters(){
+    var prods=currentGridProducts.slice();
+    var minP=parseInt(document.getElementById('filterMinPrice').value)||0;
+    var maxP=parseInt(document.getElementById('filterMaxPrice').value)||Infinity;
+    var ratingEl=document.querySelector('input[name="ratingFilter"]:checked');
+    var minRating=ratingEl?parseFloat(ratingEl.value):0;
+    var discEl=document.querySelector('input[name="discountFilter"]:checked');
+    var minDisc=discEl?parseInt(discEl.value):0;
+
+    prods=prods.filter(function(p){
+        if(p.price<minP||p.price>maxP)return false;
+        if(p.rating<minRating)return false;
+        var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
+        if(disc<minDisc)return false;
+        if(selectedBrands.length){
+            var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){}
+            var b=rev.brand||p.name.split(' ')[0]||'Other';
+            if(selectedBrands.indexOf(b)===-1)return false;
+        }
+        return true;
+    });
+
+    // Apply sort
+    if(currentSort==='price_asc')prods.sort(function(a,b){return a.price-b.price});
+    else if(currentSort==='price_desc')prods.sort(function(a,b){return b.price-a.price});
+    else if(currentSort==='popularity')prods.sort(function(a,b){return(b.review_count||0)-(a.review_count||0)});
+    else if(currentSort==='newest')prods.sort(function(a,b){return b.id-a.id});
+
+    renderGrid(prods);
+    updateFilterPills();
+}
+
+function sortProducts(sort,btn){
+    currentSort=sort;
+    document.querySelectorAll('.fk-sort-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    applyFilters();
+}
+
+function clearFilters(){
+    document.getElementById('filterMinPrice').value='';
+    document.getElementById('filterMaxPrice').value='';
+    document.querySelectorAll('input[name="ratingFilter"]').forEach(function(r){r.checked=r.value==='0'});
+    document.querySelectorAll('input[name="discountFilter"]').forEach(function(r){r.checked=r.value==='0'});
+    selectedBrands=[];
+    document.querySelectorAll('#brandFilters input').forEach(function(c){c.checked=false});
+    currentSort='relevance';
+    document.querySelectorAll('.fk-sort-btn').forEach(function(b){b.classList.remove('active')});
+    document.querySelector('.fk-sort-btn').classList.add('active');
+    applyFilters();
+}
+
+function updateFilterPills(){
+    var pills=[];
+    var minP=parseInt(document.getElementById('filterMinPrice').value);
+    var maxP=parseInt(document.getElementById('filterMaxPrice').value);
+    if(minP)pills.push('Min: '+fmt(minP));
+    if(maxP)pills.push('Max: '+fmt(maxP));
+    selectedBrands.forEach(function(b){pills.push(b)});
+    var ratingEl=document.querySelector('input[name="ratingFilter"]:checked');
+    if(ratingEl&&ratingEl.value!=='0')pills.push(ratingEl.value+'★ & above');
+    var discEl=document.querySelector('input[name="discountFilter"]:checked');
+    if(discEl&&discEl.value!=='0')pills.push(discEl.value+'% off+');
+    var el=document.getElementById('filterPills');
+    if(pills.length){
+        el.style.display='flex';
+        el.innerHTML=pills.map(function(p){return '<span style="background:#f0f5ff;color:var(--fk-blue);border:1px solid #d0dfff;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px">'+p+' <span onclick="clearFilters()" style="cursor:pointer;font-size:14px">&times;</span></span>'}).join('');
+    }else{el.style.display='none';el.innerHTML='';}
+}
+
 document.addEventListener('DOMContentLoaded',init);
 
 </script>
