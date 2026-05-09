@@ -365,6 +365,10 @@ img{max-width:100%}
     .fk-footer-top{grid-template-columns:1fr}
 }
 
+.fk-sort-btn{background:none;border:none;padding:8px 16px;font-size:14px;font-weight:500;color:#212121;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
+.fk-sort-btn:hover{color:var(--fk-blue)}
+.fk-sort-btn.active{color:var(--fk-blue);border-bottom-color:var(--fk-blue);font-weight:600}
+@media(max-width:992px){.fk-filter-sidebar{display:none !important}}
 </style>
 </head>
 <body>
@@ -409,7 +413,61 @@ img{max-width:100%}
 </header>
 <nav class="fk-subheader"><div class="fk-subheader-inner" id="catBar"></div></nav>
 <div id="homeView"><div class="fk-banner" id="bannerWrap"></div><div class="fk-main" id="homeContent"></div></div>
-<div id="gridView" style="display:none"><div class="fk-main"><div class="fk-grid-section"><div class="fk-grid-head"><h2 id="gridTitle">All Products</h2><button class="view-all-btn" onclick="goHome()" style="background:none;color:var(--fk-blue);border:1px solid var(--fk-blue)">&#8592; Back</button></div><div class="fk-grid" id="productsGrid"></div></div></div></div>
+<div id="gridView" style="display:none"><div class="fk-main" style="display:flex;gap:10px;align-items:flex-start">
+<!-- Filter Sidebar -->
+<div class="fk-filter-sidebar" id="filterSidebar" style="width:240px;flex-shrink:0;background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08);position:sticky;top:120px">
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center">Filters <button onclick="clearFilters()" style="background:none;border:none;color:var(--fk-blue);font-size:13px;font-weight:600;cursor:pointer">CLEAR ALL</button></div>
+  <div id="filterPills" style="padding:8px 16px;display:none;flex-wrap:wrap;gap:6px;border-bottom:1px solid #f0f0f0"></div>
+  <!-- Price filter -->
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Price</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="number" id="filterMinPrice" placeholder="Min" style="width:80px;padding:6px 8px;border:1px solid #c2c2c2;border-radius:2px;font-size:13px" onchange="applyFilters()"/>
+      <span style="color:#878787">to</span>
+      <input type="number" id="filterMaxPrice" placeholder="Max" style="width:80px;padding:6px 8px;border:1px solid #c2c2c2;border-radius:2px;font-size:13px" onchange="applyFilters()"/>
+    </div>
+  </div>
+  <!-- Brand filter -->
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Brand</div>
+    <div id="brandFilters"></div>
+  </div>
+  <!-- Rating filter -->
+  <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Customer Ratings</div>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="ratingFilter" value="4" onchange="applyFilters()"/> 4&#9733; &amp; above</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="ratingFilter" value="3" onchange="applyFilters()"/> 3&#9733; &amp; above</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="ratingFilter" value="0" onchange="applyFilters()" checked/> All</label>
+  </div>
+  <!-- Discount filter -->
+  <div style="padding:12px 16px">
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:10px">Discount</div>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="50" onchange="applyFilters()"/> 50% or more</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="30" onchange="applyFilters()"/> 30% or more</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="10" onchange="applyFilters()"/> 10% or more</label>
+    <label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="radio" name="discountFilter" value="0" onchange="applyFilters()" checked/> All</label>
+  </div>
+</div>
+<!-- Main grid area -->
+<div style="flex:1;min-width:0">
+<div class="fk-grid-section">
+  <div class="fk-grid-head">
+    <h2 id="gridTitle">All Products</h2>
+    <button class="view-all-btn" onclick="goHome()" style="background:none;color:var(--fk-blue);border:1px solid var(--fk-blue)">&#8592; Back</button>
+  </div>
+  <!-- Sort bar -->
+  <div id="sortBar" style="display:flex;align-items:center;gap:0;padding:10px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;background:#fff">
+    <span style="font-weight:500;margin-right:16px;color:#878787">Sort By</span>
+    <button class="fk-sort-btn active" onclick="sortProducts('relevance',this)">Relevance</button>
+    <button class="fk-sort-btn" onclick="sortProducts('popularity',this)">Popularity</button>
+    <button class="fk-sort-btn" onclick="sortProducts('price_asc',this)">Price — Low to High</button>
+    <button class="fk-sort-btn" onclick="sortProducts('price_desc',this)">Price — High to Low</button>
+    <button class="fk-sort-btn" onclick="sortProducts('newest',this)">Newest First</button>
+  </div>
+  <div class="fk-grid" id="productsGrid"></div>
+</div>
+</div>
+</div></div>
 <div class="fk-pdp" id="pdpView"><div class="fk-main" id="pdpContent"></div></div>
 <div class="fk-cart-page" id="cartPage"><div class="fk-cart-inner"><div class="fk-cart-left"><div class="fk-cart-box"><div class="fk-cart-hdr"><h2 id="cartTitle">My Cart (0)</h2></div><div id="cartItems"></div><div class="fk-cart-place" id="cartPlaceWrap" style="display:none"><button onclick="goToCheckout()">PLACE ORDER</button></div></div></div><div class="fk-cart-right"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="cpCount">0</span> items)</span><span id="cpSubtotal">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="cpDiscount">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total Amount</span><span id="cpTotal">&#8377;0</span></div></div><div class="fk-price-save" id="cpSave"></div></div></div></div></div>
 <div class="fk-ck-page" id="ckPage"><div class="fk-ck-inner"><div class="fk-ck-left">
@@ -453,15 +511,6 @@ function showView(v){
     window.scrollTo(0,0);
 }
 function goHome(){showView('home');document.querySelectorAll('.fk-cat-link').forEach(function(l){l.classList.remove('active')});}
-function showCategory(cat){
-    document.getElementById('gridTitle').textContent=cat;
-    var prods=products.filter(function(p){return p.category===cat});
-    renderGrid(prods);
-    showView('grid');
-    document.querySelectorAll('.fk-cat-link').forEach(function(l){
-        l.classList.toggle('active',l.dataset.cat===cat);
-    });
-}
 function renderGrid(prods){
     var g=document.getElementById('productsGrid');
     g.innerHTML=prods.map(function(p){
@@ -740,7 +789,9 @@ function doSearch(){
     if(!q){goHome();return;}
     var matches=products.filter(function(p){return p.name.toLowerCase().indexOf(q)!==-1||p.category.toLowerCase().indexOf(q)!==-1});
     document.getElementById('gridTitle').textContent='Search results for "'+q+'"';
-    renderGrid(matches);
+    currentGridProducts=matches;
+    populateBrandFilter(matches);
+    applyFilters();
     showView('grid');
 }
 function openLogin(){document.getElementById('loginModal').classList.add('show');}
@@ -771,6 +822,113 @@ async function init(){
         if(ep){ep.style.display='flex';ep.querySelector('h2').textContent='Shop not found';ep.querySelector('p').textContent=e.message||'Unable to load shop data';}
     }
 }
+// ── Filter & Sort ──
+var currentGridProducts=[];
+var currentSort='relevance';
+var selectedBrands=[];
+
+function showCategory(cat){
+    document.getElementById('gridTitle').textContent=cat;
+    currentGridProducts=products.filter(function(p){return p.category===cat});
+    populateBrandFilter(currentGridProducts);
+    applyFilters();
+    showView('grid');
+    document.querySelectorAll('.fk-cat-link').forEach(function(l){
+        l.classList.toggle('active',l.dataset.cat===cat);
+    });
+}
+
+function populateBrandFilter(prods){
+    var brands={};
+    prods.forEach(function(p){
+        var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){}
+        var b=rev.brand||p.name.split(' ')[0]||'Other';
+        if(!brands[b])brands[b]=0;brands[b]++;
+    });
+    var el=document.getElementById('brandFilters');
+    selectedBrands=[];
+    el.innerHTML=Object.keys(brands).slice(0,8).map(function(b){
+        return '<label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;cursor:pointer"><input type="checkbox" value="'+b.replace(/"/g,'&quot;')+'" onchange="toggleBrand(this)"/> '+b+' <span style="color:#878787">('+brands[b]+')</span></label>';
+    }).join('');
+}
+
+function toggleBrand(el){
+    var b=el.value;
+    if(el.checked){if(selectedBrands.indexOf(b)===-1)selectedBrands.push(b);}
+    else{selectedBrands=selectedBrands.filter(function(x){return x!==b});}
+    applyFilters();
+}
+
+function applyFilters(){
+    var prods=currentGridProducts.slice();
+    var minP=parseInt(document.getElementById('filterMinPrice').value)||0;
+    var maxP=parseInt(document.getElementById('filterMaxPrice').value)||Infinity;
+    var ratingEl=document.querySelector('input[name="ratingFilter"]:checked');
+    var minRating=ratingEl?parseFloat(ratingEl.value):0;
+    var discEl=document.querySelector('input[name="discountFilter"]:checked');
+    var minDisc=discEl?parseInt(discEl.value):0;
+
+    prods=prods.filter(function(p){
+        if(p.price<minP||p.price>maxP)return false;
+        if(p.rating<minRating)return false;
+        var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
+        if(disc<minDisc)return false;
+        if(selectedBrands.length){
+            var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){}
+            var b=rev.brand||p.name.split(' ')[0]||'Other';
+            if(selectedBrands.indexOf(b)===-1)return false;
+        }
+        return true;
+    });
+
+    // Apply sort
+    if(currentSort==='price_asc')prods.sort(function(a,b){return a.price-b.price});
+    else if(currentSort==='price_desc')prods.sort(function(a,b){return b.price-a.price});
+    else if(currentSort==='popularity')prods.sort(function(a,b){return(b.review_count||0)-(a.review_count||0)});
+    else if(currentSort==='newest')prods.sort(function(a,b){return b.id-a.id});
+
+    renderGrid(prods);
+    updateFilterPills();
+}
+
+function sortProducts(sort,btn){
+    currentSort=sort;
+    document.querySelectorAll('.fk-sort-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    applyFilters();
+}
+
+function clearFilters(){
+    document.getElementById('filterMinPrice').value='';
+    document.getElementById('filterMaxPrice').value='';
+    document.querySelectorAll('input[name="ratingFilter"]').forEach(function(r){r.checked=r.value==='0'});
+    document.querySelectorAll('input[name="discountFilter"]').forEach(function(r){r.checked=r.value==='0'});
+    selectedBrands=[];
+    document.querySelectorAll('#brandFilters input').forEach(function(c){c.checked=false});
+    currentSort='relevance';
+    document.querySelectorAll('.fk-sort-btn').forEach(function(b){b.classList.remove('active')});
+    document.querySelector('.fk-sort-btn').classList.add('active');
+    applyFilters();
+}
+
+function updateFilterPills(){
+    var pills=[];
+    var minP=parseInt(document.getElementById('filterMinPrice').value);
+    var maxP=parseInt(document.getElementById('filterMaxPrice').value);
+    if(minP)pills.push('Min: '+fmt(minP));
+    if(maxP)pills.push('Max: '+fmt(maxP));
+    selectedBrands.forEach(function(b){pills.push(b)});
+    var ratingEl=document.querySelector('input[name="ratingFilter"]:checked');
+    if(ratingEl&&ratingEl.value!=='0')pills.push(ratingEl.value+'★ & above');
+    var discEl=document.querySelector('input[name="discountFilter"]:checked');
+    if(discEl&&discEl.value!=='0')pills.push(discEl.value+'% off+');
+    var el=document.getElementById('filterPills');
+    if(pills.length){
+        el.style.display='flex';
+        el.innerHTML=pills.map(function(p){return '<span style="background:#f0f5ff;color:var(--fk-blue);border:1px solid #d0dfff;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px">'+p+' <span onclick="clearFilters()" style="cursor:pointer;font-size:14px">&times;</span></span>'}).join('');
+    }else{el.style.display='none';el.innerHTML='';}
+}
+
 document.addEventListener('DOMContentLoaded',init);
 
 </script>

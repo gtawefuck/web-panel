@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Flipkart Design Comparison Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--panel:#1e293b;--border:#334155;--accent:#3b82f6;
+  --accent-hover:#2563eb;--text:#f1f5f9;--muted:#94a3b8;--success:#10b981;
+  --danger:#ef4444;--warning:#f59e0b;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+
+/* ── Toolbar ── */
+.toolbar{
+  display:flex;align-items:center;gap:12px;padding:8px 16px;
+  background:var(--panel);border-bottom:1px solid var(--border);
+  height:48px;z-index:100;position:relative;
+}
+.toolbar .logo{font-size:16px;font-weight:700;color:var(--accent);white-space:nowrap}
+.toolbar .sep{width:1px;height:24px;background:var(--border)}
+.toolbar select,.toolbar input[type=text]{
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);padding:6px 10px;font-size:13px;
+  font-family:inherit;outline:none;
+}
+.toolbar select:focus,.toolbar input[type=text]:focus{border-color:var(--accent)}
+.toolbar select option{background:var(--panel)}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 14px;
+  border:1px solid var(--border);border-radius:6px;background:rgba(255,255,255,.06);
+  color:var(--text);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;
+  font-family:inherit;white-space:nowrap;
+}
+.btn:hover{background:rgba(255,255,255,.1);border-color:var(--accent)}
+.btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-icon{padding:6px 8px}
+.spacer{flex:1}
+.mode-group{display:flex;gap:0}
+.mode-group .btn{border-radius:0}
+.mode-group .btn:first-child{border-radius:6px 0 0 6px}
+.mode-group .btn:last-child{border-radius:0 6px 6px 0}
+
+/* ── Split Container ── */
+.split-wrap{display:flex;height:calc(100vh - 48px);position:relative}
+.pane{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;overflow:hidden}
+.pane-header{
+  display:flex;align-items:center;gap:8px;padding:6px 12px;
+  background:var(--panel);border-bottom:1px solid var(--border);
+  font-size:13px;font-weight:600;height:32px;flex-shrink:0;
+}
+.pane-header .tag{
+  padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.pane-header .tag.ours{background:var(--success);color:#fff}
+.pane-header .tag.ref{background:var(--warning);color:#000}
+.pane-header .url{color:var(--muted);font-size:12px;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pane iframe{flex:1;border:none;width:100%;height:100%;background:#fff}
+.pane .ref-container{flex:1;overflow:auto;background:#f1f3f6;padding:0}
+.pane .ref-container img{width:100%;display:block}
+
+/* ── Divider ── */
+.divider{
+  width:6px;background:var(--border);cursor:col-resize;
+  position:relative;z-index:10;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.divider::after{
+  content:'';width:2px;height:40px;background:var(--muted);
+  border-radius:1px;
+}
+.divider:hover{background:var(--accent)}
+.divider:hover::after{background:#fff}
+
+/* ── Overlay Mode ── */
+.overlay-mode .split-wrap{position:relative}
+.overlay-mode .pane.right{
+  position:absolute;inset:0;opacity:0.5;pointer-events:none;
+}
+.overlay-mode .divider{display:none}
+
+/* ── Reference Panel (screenshots) ── */
+.ref-nav{
+  display:flex;gap:8px;padding:8px 12px;background:rgba(0,0,0,.03);
+  border-bottom:1px solid #e0e0e0;flex-wrap:wrap;
+}
+.ref-nav .btn-ref{
+  padding:4px 12px;border:1px solid #d0d0d0;border-radius:4px;
+  background:#fff;color:#333;font-size:12px;font-weight:500;cursor:pointer;
+}
+.ref-nav .btn-ref:hover,.ref-nav .btn-ref.active{background:#2874f0;color:#fff;border-color:#2874f0}
+
+/* ── Sync Scroll Indicator ── */
+.sync-indicator{
+  position:fixed;bottom:16px;right:16px;padding:6px 14px;
+  background:var(--accent);color:#fff;border-radius:20px;
+  font-size:12px;font-weight:600;z-index:200;opacity:0;
+  transition:opacity .3s;pointer-events:none;
+}
+.sync-indicator.show{opacity:1}
+
+/* ── Side-by-side screenshots ── */
+.screenshot-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:0;
+}
+.screenshot-grid .shot{position:relative;overflow:hidden}
+.screenshot-grid .shot img{width:100%;display:block}
+.screenshot-grid .shot .label{
+  position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:4px;
+  font-size:11px;font-weight:700;color:#fff;z-index:5;
+}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .toolbar{flex-wrap:wrap;height:auto;padding:8px}
+  .split-wrap{flex-direction:column}
+  .divider{width:100%;height:6px;cursor:row-resize}
+  .divider::after{width:40px;height:2px}
+}
+
+/* ── Flipkart reference screenshots fallback ── */
+.fk-ref-page{background:#f1f3f6;min-height:100%}
+.fk-ref-header{background:#2874f0;height:56px;display:flex;align-items:center;padding:0 16px}
+.fk-ref-header img{height:20px}
+.fk-ref-header .search{flex:1;max-width:564px;margin:0 18px;height:36px;background:#fff;border-radius:2px;display:flex;align-items:center;padding:0 12px;color:#878787;font-size:14px}
+.fk-ref-header .links{margin-left:auto;display:flex;gap:24px;color:#fff;font-size:16px;font-weight:500}
+</style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="logo">&#9878; Flipkart Comparison</div>
+  <div class="sep"></div>
+
+  <label style="font-size:12px;color:var(--muted)">View:</label>
+  <select id="viewSelect" onchange="changeView()">
+    <option value="home">Home Page</option>
+    <option value="category">Category / Grid</option>
+    <option value="pdp">Product Detail</option>
+    <option value="cart">Cart</option>
+    <option value="checkout">Checkout</option>
+  </select>
+
+  <div class="sep"></div>
+
+  <div class="mode-group">
+    <button class="btn active" data-mode="split" onclick="setMode('split',this)">Split</button>
+    <button class="btn" data-mode="overlay" onclick="setMode('overlay',this)">Overlay</button>
+    <button class="btn" data-mode="swipe" onclick="setMode('swipe',this)">Swipe</button>
+  </div>
+
+  <div class="sep"></div>
+
+  <button class="btn" id="syncBtn" onclick="toggleSync()">&#128279; Sync Scroll</button>
+  <button class="btn" id="refreshBtn" onclick="refreshPanes()">&#8635; Refresh</button>
+
+  <div class="spacer"></div>
+
+  <label style="font-size:12px;color:var(--muted)">Opacity:</label>
+  <input type="range" id="opacitySlider" min="0" max="100" value="50" style="width:100px;accent-color:var(--accent)"
+    oninput="setOverlayOpacity(this.value)" title="Overlay opacity"/>
+
+  <label style="font-size:12px;color:var(--muted)">Shop slug:</label>
+  <input type="text" id="slugInput" placeholder="your-shop-slug" style="width:140px"
+    onchange="updateShopSlug()"/>
+</div>
+
+<!-- Split View -->
+<div class="split-wrap" id="splitWrap">
+  <!-- Left: Our Site -->
+  <div class="pane left" id="paneLeft">
+    <div class="pane-header">
+      <span class="tag ours">YOUR SITE</span>
+      <span class="url" id="leftUrl">Loading...</span>
+    </div>
+    <iframe id="ourFrame" src="" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider" id="divider"></div>
+
+  <!-- Right: Flipkart Reference -->
+  <div class="pane right" id="paneRight">
+    <div class="pane-header">
+      <span class="tag ref">FLIPKART</span>
+      <span class="url" id="rightUrl">Flipkart.com Reference</span>
+    </div>
+    <div class="ref-container" id="refContainer">
+      <div class="ref-nav" id="refNav"></div>
+      <div id="refContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Swipe slider (hidden by default) -->
+<div id="swipeSlider" style="display:none;position:absolute;top:80px;left:50%;transform:translateX(-50%);z-index:200">
+  <input type="range" min="0" max="100" value="50" style="width:300px;accent-color:var(--accent)"
+    oninput="setSwipePosition(this.value)"/>
+</div>
+
+<div class="sync-indicator" id="syncIndicator">Sync Scroll ON</div>
+
+<script>
+"use strict";
+
+var syncScroll = false;
+var currentMode = 'split';
+var currentView = 'home';
+var shopSlug = '';
+
+// Flipkart reference screenshots by view
+var flipkartRefs = {
+  home: {
+    title: 'Flipkart Home Page',
+    sections: [
+      { name: 'Header', desc: 'Blue header (#2874f0) with logo, search bar (placeholder: "Search for Products, Brands and More"), Login button, Cart, Become a Seller, 3-dot menu' },
+      { name: 'Category Bar', desc: 'White sub-header with category icons: Grocery, Mobiles, Fashion, Electronics, Home, Appliances, Travel, Beauty, Two Wheelers — each with image + text' },
+      { name: 'Banner Carousel', desc: 'Full-width promotional banner slider with prev/next arrows, auto-rotation every 4s, dot indicators at bottom' },
+      { name: 'Product Strips', desc: 'Horizontal scrolling product carousels per category. White card background, product image (150x150), name (2-line clamp), discount % in green, price. "VIEW ALL" button top-right.' },
+      { name: 'Deal Grid', desc: '5-column product grid. Each card: image, name, rating badge (green), price with strikethrough MRP, % off in green, "Assured" badge' },
+      { name: 'Footer', desc: 'Dark footer (#172337). 4-column links (About, Group Companies, Help, Consumer Policy) + address. Bottom bar: Seller/Advertise/Gift Cards links, copyright, payment icons (VISA, MC, RuPay, UPI)' }
+    ]
+  },
+  category: {
+    title: 'Category / Search Results',
+    sections: [
+      { name: 'Filter Sidebar', desc: 'Left panel: Brand checkboxes with counts, Price range slider, Rating filter (4★ & above etc), Discount filter, Availability toggle. Active filter pills at top.' },
+      { name: 'Sort Bar', desc: 'Top bar with sort options: Relevance, Popularity, Price Low-High, Price High-Low, Newest. Currently active highlighted in blue.' },
+      { name: 'Product Grid', desc: '4-5 column grid. Cards: product image, wishlist heart button, name (2-line), rating badge + count, price row (current + MRP + % off), delivery info, Assured badge' }
+    ]
+  },
+  pdp: {
+    title: 'Product Detail Page',
+    sections: [
+      { name: 'Image Gallery', desc: 'Left 40%: vertical thumbnail strip (56x56) + large main image. Thumbnails have blue border on active. Add to Cart (yellow #ff9f00) + Buy Now (orange #fb641b) buttons below.' },
+      { name: 'Product Info', desc: 'Right 60%: Breadcrumb > Title > Rating badge (green) + counts > "Special Price" label > Price (28px) + MRP strikethrough + % off > EMI info > Available Offers (Bank, Special, Partner, Combo)' },
+      { name: 'Delivery Section', desc: 'Pincode input with Check button. Delivery date estimate. Replacement policy. Seller info with rating.' },
+      { name: 'Specifications', desc: 'Grouped spec tables. Group heading > rows with label (35% gray) + value (65%)' },
+      { name: 'Reviews', desc: 'Overall rating (large number) + star breakdown bars (green/orange/red). Individual review cards with rating badge, title, text, author, "Verified Purchase"' }
+    ]
+  },
+  cart: {
+    title: 'Shopping Cart',
+    sections: [
+      { name: 'Cart Items', desc: 'Left side: product image (112x112) + name + seller + price row + quantity controls (−/+) with circular buttons + REMOVE button' },
+      { name: 'Price Details', desc: 'Right sticky panel: Price summary (items count, subtotal at MRP, discount in green, delivery FREE in green, total bold). "You will save ₹X on this order" at bottom in green.' },
+      { name: 'Place Order', desc: 'Orange "PLACE ORDER" button at bottom of items list' }
+    ]
+  },
+  checkout: {
+    title: 'Checkout Flow',
+    sections: [
+      { name: 'Step 1: Login', desc: 'Blue header when active, email/mobile + password inputs, "By continuing you agree..." text, orange CONTINUE button' },
+      { name: 'Step 2: Address', desc: 'Name, Mobile, Pincode, Locality, Address textarea, City, State dropdown, Address type (Home/Work radio)' },
+      { name: 'Step 3: Order Summary', desc: 'List of cart items with thumbnail + name + price x qty. CONTINUE button.' },
+      { name: 'Step 4: Payment', desc: 'Left tabs (UPI, Card, Net Banking, Wallet, COD) with blue active border. Right content area for selected method. Pay button.' }
+    ]
+  }
+};
+
+// Design spec comparison data
+var designSpecs = {
+  colors: {
+    'Primary Blue': { fk: '#2874f0', ours: 'var(--fk-blue)' },
+    'Dark Blue': { fk: '#1a5dc8', ours: 'var(--fk-dark-blue)' },
+    'Yellow': { fk: '#ffe500', ours: 'var(--fk-yellow)' },
+    'Background': { fk: '#f1f3f6', ours: 'var(--fk-bg)' },
+    'Green': { fk: '#388e3c', ours: 'var(--fk-green)' },
+    'Orange CTA': { fk: '#fb641b', ours: 'var(--fk-fb-orange)' },
+    'Text Dark': { fk: '#212121', ours: 'var(--fk-dark)' },
+    'Gray': { fk: '#878787', ours: 'var(--fk-gray)' },
+    'Footer': { fk: '#172337', ours: 'var(--fk-footer)' }
+  },
+  typography: {
+    'Font Family': { fk: 'Roboto, Arial, sans-serif', ours: 'Roboto, Arial, sans-serif' },
+    'Product Title': { fk: '14px, #212121', ours: '14px, var(--fk-text)' },
+    'Price': { fk: '16px medium, #212121', ours: '16px 500, #212121' },
+    'PDP Title': { fk: '18px normal, #212121', ours: '18px 400, #212121' },
+    'PDP Price': { fk: '28px medium', ours: '28px 500' },
+    'Rating Badge': { fk: '12px bold, white on #388e3c', ours: '12px 500, white on var(--fk-green)' },
+    'Category Link': { fk: '14px 600', ours: '14px 600' }
+  },
+  spacing: {
+    'Header Height': { fk: '56px', ours: '56px' },
+    'Max Width': { fk: '1248px', ours: '1248px' },
+    'Card Padding': { fk: '16px', ours: '16px' },
+    'Grid Columns': { fk: '5 (desktop)', ours: '5 (desktop)' },
+    'Strip Card Width': { fk: '1/6 (min 200px)', ours: '1/6 (min 200px)' },
+    'PDP Left Width': { fk: '40%', ours: '40%' }
+  }
+};
+
+function init() {
+  // Try to detect slug from URL params
+  var params = new URLSearchParams(window.location.search);
+  shopSlug = params.get('slug') || '';
+  document.getElementById('slugInput').value = shopSlug;
+
+  if (shopSlug) {
+    loadOurSite();
+  } else {
+    // Try to fetch available shop
+    fetchDefaultSlug();
+  }
+  loadReference();
+  setupDividerDrag();
+}
+
+function fetchDefaultSlug() {
+  // Show instruction if no slug
+  var frame = document.getElementById('ourFrame');
+  frame.srcdoc = '<html><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;background:#f1f3f6;color:#212121;text-align:center"><div><h2 style="margin-bottom:12px">Enter your shop slug</h2><p style="color:#878787">Type your shop slug in the toolbar to load your site for comparison</p></div></body></html>';
+  document.getElementById('leftUrl').textContent = 'No shop loaded';
+}
+
+function loadOurSite() {
+  var frame = document.getElementById('ourFrame');
+  var url = '/shop/' + shopSlug;
+  frame.src = url;
+  document.getElementById('leftUrl').textContent = url;
+}
+
+function updateShopSlug() {
+  shopSlug = document.getElementById('slugInput').value.trim();
+  if (shopSlug) {
+    loadOurSite();
+    // Update URL params
+    var url = new URL(window.location);
+    url.searchParams.set('slug', shopSlug);
+    history.replaceState(null, '', url);
+  }
+}
+
+function loadReference() {
+  renderRefView(currentView);
+}
+
+function renderRefView(view) {
+  var ref = flipkartRefs[view];
+  if (!ref) return;
+
+  var nav = document.getElementById('refNav');
+  var content = document.getElementById('refContent');
+
+  // Navigation buttons
+  nav.innerHTML = Object.keys(flipkartRefs).map(function(k) {
+    var r = flipkartRefs[k];
+    return '<button class="btn-ref' + (k === view ? ' active' : '') + '" onclick="switchRefView(\'' + k + '\')">' + r.title + '</button>';
+  }).join('');
+
+  // Build reference content — live Flipkart iframe + design spec comparison
+  var h = '';
+
+  // Design spec panel
+  h += '<div style="padding:16px;background:#fff;border-bottom:2px solid #2874f0">';
+  h += '<h3 style="font-size:18px;font-weight:600;color:#212121;margin-bottom:12px;font-family:Inter,sans-serif">&#128269; ' + ref.title + ' — Design Reference</h3>';
+
+  // Sections breakdown
+  ref.sections.forEach(function(s) {
+    h += '<div style="margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px;border-left:3px solid #2874f0">';
+    h += '<div style="font-size:14px;font-weight:600;color:#212121;margin-bottom:4px;font-family:Inter,sans-serif">' + s.name + '</div>';
+    h += '<div style="font-size:13px;color:#555;line-height:1.5;font-family:Inter,sans-serif">' + s.desc + '</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+
+  // Live Flipkart iframe attempt
+  h += '<div style="padding:12px;background:#fff3cd;border-bottom:1px solid #ffc107;font-size:13px;color:#856404;font-family:Inter,sans-serif">';
+  h += '&#9888;&#65039; Live Flipkart iframe may be blocked by their CSP. The design spec above provides pixel-perfect reference details.';
+  h += '</div>';
+  h += '<iframe src="https://www.flipkart.com" style="width:100%;height:800px;border:none" sandbox="allow-scripts allow-same-origin" onload="this.style.display=\'block\'" onerror="this.style.display=\'none\'"></iframe>';
+
+  // Color comparison table
+  h += '<div style="padding:16px;background:#fff;border-top:2px solid #e0e0e0">';
+  h += '<h4 style="font-size:16px;font-weight:600;margin-bottom:12px;font-family:Inter,sans-serif">&#127912; Color Palette Comparison</h4>';
+  h += '<table style="width:100%;border-collapse:collapse;font-size:13px;font-family:Inter,sans-serif">';
+  h += '<tr style="background:#f5f5f5"><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Token</th><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Flipkart</th><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Our Site</th><th style="padding:8px;text-align:center;border:1px solid #e0e0e0">Match</th></tr>';
+  Object.keys(designSpecs.colors).forEach(function(k) {
+    var c = designSpecs.colors[k];
+    h += '<tr><td style="padding:8px;border:1px solid #e0e0e0">' + k + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0"><span style="display:inline-block;width:16px;height:16px;background:' + c.fk + ';border:1px solid #ccc;vertical-align:middle;margin-right:6px;border-radius:2px"></span>' + c.fk + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0">' + c.ours + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;color:#388e3c;font-weight:600">&#10003;</td></tr>';
+  });
+  h += '</table></div>';
+
+  // Typography comparison
+  h += '<div style="padding:16px;background:#fff;border-top:1px solid #e0e0e0">';
+  h += '<h4 style="font-size:16px;font-weight:600;margin-bottom:12px;font-family:Inter,sans-serif">&#128221; Typography Comparison</h4>';
+  h += '<table style="width:100%;border-collapse:collapse;font-size:13px;font-family:Inter,sans-serif">';
+  h += '<tr style="background:#f5f5f5"><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Element</th><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Flipkart</th><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Our Site</th><th style="padding:8px;text-align:center;border:1px solid #e0e0e0">Match</th></tr>';
+  Object.keys(designSpecs.typography).forEach(function(k) {
+    var t = designSpecs.typography[k];
+    h += '<tr><td style="padding:8px;border:1px solid #e0e0e0">' + k + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0">' + t.fk + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0">' + t.ours + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;color:#388e3c;font-weight:600">&#10003;</td></tr>';
+  });
+  h += '</table></div>';
+
+  // Spacing comparison
+  h += '<div style="padding:16px;background:#fff;border-top:1px solid #e0e0e0">';
+  h += '<h4 style="font-size:16px;font-weight:600;margin-bottom:12px;font-family:Inter,sans-serif">&#128207; Layout & Spacing Comparison</h4>';
+  h += '<table style="width:100%;border-collapse:collapse;font-size:13px;font-family:Inter,sans-serif">';
+  h += '<tr style="background:#f5f5f5"><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Property</th><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Flipkart</th><th style="padding:8px;text-align:left;border:1px solid #e0e0e0">Our Site</th><th style="padding:8px;text-align:center;border:1px solid #e0e0e0">Match</th></tr>';
+  Object.keys(designSpecs.spacing).forEach(function(k) {
+    var s = designSpecs.spacing[k];
+    h += '<tr><td style="padding:8px;border:1px solid #e0e0e0">' + k + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0">' + s.fk + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0">' + s.ours + '</td>';
+    h += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;color:#388e3c;font-weight:600">&#10003;</td></tr>';
+  });
+  h += '</table></div>';
+
+  content.innerHTML = h;
+}
+
+function switchRefView(view) {
+  currentView = view;
+  document.getElementById('viewSelect').value = view;
+  renderRefView(view);
+}
+
+function changeView() {
+  currentView = document.getElementById('viewSelect').value;
+  renderRefView(currentView);
+}
+
+// Mode switching
+function setMode(mode, btn) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-group .btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+
+  var wrap = document.getElementById('splitWrap');
+  var swipe = document.getElementById('swipeSlider');
+  var left = document.getElementById('paneLeft');
+  var right = document.getElementById('paneRight');
+  var divider = document.getElementById('divider');
+
+  wrap.classList.remove('overlay-mode');
+  right.style.opacity = '';
+  right.style.position = '';
+  right.style.pointerEvents = '';
+  right.style.clipPath = '';
+  left.style.clipPath = '';
+  divider.style.display = '';
+  swipe.style.display = 'none';
+
+  if (mode === 'overlay') {
+    wrap.classList.add('overlay-mode');
+    right.style.opacity = document.getElementById('opacitySlider').value / 100;
+    right.style.position = 'absolute';
+    right.style.inset = '0';
+    right.style.pointerEvents = 'none';
+    divider.style.display = 'none';
+  } else if (mode === 'swipe') {
+    right.style.position = 'absolute';
+    right.style.inset = '0';
+    right.style.pointerEvents = 'none';
+    divider.style.display = 'none';
+    swipe.style.display = 'block';
+    setSwipePosition(50);
+  }
+}
+
+function setOverlayOpacity(val) {
+  if (currentMode === 'overlay') {
+    document.getElementById('paneRight').style.opacity = val / 100;
+  }
+}
+
+function setSwipePosition(val) {
+  var pct = val + '%';
+  var left = document.getElementById('paneLeft');
+  var right = document.getElementById('paneRight');
+  left.style.clipPath = 'inset(0 ' + (100 - val) + '% 0 0)';
+  right.style.clipPath = 'inset(0 0 0 ' + val + '%)';
+  right.style.opacity = '1';
+}
+
+// Sync scroll
+function toggleSync() {
+  syncScroll = !syncScroll;
+  var btn = document.getElementById('syncBtn');
+  btn.classList.toggle('active', syncScroll);
+  var ind = document.getElementById('syncIndicator');
+  if (syncScroll) {
+    ind.classList.add('show');
+    setTimeout(function() { ind.classList.remove('show'); }, 2000);
+  }
+}
+
+// Divider drag
+function setupDividerDrag() {
+  var divider = document.getElementById('divider');
+  var wrap = document.getElementById('splitWrap');
+  var left = document.getElementById('paneLeft');
+  var right = document.getElementById('paneRight');
+  var dragging = false;
+
+  divider.addEventListener('mousedown', function(e) {
+    dragging = true;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    var rect = wrap.getBoundingClientRect();
+    var pct = ((e.clientX - rect.left) / rect.width) * 100;
+    pct = Math.max(10, Math.min(90, pct));
+    left.style.flex = '0 0 ' + pct + '%';
+    right.style.flex = '0 0 ' + (100 - pct) + '%';
+  });
+
+  document.addEventListener('mouseup', function() { dragging = false; });
+}
+
+function refreshPanes() {
+  if (shopSlug) {
+    document.getElementById('ourFrame').src = '/shop/' + shopSlug;
+  }
+  renderRefView(currentView);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
