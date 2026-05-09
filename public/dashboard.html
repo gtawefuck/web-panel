@@ -681,7 +681,7 @@
         <div class="nav-section" id="navImport" style="display:none">
             <div class="nav-label">Import</div>
             <button class="nav-item" onclick="showPage('fkimport')">
-                <span class="icon">📥</span> Flipkart Import
+                <span class="icon">📥</span> Product Import
             </button>
         </div>
 
@@ -1063,17 +1063,17 @@
         <!-- Flipkart Import Page -->
         <div class="page" id="page-fkimport">
             <div class="page-header">
-                <h2>📥 Flipkart Import</h2>
-                <p>Paste any Flipkart product or category/search link to fetch and import products automatically.</p>
+                <h2>📥 Product Import</h2>
+                <p>Paste any Flipkart or Amazon product link to fetch and import products automatically.</p>
             </div>
 
             <!-- URL Input Section -->
             <div class="section-card" style="margin-bottom:20px">
                 <div style="padding:24px">
-                    <label class="ed-label" style="margin-bottom:10px">Flipkart URL</label>
+                    <label class="ed-label" style="margin-bottom:10px">Product URL (Flipkart / Amazon)</label>
                     <div style="display:flex;gap:10px;margin-bottom:12px">
                         <input class="ed-input" id="fkImportUrl" type="url"
-                            placeholder="Paste Flipkart product or category link (e.g. https://www.flipkart.com/... or https://dl.flipkart.com/...)"
+                            placeholder="https://www.flipkart.com/... or https://www.amazon.in/..."
                             style="flex:1" />
                         <button class="btn btn-primary" id="btnFkImport" onclick="startFlipkartImport()"
                             style="white-space:nowrap;padding:0 24px;font-size:15px">
@@ -1219,18 +1219,21 @@
 
     <!-- Add Product Modal -->
     <div class="modal-overlay" id="addProductModal">
-        <div class="modal glass" style="max-width:560px;max-height:90vh;overflow-y:auto">
+        <div class="modal glass" style="max-width:600px;max-height:90vh;overflow-y:auto">
             <div class="modal-header">
-                <div class="modal-title">➕ Add New Product</div>
-                <button class="modal-close" onclick="closeModal('addProductModal')">×</button>
+                <div class="modal-title">Add New Product</div>
+                <button class="modal-close" onclick="closeModal('addProductModal')">x</button>
             </div>
 
-            <!-- Flipkart Scraper -->
-            <div style="background:#f0f7ff;padding:12px;border-radius:8px;border:1px solid #cce5ff;margin-bottom:16px">
-                <label class="ed-label" style="color:#004085;font-weight:700">🔗 Auto-fill from Flipkart Link</label>
-                <div style="display:flex;gap:8px">
-                    <input class="ed-input" id="addFkUrl" type="url" placeholder="Paste Flipkart product URL here..." style="flex:1" />
-                    <button class="btn btn-primary" onclick="fetchFlipkartForAdd()" id="btnFetchFkAdd" style="white-space:nowrap;padding:0 16px">Fetch</button>
+            <!-- URL + Price + Fetch (matches video layout) -->
+            <div style="background:#f0f7ff;padding:14px;border-radius:10px;border:1px solid #cce5ff;margin-bottom:16px">
+                <label class="ed-label" style="color:#004085;font-weight:700">Paste Link Here (Flipkart / Amazon)</label>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                    <input class="ed-input" id="addFkUrl" type="url" placeholder="https://www.flipkart.com/... or https://www.amazon.in/..." style="flex:1" />
+                </div>
+                <div style="display:flex;gap:8px;align-items:center">
+                    <input class="form-input" id="addFkCustomPrice" type="number" placeholder="Custom Selling Price (optional)" style="flex:1" min="1" />
+                    <button class="btn btn-primary" onclick="fetchFlipkartForAdd()" id="btnFetchFkAdd" style="white-space:nowrap;padding:8px 24px;font-weight:700">Fetch</button>
                 </div>
                 <div id="addFkStatus" style="font-size:12px;margin-top:8px;display:none"></div>
             </div>
@@ -1239,35 +1242,77 @@
                 <label class="form-label">Product Name *</label>
                 <input id="addProdName" type="text" class="form-input" placeholder="e.g. Samsung Galaxy S24" />
             </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="form-group">
+                    <label class="form-label">Selling Price (Rs) *</label>
+                    <input id="addProdPrice" type="number" class="form-input" placeholder="100" min="1" oninput="calcAddDiscount()" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">MRP (Rs) *</label>
+                    <input id="addProdOrigPrice" type="number" class="form-input" placeholder="100000" min="1" oninput="calcAddDiscount()" />
+                </div>
+            </div>
+            <div id="addDiscountDisplay" style="font-size:13px;font-weight:700;color:#10b981;margin-bottom:12px;display:none"></div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="form-group">
+                    <label class="form-label">Sizes (e.g. 8GB, 128GB, S, M)</label>
+                    <input id="addProdSizes" type="text" class="form-input" placeholder="8GB, 128GB" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Colors (e.g. Red, Blue)</label>
+                    <input id="addProdColors" type="text" class="form-input" placeholder="Pitch Black, Lunar Pearl" />
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="form-label">Category *</label>
                 <input id="addProdCategory" type="text" class="form-input" placeholder="e.g. Electronics" />
             </div>
+
             <div class="form-group">
-                <label class="form-label">Image URL *</label>
+                <label class="form-label">Image URL 1 *</label>
                 <input id="addProdImage" type="url" class="form-input" placeholder="https://..." />
-                <img id="addProdImgPreview" src="" style="max-width:100%;max-height:150px;margin-top:8px;border-radius:8px;display:none" />
+                <img id="addProdImgPreview" src="" style="max-width:100%;max-height:120px;margin-top:6px;border-radius:6px;display:none" />
             </div>
+            <div class="form-group">
+                <label class="form-label">Image URL 2</label>
+                <input id="addProdImage1" type="url" class="form-input" placeholder="https://..." />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL 3</label>
+                <input id="addProdImage2" type="url" class="form-input" placeholder="https://..." />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL 4</label>
+                <input id="addProdImage3" type="url" class="form-input" placeholder="https://..." />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL 5</label>
+                <input id="addProdImage4" type="url" class="form-input" placeholder="https://..." />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Video URL</label>
+                <input id="addProdVideoUrl" type="url" class="form-input" placeholder="https://...mp4" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">A+ Images URLs (Comma Separated)</label>
+                <textarea id="addProdAPlusImages" class="form-input" rows="2" placeholder="https://img1.jpg, https://img2.jpg"></textarea>
+            </div>
+
             <div class="form-group">
                 <label class="form-label">Or Upload Image</label>
                 <input type="file" id="addProdImageFile" accept="image/*" onchange="handleAddProductImageUpload(event)" class="form-input" />
             </div>
             <div class="form-group">
-                <label class="form-label">Additional Images (up to 5)</label>
+                <label class="form-label">Additional Images (upload)</label>
                 <input type="file" id="addProdExtraImages" accept="image/*" multiple onchange="handleMultiImageUpload(event)" class="form-input" />
                 <div id="addExtraImagesPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div class="form-group">
-                    <label class="form-label">Sale Price (₹) *</label>
-                    <input id="addProdPrice" type="number" class="form-input" placeholder="100" min="1" oninput="calcAddDiscount()" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Original Price (₹) *</label>
-                    <input id="addProdOrigPrice" type="number" class="form-input" placeholder="100000" min="1" oninput="calcAddDiscount()" />
-                </div>
-            </div>
-            <div id="addDiscountDisplay" style="font-size:13px;font-weight:700;color:#10b981;margin-bottom:12px;display:none"></div>
+
             <div class="form-group">
                 <label class="form-label">Description</label>
                 <textarea id="addProdDesc" class="form-input" rows="3" placeholder="Product specs and description"></textarea>
@@ -1301,7 +1346,7 @@
                 </div>
             </div>
             <div class="alert" id="addProductAlert"></div>
-            <button class="btn btn-primary btn-full" onclick="addProduct()">➕ Add Product</button>
+            <button class="btn btn-primary btn-full" onclick="addProduct()">Add Product</button>
         </div>
     </div>
 

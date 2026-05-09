@@ -393,19 +393,19 @@ async function fetchFlipkartData() {
     const url = urlInput.value.trim();
 
     if (!url) {
-        statusEl.textContent = '❌ Please enter a Flipkart URL.';
+        statusEl.textContent = 'Please enter a Flipkart or Amazon URL.';
         statusEl.style.color = '#dc3545';
         statusEl.style.display = 'block';
         return;
     }
 
-    statusEl.textContent = '⏳ Fetching details from Flipkart...';
+    statusEl.textContent = 'Fetching product details...';
     statusEl.style.color = '#004085';
     statusEl.style.display = 'block';
     btn.disabled = true;
 
     try {
-        const res = await fetch('/api/shop/fetch-flipkart', {
+        const res = await fetch('/api/shop/fetch-product', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url })
@@ -524,7 +524,9 @@ async function saveProductEdit() {
 // ── Add Product ────────────────────────────────────────────────────────────────
 function openAddProductModal() {
     // Reset form
-    ['addProdName', 'addProdCategory', 'addProdImage', 'addProdDesc', 'addFkUrl'].forEach(id => {
+    ['addProdName', 'addProdCategory', 'addProdImage', 'addProdDesc', 'addFkUrl',
+     'addProdSizes', 'addProdColors', 'addProdVideoUrl', 'addProdAPlusImages', 'addFkCustomPrice',
+     'addProdImage1', 'addProdImage2', 'addProdImage3', 'addProdImage4'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
@@ -546,6 +548,7 @@ function openAddProductModal() {
     if (extraPrev) extraPrev.innerHTML = '';
     _addExtraImageUrls = [];
     _addReviews = [];
+    _lastScrapedProduct = null;
     const reviewsList = document.getElementById('addReviewsList');
     if (reviewsList) reviewsList.innerHTML = '';
     openModal('addProductModal');
@@ -674,27 +677,30 @@ let _lastScrapedProduct = null;
 
 async function fetchFlipkartForAdd() {
     const url = document.getElementById('addFkUrl').value.trim();
+    const customPrice = document.getElementById('addFkCustomPrice') ? document.getElementById('addFkCustomPrice').value.trim() : '';
     const statusEl = document.getElementById('addFkStatus');
     const btn = document.getElementById('btnFetchFkAdd');
     _lastScrapedProduct = null;
     if (!url) {
-        statusEl.textContent = '❌ Please enter a Flipkart URL.';
+        statusEl.textContent = 'Please enter a Flipkart or Amazon URL.';
         statusEl.style.color = '#dc3545';
         statusEl.style.display = 'block';
         return;
     }
-    statusEl.textContent = '⏳ Fetching details from Flipkart...';
+    statusEl.textContent = 'Fetching product details... This may take 10-30 seconds.';
     statusEl.style.color = '#004085';
     statusEl.style.display = 'block';
     btn.disabled = true;
     try {
-        const res = await fetch('/api/shop/fetch-flipkart', {
+        const body = { url };
+        if (customPrice) body.custom_price = customPrice;
+        const res = await fetch('/api/shop/fetch-product', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
+            body: JSON.stringify(body)
         });
         const data = await res.json();
         if (res.ok && data.success) {
-            statusEl.textContent = '✅ Successfully fetched details!';
+            statusEl.textContent = 'Successfully fetched details!';
             statusEl.style.color = '#28a745';
             _lastScrapedProduct = data.product;
             if (data.product.name) document.getElementById('addProdName').value = data.product.name;
@@ -708,13 +714,38 @@ async function fetchFlipkartForAdd() {
                 document.getElementById('addProdImgPreview').style.display = 'block';
             }
             if (data.product.category) document.getElementById('addProdCategory').value = data.product.category;
+            // Populate new fields
+            var sizesEl = document.getElementById('addProdSizes');
+            if (sizesEl && data.product.sizes && data.product.sizes.length) sizesEl.value = data.product.sizes.join(', ');
+            var colorsEl = document.getElementById('addProdColors');
+            if (colorsEl && (data.product.colors || data.product.color_variants)) {
+                var cv = data.product.colors || data.product.color_variants || [];
+                if (cv.length) colorsEl.value = cv.join(', ');
+            }
+            // Populate image URL fields (Image 1 is addProdImage, Image 2-5 are addProdImage1-4)
+            var imgs = data.product.images || [];
+            if (imgs[0]) {
+                document.getElementById('addProdImage').value = imgs[0];
+                document.getElementById('addProdImgPreview').src = imgs[0];
+                document.getElementById('addProdImgPreview').style.display = 'block';
+            }
+            for (var ii = 1; ii <= 4; ii++) {
+                var imgEl = document.getElementById('addProdImage' + ii);
+                if (imgEl && imgs[ii]) imgEl.value = imgs[ii];
+            }
+            var videoEl = document.getElementById('addProdVideoUrl');
+            if (videoEl && data.product.video_url) videoEl.value = data.product.video_url;
+            var aplusEl = document.getElementById('addProdAPlusImages');
+            if (aplusEl && data.product.a_plus_images && data.product.a_plus_images.length) {
+                aplusEl.value = data.product.a_plus_images.join(', ');
+            }
             calcAddDiscount();
         } else {
-            statusEl.textContent = '❌ Error: ' + (data.error || 'Could not fetch details.');
+            statusEl.textContent = 'Error: ' + (data.error || 'Could not fetch details.');
             statusEl.style.color = '#dc3545';
         }
     } catch (e) {
-        statusEl.textContent = '❌ Network error while fetching.';
+        statusEl.textContent = 'Network error while fetching.';
         statusEl.style.color = '#dc3545';
     } finally {
         btn.disabled = false;
@@ -747,14 +778,38 @@ async function addProduct() {
     const manualImages = _addExtraImageUrls.length ? [image_url, ..._addExtraImageUrls] : [];
     const manualReviews = _addReviews.slice();
 
+    // New fields from form
+    var sizesEl = document.getElementById('addProdSizes');
+    var colorsEl = document.getElementById('addProdColors');
+    var videoEl = document.getElementById('addProdVideoUrl');
+    var aplusEl = document.getElementById('addProdAPlusImages');
+    if (sizesEl && sizesEl.value.trim()) payload.sizes = sizesEl.value.trim();
+    if (colorsEl && colorsEl.value.trim()) payload.colors = colorsEl.value.trim();
+    if (videoEl && videoEl.value.trim()) payload.video_url = videoEl.value.trim();
+    if (aplusEl && aplusEl.value.trim()) payload.a_plus_images = aplusEl.value.trim();
+
+    // Image URLs from individual fields (addProdImage = Image 1, addProdImage1-4 = Image 2-5)
+    var imgUrls = [];
+    if (image_url) imgUrls.push(image_url);
+    for (var ii = 1; ii <= 4; ii++) {
+        var imgEl = document.getElementById('addProdImage' + ii);
+        if (imgEl && imgEl.value.trim()) imgUrls.push(imgEl.value.trim());
+    }
+    if (imgUrls.length) payload.images = imgUrls;
+
     if (_lastScrapedProduct) {
         payload.review_count = _lastScrapedProduct.review_count || 0;
-        payload.images = _lastScrapedProduct.images || [];
+        if (!payload.images || !payload.images.length) payload.images = _lastScrapedProduct.images || [];
         payload.highlights = _lastScrapedProduct.highlights || [];
         payload.specifications = _lastScrapedProduct.specifications || [];
         payload.reviews = _lastScrapedProduct.reviews || [];
         payload.ratings_breakdown = _lastScrapedProduct.ratings_breakdown || {};
         payload.brand = _lastScrapedProduct.brand || '';
+        if (!payload.sizes) payload.sizes = _lastScrapedProduct.sizes || [];
+        if (!payload.colors) payload.colors = _lastScrapedProduct.colors || _lastScrapedProduct.color_variants || [];
+        payload.color_variants = _lastScrapedProduct.color_variants || _lastScrapedProduct.colors || [];
+        if (!payload.video_url) payload.video_url = _lastScrapedProduct.video_url || '';
+        if (!payload.a_plus_images) payload.a_plus_images = _lastScrapedProduct.a_plus_images || [];
     }
 
     // Override/merge with manual entries
@@ -897,7 +952,7 @@ let _bulkSelected = new Set();
 let _importLog = [];
 
 function isProductUrl(url) {
-    return url.includes('/p/') || url.includes('pid=') || url.includes('dl.flipkart.com/s/');
+    return url.includes('/p/') || url.includes('pid=') || url.includes('dl.flipkart.com/s/') || url.includes('/dp/') || url.includes('amzn.') || url.includes('amazon');
 }
 
 async function startFlipkartImport() {
@@ -910,15 +965,15 @@ async function startFlipkartImport() {
     _importedProduct = null;
     _importedBulk = [];
 
-    if (!url || !url.includes('flipkart')) {
-        status.textContent = 'Please enter a valid Flipkart URL.';
+    if (!url || (!url.includes('flipkart') && !url.includes('amazon'))) {
+        status.textContent = 'Please enter a valid Flipkart or Amazon URL.';
         status.style.background = 'rgba(239,68,68,0.1)';
         status.style.color = '#ef4444';
         status.style.display = 'block';
         return;
     }
 
-    status.textContent = 'Fetching data from Flipkart... This may take 10-30 seconds.';
+    status.textContent = 'Fetching product data... This may take 10-30 seconds.';
     status.style.background = 'rgba(59,130,246,0.1)';
     status.style.color = '#60a5fa';
     status.style.display = 'block';
@@ -927,7 +982,8 @@ async function startFlipkartImport() {
     const productMode = isProductUrl(url);
 
     try {
-        const endpoint = productMode ? '/api/shop/fetch-flipkart' : '/api/shop/fetch-flipkart-category';
+        const isAmazonUrl = url.includes('amazon');
+        const endpoint = productMode ? '/api/shop/fetch-product' : (isAmazonUrl ? '/api/shop/fetch-product' : '/api/shop/fetch-flipkart-category');
         const res = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -938,7 +994,7 @@ async function startFlipkartImport() {
         if (!res.ok || !data.success) {
             // If category failed, try product endpoint
             if (!productMode) {
-                const res2 = await fetch('/api/shop/fetch-flipkart', {
+                const res2 = await fetch('/api/shop/fetch-product', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url })
@@ -1104,7 +1160,10 @@ async function addSingleFromImport() {
         review_count: p.review_count || 0,
         images: p.images || [], highlights: p.highlights || [],
         specifications: p.specifications || [], reviews: p.reviews || [],
-        ratings_breakdown: p.ratings_breakdown || {}, brand: p.brand || ''
+        ratings_breakdown: p.ratings_breakdown || {}, brand: p.brand || '',
+        sizes: p.sizes || [], colors: p.colors || p.color_variants || [],
+        color_variants: p.color_variants || p.colors || [],
+        video_url: p.video_url || '', a_plus_images: p.a_plus_images || []
     };
 
     try {
