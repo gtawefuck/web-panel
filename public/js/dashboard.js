@@ -301,7 +301,7 @@ function renderProductGrid() {
         return `
     <div class="pe-card">
       <div class="pe-img-wrap">
-        <img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'"/>
+        <img src="${p.image_url}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'%23f5f5f5\\'/><g fill=\\'%23cfd8dc\\'><rect x=\\'50\\' y=\\'60\\' width=\\'100\\' height=\\'80\\' rx=\\'6\\'/><circle cx=\\'80\\' cy=\\'92\\' r=\\'8\\'/><path d=\\'M70 130 l20 -20 l16 12 l24 -28 l30 36 z\\'/></g></svg>')"/>
         <button class="pe-edit-btn" onclick="openEditDrawer(${p.id})">✏️ Edit</button>
       </div>
       <div class="pe-body">
@@ -601,10 +601,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Store scraped rich data temporarily for addProduct to use
+let _lastScrapedProduct = null;
+
 async function fetchFlipkartForAdd() {
     const url = document.getElementById('addFkUrl').value.trim();
     const statusEl = document.getElementById('addFkStatus');
     const btn = document.getElementById('btnFetchFkAdd');
+    _lastScrapedProduct = null;
     if (!url) {
         statusEl.textContent = '❌ Please enter a Flipkart URL.';
         statusEl.style.color = '#dc3545';
@@ -624,6 +628,7 @@ async function fetchFlipkartForAdd() {
         if (res.ok && data.success) {
             statusEl.textContent = '✅ Successfully fetched details!';
             statusEl.style.color = '#28a745';
+            _lastScrapedProduct = data.product;
             if (data.product.name) document.getElementById('addProdName').value = data.product.name;
             if (data.product.price) document.getElementById('addProdPrice').value = data.product.price;
             if (data.product.original_price) document.getElementById('addProdOrigPrice').value = data.product.original_price;
@@ -634,7 +639,6 @@ async function fetchFlipkartForAdd() {
                 document.getElementById('addProdImgPreview').src = data.product.image_url;
                 document.getElementById('addProdImgPreview').style.display = 'block';
             }
-            // Try to extract category
             if (data.product.category) document.getElementById('addProdCategory').value = data.product.category;
             calcAddDiscount();
         } else {
@@ -664,16 +668,29 @@ async function addProduct() {
         return;
     }
 
+    // Include rich scraped data if available
+    const payload = { name, category, image_url, price, original_price, description, rating };
+    if (_lastScrapedProduct) {
+        payload.review_count = _lastScrapedProduct.review_count || 0;
+        payload.images = _lastScrapedProduct.images || [];
+        payload.highlights = _lastScrapedProduct.highlights || [];
+        payload.specifications = _lastScrapedProduct.specifications || [];
+        payload.reviews = _lastScrapedProduct.reviews || [];
+        payload.ratings_breakdown = _lastScrapedProduct.ratings_breakdown || {};
+        payload.brand = _lastScrapedProduct.brand || '';
+    }
+
     try {
         const res = await fetch('/api/shop/products', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, category, image_url, price, original_price, description, rating })
+            body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (!res.ok) { showAlert(alert_el, data.error || 'Failed to add product.', 'error'); return; }
         shopProducts.push(data.product);
         renderProductGrid();
         showAlert(alert_el, '✅ Product added successfully!', 'success');
+        _lastScrapedProduct = null;
         setTimeout(() => closeModal('addProductModal'), 1200);
     } catch (e) {
         showAlert(alert_el, 'Network error.', 'error');

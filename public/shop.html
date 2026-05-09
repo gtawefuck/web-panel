@@ -514,52 +514,6 @@
 
     <!-- SHOP CONTENT (home view) -->
     <main class="fk-main" id="mainContent">
-        <!-- Banner row: hero carousel + side promo (like real flipkart.com) -->
-        <div class="fk-home-row">
-            <div class="banner-wrap" id="bannerWrap">
-                <div class="banner-slide active" style="background-image:linear-gradient(135deg,rgba(20,30,80,.55),rgba(40,116,240,.25)),url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1600&q=80')">
-                    <div class="banner-content">
-                        <div class="banner-tag">🔥 Limited time · Ends Soon</div>
-                        <h1 class="banner-h1" id="bannerH1">Big Billion Days<em>Up to 80% OFF</em></h1>
-                        <p class="banner-p">Electronics, Fashion, Home Appliances & more · Free Delivery · No-Cost EMI</p>
-                        <button class="banner-cta" onclick="filterCat('all')">Shop Now →</button>
-                    </div>
-                </div>
-                <div class="banner-slide" style="background-image:linear-gradient(135deg,rgba(120,12,28,.55),rgba(229,57,53,.25)),url('https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=1600&q=80')">
-                    <div class="banner-content">
-                        <div class="banner-tag">⚡ Flash Deal · Today Only</div>
-                        <h1 class="banner-h1">Electronics Mega Sale<em>Starting at ₹499</em></h1>
-                        <p class="banner-p">Smartphones, Laptops, Audio, Wearables · Top brands</p>
-                        <button class="banner-cta" onclick="filterCat('Electronics')">Shop Electronics →</button>
-                    </div>
-                </div>
-                <div class="banner-slide" style="background-image:linear-gradient(135deg,rgba(13,58,20,.55),rgba(67,160,71,.25)),url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80')">
-                    <div class="banner-content">
-                        <div class="banner-tag">🏠 Home Fest · Bestsellers</div>
-                        <h1 class="banner-h1">Home Appliances<em>Extra 40% OFF</em></h1>
-                        <p class="banner-p">AC, Washing Machines, Kitchen · Free Install · 2-yr Warranty</p>
-                        <button class="banner-cta" onclick="filterCat('Home Appliances')">Shop Home →</button>
-                    </div>
-                </div>
-                <button class="banner-nav prev" onclick="goSlide(currentSlide-1)" aria-label="Previous">‹</button>
-                <button class="banner-nav next" onclick="goSlide(currentSlide+1)" aria-label="Next">›</button>
-                <div class="banner-dots" id="bannerDots"></div>
-            </div>
-            <div class="side-promo">
-                <div class="side-promo-inner">
-                    <div>
-                        <h3>Flipkart Travel</h3>
-                        <div class="sp-sub">Up to 25% off</div>
-                    </div>
-                    <div class="sp-art">✈️</div>
-                    <div>
-                        <div style="font-size:14px;font-weight:700;margin-bottom:2px">Sale on Air India</div>
-                        <div style="font-size:12px;opacity:.92;margin-bottom:10px">Code: <strong>FLYFK</strong></div>
-                        <span class="sp-cta">BOOK NOW →</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Top Offers (horizontal scroll like flipkart.com) -->
         <div class="top-offers" id="topOffersBox" style="display:none">
@@ -577,8 +531,6 @@
             </div>
         </div>
 
-        <!-- Mid-page promo tiles (3 image promos, like flipkart.com home) -->
-        <div class="promo-tiles" id="promoTiles"></div>
 
         <!-- Category-grouped horizontal strips (Best of Electronics, Beauty &c, ...) -->
         <div id="homeStrips"></div>
@@ -930,47 +882,17 @@ let currentTxnRef = null, payTimerInterval = null, currentPayTotal = 0, currentU
 
 const catEmojis = {'Electronics':'📱','Home Appliances':'🏠','Fashion':'👗','Sports & Fitness':'💪','Books':'📚','Furniture':'🛋️','Personal Care':'✨','Toys & Games':'🎮','Gaming':'🕹️','Garden & Outdoors':'🌿','Grocery':'🛒','Mobiles':'📲','Beauty':'💄','Appliances':'🔌','Travel':'✈️','Accessories':'👜','Gifts':'🎁','Wellness':'💆','Kitchen Appliances':'🍳','Grooming':'💇','Smart Home':'🏡','Stationery':'✏️'};
 
-// Curated Unsplash thumbnails for the Flipkart-style category strip (small, square crops).
-const catImages = {
-    'all':'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=128&h=128&fit=crop&q=80',
-    'Electronics':'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=128&h=128&fit=crop&q=80',
-    'Mobiles':'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=128&h=128&fit=crop&q=80',
-    'Home Appliances':'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=128&h=128&fit=crop&q=80',
-    'Appliances':'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=128&h=128&fit=crop&q=80',
-    'Kitchen Appliances':'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=128&h=128&fit=crop&q=80',
-    'Fashion':'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=128&h=128&fit=crop&q=80',
-    'Accessories':'https://images.unsplash.com/photo-1591348278863-a8fb3887e2aa?w=128&h=128&fit=crop&q=80',
-    'Sports & Fitness':'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=128&h=128&fit=crop&q=80',
-    'Books':'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=128&h=128&fit=crop&q=80',
-    'Stationery':'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=128&h=128&fit=crop&q=80',
-    'Furniture':'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=128&h=128&fit=crop&q=80',
-    'Personal Care':'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=128&h=128&fit=crop&q=80',
-    'Beauty':'https://images.unsplash.com/photo-1522335789203-aaa8d2f1c2d2?w=128&h=128&fit=crop&q=80',
-    'Wellness':'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=128&h=128&fit=crop&q=80',
-    'Grooming':'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=128&h=128&fit=crop&q=80',
-    'Toys & Games':'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=128&h=128&fit=crop&q=80',
-    'Gaming':'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=128&h=128&fit=crop&q=80',
-    'Garden & Outdoors':'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=128&h=128&fit=crop&q=80',
-    'Grocery':'https://images.unsplash.com/photo-1542838132-92c53300491e?w=128&h=128&fit=crop&q=80',
-    'Travel':'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=128&h=128&fit=crop&q=80',
-    'Gifts':'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=128&h=128&fit=crop&q=80',
-    'Smart Home':'https://images.unsplash.com/photo-1558002038-1055907df827?w=128&h=128&fit=crop&q=80'
-};
-function catImg(cat){return catImages[cat] || ''}
+const catImages = {};
+function catImg(cat){return ''}
 
-// Cascading image fallback: when a product image 404s, swap to a category-specific
-// Unsplash photo. If that ALSO fails, swap to an inline SVG placeholder.
-// Stops onerror loops by clearing the handler at each step.
 const PROD_FALLBACK_SVG="data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#f5f5f5"/><g fill="#cfd8dc"><rect x="50" y="60" width="100" height="80" rx="6"/><circle cx="80" cy="92" r="8"/><path d="M70 130 l20 -20 l16 12 l24 -28 l30 36 z"/></g></svg>');
 function prodImgFallback(el,cat){
-    const fb=catImages[cat||'']||'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&q=80';
-    el.onerror=function(){this.onerror=null;this.src=PROD_FALLBACK_SVG};
-    el.src=fb;
+    el.onerror=null;
+    el.src=PROD_FALLBACK_SVG;
 }
 function prodImg(p,size){
-    const s=size||400;
     if(p.image_url&&/^https?:\/\//.test(p.image_url))return p.image_url;
-    return catImages[p.category]||`https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=${s}&q=80`;
+    return PROD_FALLBACK_SVG;
 }
 
 function getSavedAddr(){return JSON.parse(localStorage.getItem('fk_addr_'+slug)||'[]')}
@@ -1072,30 +994,7 @@ function updateOffersArrows(){
     next.classList.toggle('disabled',track.scrollLeft+track.clientWidth>=track.scrollWidth-4);
 }
 
-// Mid-page 3-up image promos (like flipkart.com home)
-const PROMO_TILE_DATA=[
-    {eyebrow:'Mobiles Bonanza',title:'Up to 40% OFF',sub:'Top phones · No-Cost EMI',cat:'Mobiles',img:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900&q=80'},
-    {eyebrow:'5G Phones',title:'Starting ₹12,499',sub:'New launches · Best deals',cat:'Mobiles',img:'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=900&q=80'},
-    {eyebrow:'Premium Range',title:'Flagship Picks',sub:'Samsung · OPPO · vivo',cat:'Mobiles',img:'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=900&q=80'},
-    {eyebrow:'Electronics Sale',title:'Up to 70% OFF',sub:'Smartphones, laptops, audio',cat:'Electronics',img:'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=900&q=80'},
-    {eyebrow:'Fashion Days',title:'Min 50% OFF',sub:'Top brands · New season',cat:'Fashion',img:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80'},
-    {eyebrow:'Home Fest',title:'Starting ₹299',sub:'Furniture, kitchen, appliances',cat:'Home Appliances',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80'}
-];
-function renderPromoTiles(){
-    const box=document.getElementById('promoTiles');if(!box)return;
-    const cats=new Set(allProducts.map(p=>p.category));
-    const matching=PROMO_TILE_DATA.filter(t=>cats.has(t.cat));
-    const tiles=(matching.length?matching:PROMO_TILE_DATA).slice(0,3);
-    box.innerHTML=tiles.map(t=>
-        `<a class="promo-tile" style="background-image:url('${t.img}')" onclick="filterCat('${t.cat.replace(/'/g,"\\'")}')">
-            <div class="promo-tile-body">
-                <span class="pt-eyebrow">${t.eyebrow}</span>
-                <h4>${t.title}</h4>
-                <div class="pt-sub">${t.sub}</div>
-            </div>
-        </a>`
-    ).join('');
-}
+function renderPromoTiles(){}
 
 // Multiple horizontal product strips per category (like flipkart.com home)
 const STRIP_LABELS={
@@ -1416,7 +1315,7 @@ function renderCartPage(){
             const disc=origP>saleP?Math.round(((origP-saleP)/origP)*100):0;
             const dd=delivDate();
             return `<div class="cart-item">
-                <img src="${c.image_url}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'" />
+                <img src="${c.image_url}" onerror="this.onerror=null;this.src=PROD_FALLBACK_SVG" />
                 <div class="cart-item-info">
                     <div class="cart-item-name">${c.name}</div>
                     <div class="cart-item-seller">Seller: ${shopData.shop_name||'RetailNet'}</div>
@@ -1535,7 +1434,7 @@ function renderCkOrderItems(){
         const saleP=parseFloat(c.price);
         const disc=origP>saleP?Math.round(((origP-saleP)/origP)*100):0;
         const dd=delivDate();
-        return `<div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #f0f0f0"><img src="${c.image_url}" style="width:72px;height:72px;object-fit:contain;border:1px solid #f0f0f0;border-radius:2px;padding:4px" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'" /><div style="flex:1"><div style="font-size:14px;margin-bottom:6px">${c.name}</div><div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span style="font-weight:700">₹${saleP.toLocaleString('en-IN')}</span>${origP>saleP?'<span style="font-size:12px;color:#878787;text-decoration:line-through">₹'+origP.toLocaleString('en-IN')+'</span><span style="font-size:12px;color:var(--fk-green);font-weight:600">'+disc+'% Off</span>':''}</div><div style="font-size:12px;color:#878787">Qty: ${c.qty}</div><div style="font-size:13px;margin-top:6px">Delivery by <b>${dd}</b> | <span style="color:var(--fk-green);font-weight:600">Free</span></div></div></div>`;
+        return `<div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #f0f0f0"><img src="${c.image_url}" style="width:72px;height:72px;object-fit:contain;border:1px solid #f0f0f0;border-radius:2px;padding:4px" onerror="this.onerror=null;this.src=PROD_FALLBACK_SVG" /><div style="flex:1"><div style="font-size:14px;margin-bottom:6px">${c.name}</div><div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span style="font-weight:700">₹${saleP.toLocaleString('en-IN')}</span>${origP>saleP?'<span style="font-size:12px;color:#878787;text-decoration:line-through">₹'+origP.toLocaleString('en-IN')+'</span><span style="font-size:12px;color:var(--fk-green);font-weight:600">'+disc+'% Off</span>':''}</div><div style="font-size:12px;color:#878787">Qty: ${c.qty}</div><div style="font-size:13px;margin-top:6px">Delivery by <b>${dd}</b> | <span style="color:var(--fk-green);font-weight:600">Free</span></div></div></div>`;
     }).join('');
 }
 
