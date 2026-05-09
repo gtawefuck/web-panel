@@ -375,6 +375,8 @@
         .pd-spec-table tr{border-bottom:1px solid #f5f5f5}
         .pd-spec-table th{text-align:left;color:#878787;font-weight:500;padding:10px 0;width:38%;vertical-align:top}
         .pd-spec-table td{color:#212121;padding:10px 0;line-height:1.5}
+        .pd-spec-group{margin-bottom:18px}
+        .pd-spec-group-title{font-size:15px;font-weight:500;color:#212121;padding:12px 0 8px;border-bottom:1px solid #e0e0e0;margin-bottom:6px}
         .pd-rev-summary{display:flex;align-items:flex-start;gap:32px;padding:16px 0;border-bottom:1px solid #f0f0f0;margin-bottom:16px}
         .pd-rev-overall{flex:0 0 140px;text-align:center}
         .pd-rev-overall .num{font-size:32px;font-weight:600;color:#212121;display:inline-flex;align-items:center;gap:6px}
@@ -1072,6 +1074,9 @@ function updateOffersArrows(){
 
 // Mid-page 3-up image promos (like flipkart.com home)
 const PROMO_TILE_DATA=[
+    {eyebrow:'Mobiles Bonanza',title:'Up to 40% OFF',sub:'Top phones · No-Cost EMI',cat:'Mobiles',img:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900&q=80'},
+    {eyebrow:'5G Phones',title:'Starting ₹12,499',sub:'New launches · Best deals',cat:'Mobiles',img:'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=900&q=80'},
+    {eyebrow:'Premium Range',title:'Flagship Picks',sub:'Samsung · OPPO · vivo',cat:'Mobiles',img:'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=900&q=80'},
     {eyebrow:'Electronics Sale',title:'Up to 70% OFF',sub:'Smartphones, laptops, audio',cat:'Electronics',img:'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=900&q=80'},
     {eyebrow:'Fashion Days',title:'Min 50% OFF',sub:'Top brands · New season',cat:'Fashion',img:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80'},
     {eyebrow:'Home Fest',title:'Starting ₹299',sub:'Furniture, kitchen, appliances',cat:'Home Appliances',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80'}
@@ -1079,8 +1084,9 @@ const PROMO_TILE_DATA=[
 function renderPromoTiles(){
     const box=document.getElementById('promoTiles');if(!box)return;
     const cats=new Set(allProducts.map(p=>p.category));
-    const tiles=PROMO_TILE_DATA.filter(t=>cats.has(t.cat)||t.cat==='Fashion');
-    box.innerHTML=(tiles.length?tiles:PROMO_TILE_DATA).slice(0,3).map(t=>
+    const matching=PROMO_TILE_DATA.filter(t=>cats.has(t.cat));
+    const tiles=(matching.length?matching:PROMO_TILE_DATA).slice(0,3);
+    box.innerHTML=tiles.map(t=>
         `<a class="promo-tile" style="background-image:url('${t.img}')" onclick="filterCat('${t.cat.replace(/'/g,"\\'")}')">
             <div class="promo-tile-body">
                 <span class="pt-eyebrow">${t.eyebrow}</span>
@@ -1113,19 +1119,35 @@ const STRIP_LABELS={
 };
 function renderHomeStrips(cats){
     const wrap=document.getElementById('homeStrips');if(!wrap)return;
-    // Pick the top categories by product count, max 4 strips
-    const counts=cats.map(c=>({c,n:allProducts.filter(p=>p.category===c).length}))
-        .sort((a,b)=>b.n-a.n).slice(0,4);
-    wrap.innerHTML=counts.map((entry,idx)=>{
-        const c=entry.c;
-        const meta=STRIP_LABELS[c]||{title:c,sub:'Top picks · Lowest prices'};
-        const items=allProducts.filter(p=>p.category===c).slice(0,12);
+    // If everything is a single category (e.g. all Mobiles), group by brand instead so
+    // we still get multiple themed strips on the home page like real flipkart.com.
+    const isSingleCat=cats.length<=1;
+    let groups;
+    if(isSingleCat){
+        const byBrand={};
+        allProducts.forEach(p=>{const b=(p.brand||'Other');(byBrand[b]=byBrand[b]||[]).push(p)});
+        groups=Object.keys(byBrand)
+            .map(b=>({key:b,items:byBrand[b],meta:{title:`Best of ${b}`,sub:'Top picks · Lowest prices'}}))
+            .sort((a,b)=>b.items.length-a.items.length).slice(0,6);
+        // Add a generic "Top Mobiles" strip showing the highest-rated phones overall.
+        const topRated=[...allProducts].sort((a,b)=>(parseFloat(b.rating)||0)-(parseFloat(a.rating)||0)).slice(0,12);
+        if(topRated.length) groups.unshift({key:'__top__',items:topRated,meta:{title:'Top-Rated Mobiles',sub:'Customer favourites'}});
+    } else {
+        groups=cats.map(c=>({c,n:allProducts.filter(p=>p.category===c).length}))
+            .sort((a,b)=>b.n-a.n).slice(0,4)
+            .map(entry=>({key:entry.c,items:allProducts.filter(p=>p.category===entry.c).slice(0,12),
+                meta:STRIP_LABELS[entry.c]||{title:entry.c,sub:'Top picks · Lowest prices'}}));
+    }
+    wrap.innerHTML=groups.map((g,idx)=>{
+        const items=g.items.slice(0,12);
         if(!items.length)return '';
         const trackId=`stripTrack_${idx}`;
+        const viewAllArg=g.key==='__top__'?"''":`'${(g.key||'').replace(/'/g,"\\'")}'`;
+        const viewAllFn=isSingleCat&&g.key!=='__top__'?`filterBrand(${viewAllArg})`:(g.key==='__top__'?'goHome()':`filterCat(${viewAllArg})`);
         return `<div class="top-offers">
             <div class="to-head">
-                <div class="to-head-left"><h2>${meta.title}</h2><span class="to-sub">${meta.sub}</span></div>
-                <button class="view-all" onclick="filterCat('${c.replace(/'/g,"\\'")}')">VIEW ALL</button>
+                <div class="to-head-left"><h2>${g.meta.title}</h2><span class="to-sub">${g.meta.sub}</span></div>
+                <button class="view-all" onclick="${viewAllFn}">VIEW ALL</button>
             </div>
             <div class="to-track-wrap">
                 <button class="to-arrow prev" onclick="scrollStrip('${trackId}',-1)" aria-label="Scroll left">‹</button>
@@ -1144,6 +1166,14 @@ function renderHomeStrips(cats){
             </div>
         </div>`;
     }).join('');
+}
+function filterBrand(brand){
+    if(!brand){filteredProducts=[...allProducts]}
+    else{filteredProducts=allProducts.filter(p=>(p.brand||'').toLowerCase()===brand.toLowerCase())}
+    document.getElementById('homeView').style.display='none';
+    document.getElementById('productsView').style.display='block';
+    document.getElementById('catTitle').textContent=brand?(brand+' Mobiles'):'All Products';
+    renderProducts();showView('products');
 }
 function scrollStrip(id,dir){
     const track=document.getElementById(id);if(!track)return;
@@ -1222,41 +1252,56 @@ function openPd(id){
     currentProduct=p;
     const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
     const dd=delivDate();
-    const pImg=prodImg(p);
+    // Real image gallery from p.images (falls back to single image_url).
+    const gallery=(p.images&&p.images.length?p.images:[prodImg(p)]).slice(0,8);
+    const mainImg=gallery[0];
     const pdImgEl=document.getElementById('pdImg');
     pdImgEl.onerror=function(){prodImgFallback(this,p.category)};
-    pdImgEl.src=pImg;
+    pdImgEl.src=mainImg;
     syncPdActionBtn();
-    // image gallery — same product image used as 4 thumbnails (placeholder for multiple angles)
     const thumbs=document.getElementById('pdThumbs');
     if(thumbs){
-        thumbs.innerHTML=[0,1,2,3].map(i=>`<div class="pd-thumb${i===0?' active':''}" onmouseenter="pdSwapImg(this,'${pImg}')"><img src="${pImg}" alt="thumb" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>`).join('');
+        thumbs.innerHTML=gallery.map((src,i)=>
+            `<div class="pd-thumb${i===0?' active':''}" onmouseenter="pdSwapImg(this,${JSON.stringify(src)})"><img src="${src}" alt="thumb ${i+1}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>`
+        ).join('');
     }
     document.getElementById('pdBreadcrumb').innerHTML=`<a onclick="goHome()">Home</a> › <a onclick="filterCat('${p.category.replace(/'/g,"\\'")}')">${p.category}</a> › ${p.name.length>40?p.name.slice(0,40)+'…':p.name}`;
     document.getElementById('pdName').textContent=p.name;
     document.getElementById('pdRating').innerHTML=`★ ${parseFloat(p.rating).toFixed(1)}`;
-    document.getElementById('pdRatingCount').textContent=`${p.review_count.toLocaleString()} Ratings & Reviews`;
+    document.getElementById('pdRatingCount').textContent=`${(parseInt(p.review_count)||0).toLocaleString('en-IN')} Ratings & Reviews`;
     document.getElementById('pdExtraBadge').textContent=`${buyerCount(p.id)}+ bought last month`;
     document.getElementById('pdPrice').textContent='₹'+parseInt(p.price).toLocaleString('en-IN');
     document.getElementById('pdOrigPrice').textContent='₹'+parseInt(p.original_price).toLocaleString('en-IN');
     document.getElementById('pdOff').textContent=disc+'% off';
     document.getElementById('pdOfferExtra').textContent='₹'+Math.round((p.original_price-p.price)*0.1).toLocaleString('en-IN');
     document.getElementById('pdDelivDate').textContent=dd;
-    const highlights=p.description.split('|').map(s=>s.trim()).filter(Boolean);
+    // Highlights — prefer real ones from the product, fall back to splitting description.
+    const highlights=(p.highlights&&p.highlights.length?p.highlights:(p.description||'').split('|').map(s=>s.trim()).filter(Boolean));
     document.getElementById('pdHighlightList').innerHTML=highlights.map(h=>`<li>${h}</li>`).join('');
     document.getElementById('pdDesc').textContent=p.description;
-    document.getElementById('pdSeller').textContent=shopData.shop_name||'RetailNet';
-    // specifications table — derive from highlights + category
+    document.getElementById('pdSeller').textContent=p.brand||shopData.shop_name||'RetailNet';
+    // Specifications — render real grouped specs if present, else derive from highlights.
     const specEl=document.getElementById('pdSpecs');
     if(specEl){
-        const rows=[
-            ['Brand', shopData.shop_name||'RetailNet'],
-            ['Category', p.category||'General'],
-            ['In The Box', highlights[0]||p.name],
-            ['Warranty', '1 Year Manufacturer Warranty'],
-            ['Country of Origin', 'India'],
-        ];
-        specEl.innerHTML=`<h3>Specifications</h3><table class="pd-spec-table"><tbody>${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
+        let html='<h3>Specifications</h3>';
+        if(p.specifications&&p.specifications.length){
+            html+=p.specifications.map(g=>
+                `<div class="pd-spec-group"><div class="pd-spec-group-title">${g.group}</div>
+                 <table class="pd-spec-table"><tbody>${(g.items||[]).map(it=>
+                    `<tr><th>${it.label}</th><td>${it.value}</td></tr>`
+                 ).join('')}</tbody></table></div>`
+            ).join('');
+        } else {
+            const rows=[
+                ['Brand', p.brand||shopData.shop_name||'RetailNet'],
+                ['Category', p.category||'General'],
+                ['In The Box', highlights[0]||p.name],
+                ['Warranty', '1 Year Manufacturer Warranty'],
+                ['Country of Origin', 'India'],
+            ];
+            html+=`<table class="pd-spec-table"><tbody>${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
+        }
+        specEl.innerHTML=html;
     }
     const reviews=typeof p.reviews==='string'?JSON.parse(p.reviews):(p.reviews||[]);
     renderPdReviews(reviews,p);
@@ -1295,23 +1340,41 @@ function renderPdReviews(reviews,p){
     const c=document.getElementById('pdReviews');if(!c)return;
     reviews=reviews||[];
     const ratingsTotal=parseInt(p.review_count)||0;
-    const buckets=ratingsTotal>0?ratingHistogram(ratingsTotal,p.rating):[0,0,0,0,0];
+    // Prefer real ratings_breakdown from the product when available, else use the heuristic.
+    let buckets;
+    if(p.ratings_breakdown&&typeof p.ratings_breakdown==='object'){
+        const rb=p.ratings_breakdown;
+        buckets=[5,4,3,2,1].map(s=>parseInt(rb[s]||rb[String(s)]||0)||0);
+    } else {
+        buckets=ratingsTotal>0?ratingHistogram(ratingsTotal,p.rating):[0,0,0,0,0];
+    }
+    const bucketTotal=buckets.reduce((a,b)=>a+b,0)||ratingsTotal||1;
     const histo=[5,4,3,2,1].map((star,idx)=>{
-        const pct=ratingsTotal>0?Math.round((buckets[idx]/ratingsTotal)*100):0;
+        const pct=Math.round((buckets[idx]/bucketTotal)*100);
         return `<div class="pd-rev-bar"><div class="lbl">${star}<span class="star">★</span></div><div class="track"><div class="fill ${star<3?'low':''}" style="width:${pct}%"></div></div><div class="pct">${buckets[idx].toLocaleString('en-IN')}</div></div>`;
     }).join('');
     const overall=parseFloat(p.rating).toFixed(1);
-    // Flipkart PDPs typically show ~12% of ratings translate into written reviews.
-    const reviewsCount=Math.max(reviews.length,Math.round(ratingsTotal*0.12));
+    // Flipkart PDPs typically show ~5% of ratings translate into written reviews.
+    const reviewsCount=Math.max(reviews.length,Math.round(ratingsTotal*0.05));
     const summary=`<div class="pd-rev-summary">
         <div class="pd-rev-overall"><div class="num">${overall}<span class="star">★</span></div><div class="total">${ratingsTotal.toLocaleString('en-IN')} Ratings &amp;<br/>${reviewsCount.toLocaleString('en-IN')} Reviews</div></div>
         <div class="pd-rev-bars">${histo}</div>
     </div>`;
-    const list=reviews.length?reviews.map((r,i)=>`<div class="pd-review">
-        <div class="pd-review-head"><span class="pd-review-badge">★ ${r.rating}</span><span style="font-size:13px;font-weight:600">${r.text||''}</span></div>
-        <div class="pd-review-user">${r.user||'Customer'} · ${r.date||''}<span class="pd-review-verified">Certified Buyer</span></div>
-        <div class="pd-review-meta"><span>👍 Helpful (${20+(i*7)%180})</span><span>·</span><span class="pd-review-helpful">REPORT ABUSE</span></div>
-    </div>`).join(''):'';
+    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const list=reviews.length?reviews.map((r,i)=>{
+        const helpful=r.helpful!=null?parseInt(r.helpful):(20+(i*7)%180);
+        const unhelpful=r.unhelpful!=null?parseInt(r.unhelpful):Math.round(helpful*0.2);
+        const title=r.title?`<span style="font-size:13px;font-weight:600">${esc(r.title)}</span>`:'';
+        const body=r.text?`<div style="font-size:13px;color:#212121;margin:6px 0 8px;line-height:1.5">${esc(r.text)}</div>`:'';
+        const loc=r.location?`, ${esc(r.location)}`:'';
+        const date=r.date?` · ${esc(r.date)}`:'';
+        return `<div class="pd-review">
+            <div class="pd-review-head"><span class="pd-review-badge">★ ${esc(r.rating||5)}</span>${title}</div>
+            ${body}
+            <div class="pd-review-user">${esc(r.user||'Customer')}${loc}${date}<span class="pd-review-verified">Certified Buyer</span></div>
+            <div class="pd-review-meta"><span>👍 ${helpful}</span><span>👎 ${unhelpful}</span><span>·</span><span class="pd-review-helpful">REPORT ABUSE</span></div>
+        </div>`;
+    }).join(''):'';
     c.innerHTML=summary+list;
 }
 function closePd(){showView('home')}
