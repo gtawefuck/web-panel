@@ -638,6 +638,55 @@
             cursor: pointer;
             padding: 4px;
         }
+        /* Mobile Bottom Navigation Bar */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            z-index: 200;
+            padding: 4px 0 calc(4px + env(safe-area-inset-bottom, 0px));
+        }
+        .mobile-bottom-nav-inner {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .mob-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 600;
+            color: #878787;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .mob-nav-item.active {
+            color: #2874f0;
+        }
+        .mob-nav-item svg {
+            width: 22px;
+            height: 22px;
+        }
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: block;
+            }
+            .main {
+                padding-bottom: 70px !important;
+            }
+        }
     </style>
 </head>
 
@@ -1406,6 +1455,32 @@
             </div>
             <div class="alert" id="addAdminAlert"></div>
             <button class="btn btn-primary btn-full" onclick="addAdmin()">Add Admin</button>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <div class="mobile-bottom-nav-inner">
+            <button class="mob-nav-item active" id="mobNavHome" onclick="showPage('dashboard');updateMobNav(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                HOME
+            </button>
+            <button class="mob-nav-item" id="mobNavInventory" onclick="showPage('myshop');updateMobNav(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                INVENTORY
+            </button>
+            <button class="mob-nav-item" id="mobNavAdd" onclick="openAddProductModal();updateMobNav(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                ADD
+            </button>
+            <button class="mob-nav-item" id="mobNavUpi" onclick="showPage('dashboard');updateMobNav(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13-2h2v4h-4v-2h2v-2zm-4 0h2v2h-2v-2zm2 4h2v4h-2v-4zm-4 0h2v4H12v-2h2v-2zm-2 2h2v2h-2v-2zm6 2h2v2h-2v-2z"/></svg>
+                UPI
+            </button>
+            <button class="mob-nav-item" id="mobNavSettings" onclick="showPage('dashboard');updateMobNav(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+                SETTINGS
+            </button>
         </div>
     </div>
 

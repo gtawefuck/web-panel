@@ -121,7 +121,7 @@ img{max-width:100%}
 .fk-grid-card-img img{max-width:100%;max-height:100%;object-fit:contain}
 .fk-grid-card-name{font-size:14px;color:#212121;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;width:100%;text-align:left}
 .fk-grid-card-price{display:flex;align-items:baseline;gap:8px;width:100%;margin-top:6px}
-.fk-grid-card-price .now{font-size:16px;font-weight:500}
+.fk-grid-card-price .now{font-size:16px;font-weight:700}
 .fk-grid-card-price .was{font-size:14px;color:#878787;text-decoration:line-through}
 .fk-grid-card-price .off{font-size:13px;color:var(--fk-green);font-weight:500}
 .fk-grid-card-rating{display:flex;align-items:center;gap:4px;width:100%;margin-top:4px}
@@ -130,6 +130,9 @@ img{max-width:100%}
 .fk-grid-card-rating .count{font-size:12px;color:#878787}
 .fk-assured-badge{display:inline-flex;align-items:center;border:1px solid #e0e0e0;border-radius:2px;padding:1px 6px;font-size:11px;font-weight:700;gap:2px;margin-top:6px}
 .fk-assured-badge .f{color:var(--fk-blue)}
+.fk-disc-badge{position:absolute;top:8px;left:8px;background:#e74c3c;color:#fff;font-size:12px;font-weight:700;padding:4px 8px;border-radius:3px;z-index:2;line-height:1}
+.fk-delivery-tag{font-size:12px;color:#212121;margin-top:4px;display:flex;align-items:center;gap:4px}
+.fk-delivery-tag .express{font-weight:700;color:#2874f0;font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
 .fk-pdp{display:none;max-width:1248px;margin:0 auto;padding:10px 10px 40px}
 .fk-pdp-back{color:var(--fk-blue);font-size:14px;font-weight:500;padding:8px 0;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-bottom:8px}
 .fk-pdp-inner{display:flex;background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08)}
@@ -169,16 +172,16 @@ img{max-width:100%}
 .fk-pdp-right{flex:1;padding:20px 24px}
 .fk-pdp-breadcrumb{font-size:12px;color:var(--fk-blue);margin-bottom:8px}
 .fk-pdp-breadcrumb span{color:#878787}
-.fk-pdp-title{font-size:18px;color:#212121;font-weight:400;line-height:1.4;margin-bottom:8px}
+.fk-pdp-title{font-size:18px;color:#212121;font-weight:600;line-height:1.4;margin-bottom:8px}
 .fk-pdp-rating-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.fk-pdp-rating-badge{background:var(--fk-green);color:#fff;font-size:14px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-flex;align-items:center;gap:3px}
-.fk-pdp-rating-count{font-size:14px;color:#878787}
+.fk-pdp-rating-badge{background:var(--fk-green);color:#fff;font-size:12px;font-weight:700;padding:2px 6px 2px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:2px}
+.fk-pdp-rating-count{font-size:13px;color:#878787;font-weight:500}
 .fk-pdp-bought{font-size:14px;color:var(--fk-green);font-weight:600;background:#f1f8e7;padding:4px 10px;border-radius:12px}
-.fk-pdp-special{color:var(--fk-green);font-size:14px;font-weight:600;margin-bottom:4px}
+.fk-pdp-special{color:var(--fk-green);font-size:13px;font-weight:500;margin-bottom:4px}
 .fk-pdp-price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
-.fk-pdp-price{font-size:28px;font-weight:500}
+.fk-pdp-price{font-size:28px;font-weight:700}
 .fk-pdp-mrp{font-size:16px;color:#878787;text-decoration:line-through}
-.fk-pdp-disc{font-size:16px;color:var(--fk-green);font-weight:500}
+.fk-pdp-disc{font-size:16px;color:var(--fk-green);font-weight:600}
 .fk-pdp-emi{font-size:13px;margin-bottom:16px}
 .fk-pdp-offers{margin-bottom:16px}
 .fk-pdp-offers h4{font-size:14px;font-weight:500;margin-bottom:8px}
@@ -208,7 +211,7 @@ img{max-width:100%}
 .fk-pdp-reviews h3{font-size:24px;font-weight:500;margin-bottom:20px}
 .fk-reviews-top{display:flex;gap:40px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #f0f0f0}
 .fk-reviews-summary{text-align:center;min-width:140px}
-.fk-reviews-big{font-size:48px;font-weight:400;line-height:1}
+.fk-reviews-big{font-size:48px;font-weight:600;line-height:1}
 .fk-reviews-big span{font-size:16px;color:#878787}
 .fk-reviews-total{font-size:14px;color:#878787;margin-top:4px}
 .fk-ratings-bars{flex:1;max-width:300px}
@@ -230,6 +233,10 @@ img{max-width:100%}
 .fk-review-title{font-size:14px;font-weight:500;display:inline;margin-left:8px}
 .fk-review-text{font-size:14px;line-height:1.5;margin:8px 0}
 .fk-review-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#878787}
+.fk-pdp-mobile-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;box-shadow:0 -2px 10px rgba(0,0,0,.1)}
+.fk-pdp-mobile-bar .btn-cart{flex:1;background:#fff;color:#212121;border:none;padding:14px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-transform:uppercase;border-top:1px solid #e0e0e0}
+.fk-pdp-mobile-bar .btn-buy{flex:1;background:var(--fk-fb-orange);color:#fff;border:none;padding:14px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-transform:uppercase}
+.fk-pdp-mobile-bar button:active{opacity:.85}
 .fk-cart-page{display:none;max-width:1248px;margin:0 auto;padding:16px 10px}
 .fk-cart-inner{display:flex;gap:16px;align-items:flex-start}
 .fk-cart-left{flex:1;min-width:0}
@@ -375,9 +382,13 @@ img{max-width:100%}
     .fk-logo{font-size:16px}
     .fk-header-inner{padding:0 8px;gap:8px}
     .fk-login-btn{padding:4px 12px;font-size:14px}
-    .fk-grid{grid-template-columns:1fr 1fr;gap:4px}
+    .fk-grid{grid-template-columns:1fr 1fr;gap:0}
     .fk-grid-card{padding:8px}
     .fk-grid-card-img{width:100px;height:120px}
+    .fk-grid-card-name{font-size:13px;min-height:36px}
+    .fk-grid-card-price .now{font-size:14px}
+    .fk-grid-card-price .was{font-size:12px}
+    .fk-grid-card-price .off{font-size:12px}
     .fk-strip-card{flex:0 0 50%;min-width:130px}
     .fk-strip-card-img{width:100px;height:100px}
     .fk-footer-top{grid-template-columns:1fr}
@@ -388,8 +399,22 @@ img{max-width:100%}
     .fk-cat-link{padding:6px 8px}
     .cat-img{width:48px;height:48px}
     .fk-cat-link-name{font-size:12px}
-    .fk-pdp-title{font-size:16px}
-    .fk-pdp-price{font-size:22px}
+    .fk-pdp-title{font-size:16px;font-weight:600}
+    .fk-pdp-price{font-size:24px;font-weight:700}
+    .fk-pdp-mrp{font-size:14px}
+    .fk-pdp-disc{font-size:14px}
+    .fk-pdp-actions{display:none}
+    .fk-pdp-mobile-bar{display:flex}
+    .fk-pdp{padding:0 0 56px}
+    .fk-pdp-left{padding:12px}
+    .fk-pdp-right{padding:12px 16px}
+    .fk-pdp-main-img{min-height:280px}
+    .fk-pdp-main-img img{max-height:280px}
+    .fk-pdp-thumbs{gap:4px}
+    .fk-pdp-thumb{width:48px;height:48px}
+    .fk-pdp-specs h3{font-size:18px}
+    .fk-pdp-reviews h3{font-size:18px}
+    .fk-pdp-specs,.fk-pdp-reviews{padding:16px}
 }
 
 .fk-sort-btn{background:none;border:none;padding:8px 16px;font-size:14px;font-weight:500;color:#212121;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
@@ -558,6 +583,7 @@ img{max-width:100%}
 </div>
 </div></div>
 <div class="fk-pdp" id="pdpView"><div class="fk-main" id="pdpContent"></div></div>
+<div class="fk-pdp-mobile-bar" id="pdpMobileBar"><button class="btn-cart" id="pdpMobCart">ADD TO CART</button><button class="btn-buy" id="pdpMobBuy">BUY NOW</button></div>
 <div class="fk-cart-page" id="cartPage"><div class="fk-cart-inner"><div class="fk-cart-left"><div class="fk-cart-box"><div class="fk-cart-hdr"><h2 id="cartTitle">My Cart (0)</h2></div><div id="cartItems"></div><div class="fk-cart-place" id="cartPlaceWrap" style="display:none"><button onclick="goToCheckout()">PLACE ORDER</button></div></div></div><div class="fk-cart-right"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="cpCount">0</span> items)</span><span id="cpSubtotal">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="cpDiscount">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total Amount</span><span id="cpTotal">&#8377;0</span></div></div><div class="fk-price-save" id="cpSave"></div></div></div></div></div>
 <div class="fk-ck-page" id="ckPage"><div class="fk-ck-inner"><div class="fk-ck-left">
 <div class="fk-ck-step" id="ckS1"><div class="fk-ck-step-head active" id="ckS1H" onclick="ckExpand(1)"><span class="fk-ck-step-num">1</span><span class="fk-ck-step-label">LOGIN</span><span class="fk-ck-step-check" id="ckS1C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS1Sum"></div><div class="fk-ck-step-body show" id="ckS1B"><div style="max-width:360px"><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Email/Mobile</label><input class="fk-ck-input" id="ckEmail1" placeholder="Email or Mobile"/></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Password</label><input class="fk-ck-input" id="ckPass1" type="password" placeholder="Password"/></div><p style="font-size:12px;color:#878787;margin-bottom:16px;line-height:1.5">By continuing, you agree to Flipkart Terms of Use and Privacy Policy.</p><button class="fk-ck-continue" onclick="ckLogin()" style="width:100%">CONTINUE</button></div></div></div>
@@ -594,9 +620,9 @@ function showView(v){
     document.getElementById('pdpView').style.display='none';
     if(v==='home'){document.getElementById('homeView').style.display='';document.getElementById('gridView').style.display='none';}
     else if(v==='grid'){document.getElementById('homeView').style.display='none';document.getElementById('gridView').style.display='';}
-    else if(v==='pdp'){document.getElementById('pdpView').style.display='block';}
-    else if(v==='cart'){document.getElementById('cartPage').style.display='block';}
-    else if(v==='checkout'){document.getElementById('ckPage').style.display='block';}
+    else if(v==='pdp'){document.getElementById('pdpView').style.display='block';document.getElementById('pdpMobileBar').style.display='';}
+    else if(v==='cart'){document.getElementById('cartPage').style.display='block';document.getElementById('pdpMobileBar').style.display='none';}
+    else if(v==='checkout'){document.getElementById('ckPage').style.display='block';document.getElementById('pdpMobileBar').style.display='none';}
     window.scrollTo(0,0);
 }
 function goHome(){showView('home');document.querySelectorAll('.fk-cat-link').forEach(function(l){l.classList.remove('active')});}
@@ -608,11 +634,12 @@ function renderGrid(prods){
         var rev='';try{rev=JSON.parse(p.reviews||'{}');}catch(e){rev={};}
         var reviewCount=rev.reviews?rev.reviews.length:Math.floor(Math.random()*500+50);
         return '<div class="fk-grid-card" onclick="openPDP('+p.id+')">'+
-            '<div class="fk-grid-card-img" style="position:relative"><img src="'+(p.image_url||'https://via.placeholder.com/200')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=Product\'"/><button class="fk-wishlist-btn'+(wishlist.includes(p.id)?' active':'')+'" onclick="event.stopPropagation();toggleWishlist('+p.id+');renderGrid(products.filter(function(x){return document.getElementById(\'gridTitle\').textContent.includes(x.category)||true}))"><svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#878787" stroke-width="1.5" fill="'+(wishlist.includes(p.id)?'#ff4081':'none')+'"/></svg></button></div>'+
+            '<div class="fk-grid-card-img" style="position:relative">'+(disc>0?'<span class="fk-disc-badge">'+disc+'%<br>off</span>':'')+'<img src="'+(p.image_url||'https://via.placeholder.com/200')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=Product\'"/><button class="fk-wishlist-btn'+(wishlist.includes(p.id)?' active':'')+'" onclick="event.stopPropagation();toggleWishlist('+p.id+');renderGrid(products.filter(function(x){return document.getElementById(\'gridTitle\').textContent.includes(x.category)||true}))"><svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#878787" stroke-width="1.5" fill="'+(wishlist.includes(p.id)?'#ff4081':'none')+'"/></svg></button></div>'+
             '<div class="fk-grid-card-name">'+p.name+'</div>'+
             '<div class="fk-grid-card-rating"><span class="badge '+ratingClass+'">'+p.rating.toFixed(1)+' &#9733;</span><span class="count">('+reviewCount+')</span></div>'+
             '<div class="fk-grid-card-price"><span class="now">'+fmt(p.price)+'</span>'+(p.original_price?'<span class="was">'+fmt(p.original_price)+'</span><span class="off">'+disc+'% off</span>':'')+'</div>'+
             '<div class="fk-assured-badge"><span class="f">F</span>Assured</div>'+
+            '<div class="fk-delivery-tag"><span class="express">Express</span> Delivery tomorrow</div>'+
             '</div>';
     }).join('');
 }
@@ -925,6 +952,10 @@ function openPDP(id){
         h+='</div></div>';
     }
     document.getElementById('pdpContent').innerHTML=h;
+    var mobCart=document.getElementById('pdpMobCart');
+    var mobBuy=document.getElementById('pdpMobBuy');
+    if(mobCart)mobCart.onclick=function(){addToCart(p.id)};
+    if(mobBuy)mobBuy.onclick=function(){addToCart(p.id);openCartPage()};
     showView('pdp');
 }
 var selectedReviewStar=5;

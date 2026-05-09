@@ -70,6 +70,11 @@ function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('show');
 }
 
+function updateMobNav(el) {
+    document.querySelectorAll('.mob-nav-item').forEach(function(b) { b.classList.remove('active'); });
+    if (el) el.classList.add('active');
+}
+
 // ── Modals ─────────────────────────────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).style.display = 'flex'; }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
