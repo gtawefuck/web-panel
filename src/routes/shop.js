@@ -37,6 +37,27 @@ const upload = multer({
 });
 
 // GET /api/shop/my — get current user's shop info + products
+// Flatten the rich product envelope stored in the `reviews` column.
+// Older rows store a plain array of reviews; newer ones store an object
+// { reviews, highlights, images, specifications, ratings_breakdown, brand, color_variants }.
+function flattenProduct(p) {
+    let parsed;
+    try { parsed = JSON.parse(p.reviews || '[]'); } catch (_) { parsed = []; }
+    if (Array.isArray(parsed)) {
+        return { ...p, reviews: parsed };
+    }
+    return {
+        ...p,
+        reviews: parsed.reviews || [],
+        highlights: parsed.highlights || [],
+        images: parsed.images && parsed.images.length ? parsed.images : [p.image_url],
+        specifications: parsed.specifications || [],
+        ratings_breakdown: parsed.ratings_breakdown || null,
+        brand: parsed.brand || '',
+        color_variants: parsed.color_variants || []
+    };
+}
+
 router.get('/my', requireAuth, (req, res) => {
     const { tgId } = req.session.user;
     const shop = db.prepare('SELECT * FROM shops WHERE tg_id = ?').get(tgId);
@@ -49,7 +70,7 @@ router.get('/my', requireAuth, (req, res) => {
     }
 
     const products = db.prepare('SELECT * FROM products WHERE shop_id = ? ORDER BY id ASC').all(shop.id);
-    const parsed = products.map(p => ({ ...p, reviews: JSON.parse(p.reviews) }));
+    const parsed = products.map(flattenProduct);
     const baseUrl = getBaseUrl(req);
     res.json({ shop, products: parsed, shopUrl: `${baseUrl}/shop/${shop.slug}` });
 });
@@ -68,7 +89,7 @@ router.get('/info/:slug', (req, res) => {
     }
 
     const products = db.prepare('SELECT * FROM products WHERE shop_id = ? ORDER BY id ASC').all(shop.id);
-    const parsed = products.map(p => ({ ...p, reviews: JSON.parse(p.reviews) }));
+    const parsed = products.map(flattenProduct);
     res.json({ shop, products: parsed });
 });
 
