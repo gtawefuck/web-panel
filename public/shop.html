@@ -346,6 +346,8 @@ img{max-width:100%}
     .fk-cat-link .emoji-icon{font-size:36px;line-height:48px;height:48px}
     .fk-banner{height:130px}
     .fk-ck-row{grid-template-columns:1fr}
+    .fk-pdp-inner{flex-direction:column}
+    .fk-pdp-left,.fk-pdp-right{width:100%;max-width:100%}
     .fk-pdp-actions{flex-direction:column;padding:0}
     .fk-pdp-gallery{flex-direction:column-reverse}
     .fk-pdp-thumbs{flex-direction:row;width:100%;overflow-x:auto}
@@ -354,15 +356,40 @@ img{max-width:100%}
     .fk-pay-tab{border-left:none;border-bottom:3px solid transparent;white-space:nowrap;padding:10px 16px}
     .fk-pay-tab.active{border-bottom-color:var(--fk-blue);border-left:none}
     .fk-strip-card{flex:0 0 calc(100%/3);min-width:150px}
+    .fk-cart-inner{flex-direction:column}
+    .fk-cart-left,.fk-cart-right{width:100%}
+    .fk-ck-inner{flex-direction:column}
+    .fk-ck-left,.fk-ck-right{width:100%}
+    .fk-pdp-zoom-result{display:none !important}
+    .fk-dotd-head{flex-wrap:wrap;gap:8px}
+    .fk-top-offers-grid{grid-template-columns:repeat(2,1fr)}
+    .fk-bt-items{flex-direction:column;align-items:stretch}
+    .fk-bt-plus{text-align:center}
+    .fk-bt-total{margin-left:0;margin-top:12px;text-align:center}
+    .fk-ymal-card{flex:0 0 150px}
+    #sortBar{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+    #sortBar::-webkit-scrollbar{display:none}
+    .fk-sort-btn{white-space:nowrap;padding:8px 12px;font-size:13px}
 }
 @media(max-width:480px){
     .fk-logo{font-size:16px}
+    .fk-header-inner{padding:0 8px;gap:8px}
     .fk-login-btn{padding:4px 12px;font-size:14px}
-    .fk-grid{grid-template-columns:1fr 1fr}
+    .fk-grid{grid-template-columns:1fr 1fr;gap:4px}
+    .fk-grid-card{padding:8px}
     .fk-grid-card-img{width:100px;height:120px}
     .fk-strip-card{flex:0 0 50%;min-width:130px}
     .fk-strip-card-img{width:100px;height:100px}
     .fk-footer-top{grid-template-columns:1fr}
+    .fk-top-offers-grid{grid-template-columns:1fr 1fr}
+    .fk-offer-card{padding:10px}
+    .fk-offer-card img{width:100px;height:100px}
+    .fk-subheader-inner{gap:0}
+    .fk-cat-link{padding:6px 8px}
+    .cat-img{width:48px;height:48px}
+    .fk-cat-link-name{font-size:12px}
+    .fk-pdp-title{font-size:16px}
+    .fk-pdp-price{font-size:22px}
 }
 
 .fk-sort-btn{background:none;border:none;padding:8px 16px;font-size:14px;font-weight:500;color:#212121;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
