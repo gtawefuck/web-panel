@@ -1,1633 +1,744 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="shopTitle">Flipkart — Best Offers Online</title>
-    <meta name="description" content="Best deals on electronics, fashion, home appliances and more." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
-        rel="stylesheet" />
-    <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        :root{
-            --fk-blue:#2874f0;--fk-blue-dark:#1a5dc8;--fk-yellow:#ffe500;--fk-yellow-dark:#ffd000;
-            --fk-bg:#f1f3f6;--fk-white:#fff;--fk-gray:#878787;--fk-border:#e0e0e0;
-            --fk-green:#388e3c;--fk-red:#ff6161;--fk-orange:#ff9f00;--fk-fb-orange:#fb641b;
-            --fk-dark:#212121;--fk-text:#212121;--radius:2px;--shadow:0 1px 1px 0 rgba(0,0,0,.1);
-        }
-        body{font-family:'Roboto','Inter',Arial,sans-serif;background:var(--fk-bg);color:var(--fk-text);min-height:100vh;-webkit-font-smoothing:antialiased;letter-spacing:.1px}
-        a{text-decoration:none;color:inherit;cursor:pointer}
-        button{cursor:pointer;font-family:inherit}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title id="shopTitle">Online Shopping India | Flipkart.com</title>
+<meta name="description" content="India's biggest online store. Free Delivery, Best Offers"/>
+<link rel="shortcut icon" href="https://static-assets-web.flixcart.com/www/promos/new/20150528-140547-favicon-retina.ico" type="image/x-icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
 
-        /* ══════ HEADER (modern flipkart.com white) ══════ */
-        .fk-header{background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 1px 2px rgba(0,0,0,.08);border-bottom:1px solid #f0f0f0}
-        .fk-header-inner{max-width:1366px;margin:0 auto;padding:0 64px;display:flex;align-items:center;gap:0;height:64px}
-        .fk-logo-wrap{display:flex;flex-direction:column;align-items:flex-start;min-width:120px;margin-right:24px;cursor:pointer;text-decoration:none;line-height:1}
-        .fk-logo{color:var(--fk-blue);font-size:28px;font-weight:700;font-style:italic;letter-spacing:-.5px;line-height:1}
-        .fk-logo-sub{display:flex;align-items:center;gap:3px;margin-top:2px}
-        .fk-logo-sub span{font-size:12px;font-style:italic;color:#878787;font-weight:400}
-        .fk-logo-sub em{font-style:italic;font-weight:700;font-size:12px;color:var(--fk-blue);text-decoration:underline;text-underline-offset:2px}
-        .fk-logo-sub .star{display:inline-block;width:11px;height:11px;background:var(--fk-yellow);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);margin-left:2px}
-        .fk-search{flex:1;display:flex;background:#f0f5fd;border-radius:2px;overflow:hidden;max-width:680px;margin:0 24px;height:40px;align-items:center;border:1px solid #f0f5fd;transition:border-color .15s}
-        .fk-search:focus-within{border-color:#dbe4f3;background:#f5f8fc}
-        .fk-search input{flex:1;padding:0 4px;height:100%;border:none;outline:none;font-size:14px;font-family:inherit;color:#212121;background:transparent;font-weight:400}
-        .fk-search input::placeholder{color:#878787}
-        .fk-search-btn{background:none;border:none;padding:0 14px;height:100%;display:flex;align-items:center;color:var(--fk-blue);font-size:18px;cursor:pointer}
-        .fk-hdr-links{display:flex;gap:32px;align-items:center;margin-left:auto}
-        .fk-hdr-link{color:#212121;font-size:15px;font-weight:500;white-space:nowrap;padding:6px 0;position:relative;display:flex;align-items:center;gap:6px;cursor:pointer}
-        .fk-hdr-link:hover{color:var(--fk-blue)}
-        .fk-hdr-link .dd{font-size:9px;margin-left:2px;opacity:.7}
-        .fk-hdr-link .ic{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:18px}
-        .fk-cart-wrap{display:flex;align-items:center;gap:8px;color:#212121;font-size:15px;font-weight:500;position:relative;cursor:pointer}
-        .fk-cart-icon{font-size:18px;position:relative;display:inline-flex}
-        .fk-cart-count{position:absolute;top:-9px;right:-10px;background:var(--fk-fb-orange);color:#fff;border-radius:50%;min-width:18px;height:18px;padding:0 4px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
-        .fk-hdr-kebab{color:#878787;font-size:22px;cursor:pointer;padding:6px 0;letter-spacing:1px;line-height:.4}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+    --fk-blue:#2874f0;--fk-dark-blue:#1a5dc8;--fk-yellow:#ffe500;
+    --fk-bg:#f1f3f6;--fk-white:#fff;--fk-gray:#878787;--fk-border:#e0e0e0;
+    --fk-green:#388e3c;--fk-red:#ff6161;--fk-orange:#ff9f00;--fk-fb-orange:#fb641b;
+    --fk-dark:#212121;--fk-text:#212121;--fk-footer:#172337
+}
+html{scroll-behavior:smooth}
+body{font-family:Roboto,Arial,sans-serif;background:var(--fk-bg);color:var(--fk-text);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit;cursor:pointer}
+button{cursor:pointer;font-family:inherit}
+img{max-width:100%}
+.ld-screen{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.ld-spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:var(--fk-blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-text{color:#878787;font-size:14px}
+.fk-header{background:var(--fk-blue);position:sticky;top:0;z-index:200;min-height:56px}
+.fk-header-inner{max-width:1248px;margin:0 auto;padding:0 16px;display:flex;align-items:center;height:56px}
+.fk-logo-wrap{display:flex;flex-direction:column;align-items:flex-start;min-width:75px;margin-right:16px;cursor:pointer;line-height:1}
+.fk-logo-img{width:160px;height:40px}
+.fk-logo{color:#fff;font-size:20px;font-weight:700;font-style:italic;letter-spacing:-.3px}
+.fk-logo-sub{display:flex;align-items:center;gap:3px;margin-top:-1px}
+.fk-logo-sub span{font-size:11px;font-style:italic;color:#dbdbdb}
+.fk-logo-sub em{font-style:italic;font-weight:500;font-size:11px;color:var(--fk-yellow)}
+.fk-plus-star{display:inline-block;width:10px;height:10px;background:var(--fk-yellow);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.fk-search{flex:1;max-width:564px;margin:0 18px;position:relative}
+.fk-search-box{display:flex;align-items:center;background:#fff;border-radius:2px;height:36px;padding:0 8px 0 0}
+.fk-search-box input{flex:1;height:100%;border:none;outline:none;font-size:14px;padding:0 0 0 16px;color:#212121;background:transparent}
+.fk-search-box input::placeholder{color:#878787;font-size:14px}
+.fk-search-btn{background:none;border:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#717478}
+.fk-search-btn svg{width:24px;height:24px}
+.fk-autocomplete{position:absolute;top:38px;left:0;right:0;background:#fff;border-radius:0 0 2px 2px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:300;display:none;max-height:400px;overflow-y:auto}
+.fk-autocomplete.show{display:block}
+.fk-ac-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;font-size:14px;color:#212121;border-bottom:1px solid #f0f0f0}
+.fk-ac-item:hover{background:#f5f5f5}
+.fk-ac-item img{width:32px;height:32px;object-fit:contain}
+.fk-ac-item .ac-cat{font-size:12px;color:#878787;margin-left:auto}
+.fk-hdr-links{display:flex;align-items:center;margin-left:auto}
+.fk-hdr-link{color:#fff;font-size:16px;font-weight:500;white-space:nowrap;padding:8px 16px;position:relative;display:flex;align-items:center;gap:6px}
+.fk-hdr-3dot{background:none;border:none;color:#fff;padding:8px;cursor:pointer;display:flex;align-items:center}
+.fk-hdr-link:hover{opacity:.9}
+.fk-login-btn{background:transparent;color:#fff;font-size:16px;font-weight:500;padding:8px 16px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.fk-login-btn:hover{opacity:.9}
+.fk-login-btn .fk-user-icon{width:20px;height:20px}
+.fk-login-btn .fk-dd-arrow{font-size:10px;margin-left:2px}
+.fk-hdr-dd{font-size:10px;margin-left:4px}
+.fk-cart-count{position:absolute;top:-2px;right:-6px;background:var(--fk-fb-orange);color:#fff;border-radius:2px;min-width:16px;height:16px;padding:0 4px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fk-login-dd{display:none;position:absolute;top:100%;right:0;background:#fff;min-width:240px;box-shadow:0 4px 16px rgba(0,0,0,.2);border-radius:0 0 2px 2px;z-index:500;padding:12px 0}
+.fk-login-dd::before{content:'';position:absolute;top:-6px;right:40px;width:12px;height:12px;background:#fff;transform:rotate(45deg);box-shadow:-2px -2px 4px rgba(0,0,0,.06)}
+.fk-login-dd a{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#212121}
+.fk-login-dd a:hover{background:#f5f5f5}
+.fk-login-dd .sep{height:1px;background:#f0f0f0;margin:6px 0}
+.fk-login-parent:hover .fk-login-dd{display:block}
+.fk-more-dd{display:none;position:absolute;top:100%;right:0;background:#fff;min-width:200px;box-shadow:0 4px 16px rgba(0,0,0,.2);border-radius:0 0 2px 2px;z-index:500;padding:8px 0}
+.fk-more-dd::before{content:'';position:absolute;top:-6px;right:20px;width:12px;height:12px;background:#fff;transform:rotate(45deg);box-shadow:-2px -2px 4px rgba(0,0,0,.06)}
+.fk-more-dd a{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#212121}
+.fk-more-dd a:hover{background:#f5f5f5}
+.fk-more-parent:hover .fk-more-dd{display:block}
+.fk-subheader{background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.08);position:sticky;top:56px;z-index:150}
+.fk-subheader-inner{max-width:1248px;margin:0 auto;display:flex;padding:0 16px;justify-content:space-between;overflow-x:auto;scrollbar-width:none}
+.fk-subheader-inner::-webkit-scrollbar{display:none}
+.fk-cat-link{display:flex;flex-direction:column;align-items:center;padding:8px 20px;cursor:pointer;position:relative;flex:0 0 auto;border-bottom:3px solid transparent;transition:border-color .2s}
+.fk-cat-link:hover{border-bottom-color:var(--fk-blue)}
+.fk-cat-link.active{border-bottom-color:var(--fk-blue)}
+.fk-cat-link .emoji-icon{font-size:48px;line-height:64px;height:64px;display:block;margin-bottom:4px}
+.fk-cat-link .cat-img{width:64px;height:64px;object-fit:contain;display:block;margin-bottom:6px}
+.fk-cat-link-name{font-size:14px;font-weight:600;color:#212121;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.fk-cat-link-name .dd{font-size:8px;color:#878787}
+.fk-main{max-width:1248px;margin:0 auto;padding:10px 10px 20px}
+.fk-banner{position:relative;width:100%;height:0;padding-bottom:16.7%;background:#f0f0f0;margin-bottom:10px;overflow:hidden}
+.fk-banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s;pointer-events:none}
+.fk-banner-slide.active{opacity:1;pointer-events:auto}
+.fk-banner-nav{position:absolute;top:0;width:36px;height:100%;background:rgba(255,255,255,.65);border:none;color:#212121;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:5;cursor:pointer;opacity:0;transition:opacity .2s}
+.fk-banner:hover .fk-banner-nav{opacity:1}
+.fk-banner-nav.prev{left:0}
+.fk-banner-nav.next{right:0}
+.fk-banner-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.fk-banner-dot{width:16px;height:3px;background:rgba(0,0,0,.2);cursor:pointer;border-radius:1px}
+.fk-banner-dot.active{background:#878787}
+.fk-strip{background:#fff;margin-bottom:10px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-strip-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 8px}
+.fk-strip-head h2{font-size:22px;font-weight:600;color:#212121}
+.fk-strip-head .sub{font-size:14px;color:#878787;margin-left:16px}
+.fk-strip .view-all-btn{background:var(--fk-blue);color:#fff;border:none;padding:8px 20px;font-size:13px;font-weight:600;border-radius:2px}
+.fk-strip .view-all-btn:hover{background:var(--fk-dark-blue)}
+.fk-strip-track-wrap{position:relative;overflow:hidden}
+.fk-strip-track{display:flex;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;padding:0 0 16px}
+.fk-strip-track::-webkit-scrollbar{display:none}
+.fk-strip-card{flex:0 0 calc(100%/6);min-width:200px;padding:12px 16px;text-align:center;cursor:pointer;border-right:1px solid #f0f0f0;display:flex;flex-direction:column;align-items:center;transition:box-shadow .2s}
+.fk-strip-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.fk-strip-card:last-child{border-right:none}
+.fk-strip-card-img{width:150px;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.fk-strip-card-img img{max-width:100%;max-height:100%;object-fit:contain}
+.fk-strip-card-name{font-size:14px;color:#212121;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px;max-width:180px;margin:0 auto}
+.fk-strip-card-off{font-size:13px;font-weight:500;color:var(--fk-green);margin:4px 0}
+.fk-strip-card-price{font-size:13px;color:#212121;font-weight:500}
+.fk-strip-arrow{position:absolute;top:50%;transform:translateY(-60%);width:40px;height:80px;background:rgba(0,0,0,.03);border:none;font-size:24px;color:#212121;z-index:5;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.fk-strip:hover .fk-strip-arrow{opacity:1}
+.fk-strip-arrow:hover{background:rgba(0,0,0,.06)}
+.fk-strip-arrow.prev{left:0;border-radius:0 4px 4px 0;box-shadow:2px 0 4px rgba(0,0,0,.1)}
+.fk-strip-arrow.next{right:0;border-radius:4px 0 0 4px;box-shadow:-2px 0 4px rgba(0,0,0,.1)}
+.fk-grid-section{background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08);margin-bottom:10px}
+.fk-grid-head{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px;border-bottom:1px solid #f0f0f0}
+.fk-grid-head h2{font-size:18px;font-weight:600}
+.fk-grid{display:grid;grid-template-columns:repeat(5,1fr)}
+.fk-grid-card{padding:16px;cursor:pointer;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;display:flex;flex-direction:column;align-items:center;transition:box-shadow .2s}
+.fk-grid-card:nth-child(5n){border-right:none}
+.fk-grid-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.12);position:relative;z-index:2}
+.fk-grid-card-img{width:150px;height:180px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.fk-grid-card-img img{max-width:100%;max-height:100%;object-fit:contain}
+.fk-grid-card-name{font-size:14px;color:#212121;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;width:100%;text-align:left}
+.fk-grid-card-price{display:flex;align-items:baseline;gap:8px;width:100%;margin-top:6px}
+.fk-grid-card-price .now{font-size:16px;font-weight:500}
+.fk-grid-card-price .was{font-size:14px;color:#878787;text-decoration:line-through}
+.fk-grid-card-price .off{font-size:13px;color:var(--fk-green);font-weight:500}
+.fk-grid-card-rating{display:flex;align-items:center;gap:4px;width:100%;margin-top:4px}
+.fk-grid-card-rating .badge{background:var(--fk-green);color:#fff;font-size:12px;font-weight:500;padding:1px 5px;border-radius:2px;display:inline-flex;align-items:center;gap:2px}
+.fk-grid-card-rating .badge.low{background:#ff6161}
+.fk-grid-card-rating .count{font-size:12px;color:#878787}
+.fk-assured-badge{display:inline-flex;align-items:center;border:1px solid #e0e0e0;border-radius:2px;padding:1px 6px;font-size:11px;font-weight:700;gap:2px;margin-top:6px}
+.fk-assured-badge .f{color:var(--fk-blue)}
+.fk-pdp{display:none;max-width:1248px;margin:0 auto;padding:10px 10px 40px}
+.fk-pdp-back{color:var(--fk-blue);font-size:14px;font-weight:500;padding:8px 0;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-bottom:8px}
+.fk-pdp-inner{display:flex;background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-pdp-left{width:40%;min-width:360px;position:sticky;top:66px;align-self:flex-start;padding:20px;border-right:1px solid #f0f0f0}
+.fk-pdp-gallery{display:flex}
+.fk-pdp-thumbs{display:flex;flex-direction:column;gap:8px;width:64px;flex-shrink:0}
+.fk-pdp-thumb{width:56px;height:56px;border:2px solid transparent;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:2px;transition:border-color .15s}
+.fk-pdp-thumb:hover,.fk-pdp-thumb.active{border-color:var(--fk-blue)}
+.fk-pdp-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.fk-pdp-main-img{flex:1;display:flex;align-items:center;justify-content:center;min-height:400px;padding:10px}
+.fk-pdp-main-img img{max-width:100%;max-height:400px;object-fit:contain}
+.fk-pdp-actions{display:flex;gap:12px;margin-top:16px;padding:0 0 0 64px}
+.fk-pdp-actions .btn-cart{flex:1;background:var(--fk-orange);color:#fff;border:none;padding:16px;font-size:16px;font-weight:600;border-radius:2px;display:flex;align-items:center;justify-content:center;gap:8px}
+.fk-pdp-actions .btn-buy{flex:1;background:var(--fk-fb-orange);color:#fff;border:none;padding:16px;font-size:16px;font-weight:600;border-radius:2px;display:flex;align-items:center;justify-content:center;gap:8px}
+.fk-pdp-actions button:hover{opacity:.9}
+.fk-pdp-right{flex:1;padding:20px 24px}
+.fk-pdp-breadcrumb{font-size:12px;color:var(--fk-blue);margin-bottom:8px}
+.fk-pdp-breadcrumb span{color:#878787}
+.fk-pdp-title{font-size:18px;color:#212121;font-weight:400;line-height:1.4;margin-bottom:8px}
+.fk-pdp-rating-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.fk-pdp-rating-badge{background:var(--fk-green);color:#fff;font-size:14px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-flex;align-items:center;gap:3px}
+.fk-pdp-rating-count{font-size:14px;color:#878787}
+.fk-pdp-bought{font-size:14px;color:var(--fk-green);font-weight:600;background:#f1f8e7;padding:4px 10px;border-radius:12px}
+.fk-pdp-special{color:var(--fk-green);font-size:14px;font-weight:600;margin-bottom:4px}
+.fk-pdp-price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.fk-pdp-price{font-size:28px;font-weight:500}
+.fk-pdp-mrp{font-size:16px;color:#878787;text-decoration:line-through}
+.fk-pdp-disc{font-size:16px;color:var(--fk-green);font-weight:500}
+.fk-pdp-emi{font-size:13px;margin-bottom:16px}
+.fk-pdp-offers{margin-bottom:16px}
+.fk-pdp-offers h4{font-size:14px;font-weight:500;margin-bottom:8px}
+.fk-offer-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:14px;line-height:1.4}
+.fk-offer-tag{font-size:12px;font-weight:700;color:#fff;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.fk-offer-tag.bank{background:var(--fk-green)}
+.fk-offer-tag.special{background:#0d47a1}
+.fk-offer-tag.partner{background:#e65100}
+.fk-pdp-delivery{display:flex;align-items:center;gap:8px;padding:12px 0;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;margin-bottom:16px;font-size:14px}
+.fk-pdp-delivery .del-date{font-weight:700}
+.fk-pdp-delivery .del-free{color:var(--fk-green);font-weight:500;margin-left:4px}
+.fk-pdp-highlights{margin-bottom:16px}
+.fk-pdp-highlights h4{font-size:14px;font-weight:500;margin-bottom:8px}
+.fk-pdp-highlights ul{padding-left:16px;font-size:14px;line-height:1.7}
+.fk-pdp-seller{margin-bottom:16px;padding:12px 0;border-top:1px solid #f0f0f0}
+.fk-pdp-seller span{font-size:14px;color:#878787}
+.fk-pdp-seller a{color:var(--fk-blue);font-size:14px;font-weight:500}
+.fk-pdp-specs{padding:24px;border-top:8px solid var(--fk-bg)}
+.fk-pdp-specs h3{font-size:24px;font-weight:500;margin-bottom:20px}
+.fk-spec-group{margin-bottom:16px}
+.fk-spec-group h4{font-size:18px;font-weight:500;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.fk-spec-row{display:flex;padding:12px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+.fk-spec-row .label{width:35%;color:#878787;padding-right:16px;flex-shrink:0}
+.fk-spec-row .value{flex:1}
+.fk-pdp-reviews{padding:24px;border-top:8px solid var(--fk-bg)}
+.fk-pdp-reviews h3{font-size:24px;font-weight:500;margin-bottom:20px}
+.fk-reviews-top{display:flex;gap:40px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #f0f0f0}
+.fk-reviews-summary{text-align:center;min-width:140px}
+.fk-reviews-big{font-size:48px;font-weight:400;line-height:1}
+.fk-reviews-big span{font-size:16px;color:#878787}
+.fk-reviews-total{font-size:14px;color:#878787;margin-top:4px}
+.fk-ratings-bars{flex:1;max-width:300px}
+.fk-rating-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:14px}
+.fk-rating-bar-row .num{width:12px;text-align:right}
+.fk-rating-bar{flex:1;height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+.fk-rating-bar .fill{height:100%;border-radius:3px}
+.fk-rating-bar .fill.c5{background:var(--fk-green)}
+.fk-rating-bar .fill.c4{background:var(--fk-green)}
+.fk-rating-bar .fill.c3{background:var(--fk-orange)}
+.fk-rating-bar .fill.c2{background:var(--fk-fb-orange)}
+.fk-rating-bar .fill.c1{background:var(--fk-red)}
+.fk-rating-bar-row .cnt{font-size:13px;color:#878787;width:50px;text-align:right}
+.fk-review-card{padding:16px 0;border-bottom:1px solid #f0f0f0}
+.fk-review-rating{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:2px;font-size:12px;font-weight:700;color:#fff}
+.fk-review-rating.g{background:var(--fk-green)}
+.fk-review-rating.o{background:var(--fk-orange)}
+.fk-review-rating.r{background:var(--fk-red)}
+.fk-review-title{font-size:14px;font-weight:500;display:inline;margin-left:8px}
+.fk-review-text{font-size:14px;line-height:1.5;margin:8px 0}
+.fk-review-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#878787}
+.fk-cart-page{display:none;max-width:1248px;margin:0 auto;padding:16px 10px}
+.fk-cart-inner{display:flex;gap:16px;align-items:flex-start}
+.fk-cart-left{flex:1;min-width:0}
+.fk-cart-box{background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-cart-hdr{padding:16px 24px;border-bottom:1px solid #f0f0f0}
+.fk-cart-hdr h2{font-size:18px;font-weight:500}
+.fk-cart-item{display:flex;gap:16px;padding:24px;border-bottom:1px solid #f0f0f0}
+.fk-cart-item-img{width:112px;height:112px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fk-cart-item-img img{max-width:100%;max-height:100%;object-fit:contain}
+.fk-cart-item-info{flex:1}
+.fk-cart-item-name{font-size:16px;margin-bottom:8px}
+.fk-cart-item-seller{font-size:14px;color:#878787;margin-bottom:8px}
+.fk-cart-item-price{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.fk-cart-item-price .now{font-size:18px;font-weight:500}
+.fk-cart-item-price .was{font-size:14px;color:#878787;text-decoration:line-through}
+.fk-cart-item-price .off{font-size:14px;color:var(--fk-green);font-weight:500}
+.fk-cart-item-actions{display:flex;align-items:center;gap:16px}
+.fk-qty-ctrl{display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:50px;overflow:hidden}
+.fk-qty-ctrl button{width:32px;height:28px;border:none;background:#fff;font-size:16px;font-weight:500;cursor:pointer}
+.fk-qty-ctrl button:disabled{color:#e0e0e0;cursor:not-allowed}
+.fk-qty-ctrl .qty{width:36px;text-align:center;font-size:14px;font-weight:500;border-left:1px solid #e0e0e0;border-right:1px solid #e0e0e0;line-height:28px}
+.fk-cart-item-actions .remove-btn{background:none;border:none;font-size:14px;font-weight:600;text-transform:uppercase;cursor:pointer;padding:4px 8px}
+.fk-cart-item-actions .remove-btn:hover{color:var(--fk-blue)}
+.fk-cart-place{padding:16px 24px;display:flex;justify-content:flex-end}
+.fk-cart-place button{background:var(--fk-fb-orange);color:#fff;border:none;padding:16px 48px;font-size:16px;font-weight:600;border-radius:2px;cursor:pointer}
+.fk-cart-right{width:380px;flex-shrink:0;position:sticky;top:76px}
+.fk-price-box{background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-price-hdr{padding:16px;border-bottom:1px solid #f0f0f0;font-size:16px;font-weight:500;color:#878787;text-transform:uppercase}
+.fk-price-body{padding:16px}
+.fk-price-row{display:flex;justify-content:space-between;padding:8px 0;font-size:16px}
+.fk-price-row .green{color:var(--fk-green)}
+.fk-price-total{display:flex;justify-content:space-between;padding:16px 0 8px;font-size:18px;font-weight:600;border-top:1px dashed #e0e0e0;margin-top:8px}
+.fk-price-save{padding:12px 16px;font-size:16px;font-weight:500;color:var(--fk-green);border-top:1px solid #f0f0f0}
+.fk-ck-page{display:none;max-width:1248px;margin:0 auto;padding:16px 10px}
+.fk-ck-inner{display:flex;gap:16px;align-items:flex-start}
+.fk-ck-left{flex:1;min-width:0}
+.fk-ck-step{background:#fff;margin-bottom:6px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.fk-ck-step-head{padding:16px 24px;display:flex;align-items:center;gap:16px;cursor:pointer}
+.fk-ck-step-head.active{background:var(--fk-blue);color:#fff}
+.fk-ck-step-num{width:24px;height:24px;background:#878787;color:#fff;border-radius:2px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fk-ck-step-head.active .fk-ck-step-num{background:#fff;color:var(--fk-blue)}
+.fk-ck-step-label{font-size:14px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.fk-ck-step-check{font-size:14px;margin-left:auto;display:none;color:var(--fk-blue)}
+.fk-ck-step-body{display:none;padding:24px;border-top:1px solid #f0f0f0}
+.fk-ck-step-body.show{display:block}
+.fk-ck-step-summary{display:none;padding:10px 24px 10px 64px;font-size:14px}
+.fk-ck-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.fk-ck-group{display:flex;flex-direction:column;gap:4px}
+.fk-ck-label{font-size:12px;color:#878787;font-weight:500}
+.fk-ck-input{border:1px solid #c2c2c2;border-radius:2px;padding:10px 12px;font-size:16px;outline:none;font-family:inherit;width:100%}
+.fk-ck-input:focus{border-color:var(--fk-blue)}
+.fk-ck-continue{background:var(--fk-fb-orange);color:#fff;border:none;padding:14px 32px;font-size:16px;font-weight:600;border-radius:2px}
+.fk-ck-continue:hover{opacity:.9}
+.fk-pay-layout{display:flex;min-height:300px}
+.fk-pay-tabs{display:flex;border-right:1px solid #f0f0f0;flex-direction:column;width:220px;flex-shrink:0}
+.fk-pay-tab{padding:16px 20px;font-size:14px;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.fk-pay-tab:hover{background:#f5f5f5}
+.fk-pay-tab.active{border-left-color:var(--fk-blue);background:#f5faff;color:var(--fk-blue);font-weight:600}
+.fk-pay-content{flex:1;padding:24px}
+.fk-footer{background:var(--fk-footer);color:#fff;margin-top:30px}
+.fk-footer-top{max-width:1248px;margin:0 auto;padding:36px 16px 24px;display:grid;grid-template-columns:repeat(4,1fr) auto;gap:20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.fk-footer-col h4{font-size:12px;font-weight:600;color:#878787;text-transform:uppercase;margin-bottom:12px;letter-spacing:.5px}
+.fk-footer-col a{display:block;font-size:14px;color:#fff;line-height:1.8;opacity:.9}
+.fk-footer-col a:hover{text-decoration:underline}
+.fk-footer-mail{color:#fff;font-size:14px;margin-top:12px}
+.fk-footer-btm{max-width:1248px;margin:0 auto;padding:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fk-footer-btm-links{display:flex;gap:24px;flex-wrap:wrap}
+.fk-footer-btm-links a{font-size:14px;color:#fff;font-weight:500;opacity:.9}
+.fk-footer-copy{font-size:14px;color:#878787}
+.fk-footer-pay{display:flex;gap:8px}
+.fk-footer-pay span{background:rgba(255,255,255,.1);padding:4px 10px;border-radius:2px;font-size:12px;font-weight:500}
+.fk-login-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:center;justify-content:center}
+.fk-login-modal.show{display:flex}
+.fk-login-box{display:flex;width:750px;min-height:528px;background:#fff;border-radius:2px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.fk-login-left{width:280px;background:var(--fk-blue);padding:40px 32px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
+.fk-login-left h2{font-size:28px;font-weight:500;margin-bottom:12px}
+.fk-login-left p{font-size:18px;font-weight:300;opacity:.9;line-height:1.5}
+.fk-login-right{flex:1;padding:56px 36px 24px;position:relative}
+.fk-login-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;color:#878787;cursor:pointer}
+.fk-login-input{width:100%;padding:12px 0;border:none;border-bottom:1px solid #c2c2c2;font-size:16px;outline:none;font-family:inherit}
+.fk-login-input:focus{border-bottom-color:var(--fk-blue)}
+.fk-login-terms{font-size:12px;color:#878787;margin:16px 0;line-height:1.5}
+.fk-login-terms a{color:var(--fk-blue)}
+.fk-login-submit{width:100%;padding:14px;background:var(--fk-fb-orange);color:#fff;border:none;font-size:16px;font-weight:600;border-radius:2px;margin-top:8px;cursor:pointer}
+.fk-login-or{display:flex;align-items:center;gap:12px;margin:24px 0;color:#878787;font-size:12px}
+.fk-login-or .line{flex:1;height:1px;background:#e0e0e0}
+.fk-login-otp{text-align:center;color:var(--fk-blue);font-size:14px;font-weight:500;cursor:pointer}
+.fk-login-new{text-align:center;margin-top:auto;padding-top:24px;font-size:14px;font-weight:500}
+.fk-login-new a{color:var(--fk-blue);font-weight:600}
+.fk-toast{position:fixed;bottom:-60px;left:50%;transform:translateX(-50%);background:#212121;color:#fff;padding:12px 32px;border-radius:4px;font-size:14px;font-weight:500;z-index:9999;transition:bottom .3s;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.fk-toast.show{bottom:24px}
+.addr-type input{display:none}
+.addr-type span{padding:8px 16px;border:1px solid #e0e0e0;border-radius:4px;display:inline-flex;cursor:pointer;font-size:13px;color:#878787}
+.addr-type input:checked+span{border-color:var(--fk-blue);background:#f0f5ff;color:var(--fk-blue);font-weight:600}
+@media(max-width:992px){
+    .fk-header-inner{padding:0 12px}
+    .fk-search{margin:0 12px;max-width:400px}
+    .fk-login-btn{padding:5px 16px;font-size:14px}
+    .fk-hdr-link{padding:8px 10px;font-size:14px}
+    .fk-pdp-inner{flex-direction:column}
+    .fk-pdp-left{width:100%;min-width:0;position:static;border-right:none;border-bottom:1px solid #f0f0f0}
+    .fk-grid{grid-template-columns:repeat(3,1fr)}
+    .fk-cart-inner,.fk-ck-inner{flex-direction:column}
+    .fk-cart-right{width:100%}
+    .fk-footer-top{grid-template-columns:repeat(2,1fr)}
+    .fk-login-box{width:90%;max-width:750px}
+    .fk-login-left{display:none}
+}
+@media(max-width:768px){
+    .fk-hdr-links .seller-link,.fk-hdr-links .fk-more-parent{display:none}
+    .fk-search{max-width:none}
+    .fk-grid{grid-template-columns:repeat(2,1fr)}
+    .fk-cat-link{padding:6px 12px}
+    .fk-cat-link .emoji-icon{font-size:36px;line-height:48px;height:48px}
+    .fk-banner{height:130px}
+    .fk-ck-row{grid-template-columns:1fr}
+    .fk-pdp-actions{flex-direction:column;padding:0}
+    .fk-pdp-gallery{flex-direction:column-reverse}
+    .fk-pdp-thumbs{flex-direction:row;width:100%;overflow-x:auto}
+    .fk-pay-layout{flex-direction:column}
+    .fk-pay-tabs{flex-direction:row;width:100%;overflow-x:auto;border-right:none;border-bottom:1px solid #f0f0f0}
+    .fk-pay-tab{border-left:none;border-bottom:3px solid transparent;white-space:nowrap;padding:10px 16px}
+    .fk-pay-tab.active{border-bottom-color:var(--fk-blue);border-left:none}
+    .fk-strip-card{flex:0 0 calc(100%/3);min-width:150px}
+}
+@media(max-width:480px){
+    .fk-logo{font-size:16px}
+    .fk-login-btn{padding:4px 12px;font-size:14px}
+    .fk-grid{grid-template-columns:1fr 1fr}
+    .fk-grid-card-img{width:100px;height:120px}
+    .fk-strip-card{flex:0 0 50%;min-width:130px}
+    .fk-strip-card-img{width:100px;height:100px}
+    .fk-footer-top{grid-template-columns:1fr}
+}
 
-        /* ══════ CATEGORY STRIP (modern flipkart.com white) ══════ */
-        .fk-cat-bar{background:#fff;box-shadow:0 1px 2px 0 rgba(0,0,0,.06);position:sticky;top:64px;z-index:90;border-bottom:1px solid #f0f0f0}
-        .fk-cat-bar-inner{max-width:1366px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;padding:8px 64px;gap:0;justify-content:space-between}
-        .fk-cat-bar-inner::-webkit-scrollbar{display:none}
-        .fk-cat-item{display:flex;flex-direction:column;align-items:center;padding:6px 14px;cursor:pointer;transition:color .15s;text-decoration:none;color:var(--fk-dark);flex:0 0 auto}
-        .fk-cat-item:hover{color:var(--fk-blue)}
-        .fk-cat-item.active{color:var(--fk-blue)}
-        .fk-cat-item-icon{width:60px;height:60px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:4px;border-radius:50%;background:#fff}
-        .fk-cat-item-icon img{width:100%;height:100%;object-fit:cover}
-        .fk-cat-item-icon .emoji{font-size:36px;line-height:1}
-        .fk-cat-item-name{font-size:14px;font-weight:600;white-space:nowrap;text-align:center;letter-spacing:.1px;display:inline-flex;align-items:center;gap:3px}
-        .fk-cat-item-name .arr{font-size:8px;opacity:.7}
-
-        /* ══════ MAIN ══════ */
-        .fk-main{max-width:1366px;margin:0 auto;padding:12px 16px 24px}
-        .fk-home-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
-        .fk-home-row > .banner-wrap{flex:1;min-width:0}
-        .fk-home-row > .side-promo{flex:0 0 240px;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);align-self:stretch;display:flex;flex-direction:column}
-        .side-promo-inner{padding:18px 16px;background:linear-gradient(150deg,#1565c0 0%,#1976d2 50%,#42a5f5 100%);color:#fff;flex:1;display:flex;flex-direction:column;justify-content:space-between;min-height:296px}
-        .side-promo h3{font-size:18px;font-weight:700;margin-bottom:4px}
-        .side-promo .sp-sub{font-size:13px;opacity:.92;margin-bottom:14px}
-        .side-promo .sp-art{font-size:72px;text-align:center;margin:18px 0}
-        .side-promo .sp-cta{font-size:13px;font-weight:700;background:rgba(255,255,255,.18);padding:8px 14px;border-radius:2px;align-self:flex-start;backdrop-filter:blur(4px)}
-
-        /* ══════ HERO BANNER (real-image, full-bleed like flipkart.com) ══════ */
-        .banner-wrap{position:relative;border-radius:var(--radius);overflow:hidden;height:296px;background:#e4e4e4;box-shadow:var(--shadow)}
-        .banner-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .5s;pointer-events:none}
-        .banner-slide.active{opacity:1;pointer-events:auto}
-        .banner-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,.18) 45%,rgba(0,0,0,0) 60%);}
-        .banner-content{position:absolute;inset:0;padding:42px 56px;z-index:1;display:flex;flex-direction:column;justify-content:center;max-width:560px}
-        .banner-tag{background:var(--fk-yellow);color:#1a1a1a;font-size:11px;font-weight:800;padding:5px 12px;border-radius:2px;display:inline-block;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;align-self:flex-start}
-        .banner-h1{color:#fff;font-size:38px;font-weight:900;line-height:1.05;letter-spacing:-.6px;text-shadow:0 2px 12px rgba(0,0,0,.45)}
-        .banner-h1 em{color:var(--fk-yellow);font-style:normal;display:block;margin-top:6px}
-        .banner-p{color:rgba(255,255,255,.96);font-size:15px;margin-top:14px;font-weight:500;letter-spacing:.2px;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-        .banner-cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--fk-yellow);color:#1a1a1a;font-weight:800;font-size:14px;padding:12px 30px;border-radius:2px;border:none;align-self:flex-start;box-shadow:0 4px 12px rgba(0,0,0,.3);letter-spacing:.3px}
-        .banner-cta:hover{background:var(--fk-yellow-dark);transform:translateY(-1px)}
-        .banner-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
-        .banner-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
-        .banner-dot.active{background:#fff;width:24px;border-radius:4px}
-        .banner-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:78px;background:rgba(255,255,255,.92);border:none;color:#212121;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:5;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-        .banner-nav:hover{background:#fff}
-        .banner-nav.prev{left:0;border-radius:0 4px 4px 0}
-        .banner-nav.next{right:0;border-radius:4px 0 0 4px}
-
-        /* ══════ DEAL STRIP ══════ */
-        .deal-strip{display:flex;gap:10px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-        .deal-strip::-webkit-scrollbar{display:none}
-        .deal-card{background:#fff;border-radius:var(--radius);padding:18px 14px 16px;text-align:center;cursor:pointer;min-width:172px;flex:1;box-shadow:var(--shadow);transition:transform .2s, box-shadow .2s;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:inherit}
-        .deal-card:hover{box-shadow:0 6px 18px rgba(0,0,0,.12);transform:translateY(-2px)}
-        .deal-card .dc-img{width:64px;height:64px;border-radius:50%;background:#f5f7fa;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;border:1px solid #eef0f3}
-        .deal-card .dc-img img{width:100%;height:100%;object-fit:cover}
-        .deal-card .dc-img .emoji{font-size:30px}
-        .deal-card .dc-name{font-size:13px;font-weight:700;color:var(--fk-dark);margin-bottom:2px}
-        .deal-card .dc-off{font-size:12px;color:var(--fk-green);font-weight:700;margin-top:2px}
-
-        /* ══════ TOP OFFERS (horizontal carousel like flipkart.com) ══════ */
-        .top-offers{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;position:relative}
-        .top-offers .to-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px}
-        .to-head-left{display:flex;align-items:baseline;gap:14px}
-        .to-head h2{font-size:22px;font-weight:600;color:var(--fk-dark);letter-spacing:-.2px}
-        .to-head .to-sub{font-size:13px;color:var(--fk-gray);font-weight:500}
-        .top-offers .view-all{background:var(--fk-blue);color:#fff;padding:9px 22px;border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.4px;box-shadow:0 1px 2px rgba(40,116,240,.25)}
-        .top-offers .view-all:hover{background:var(--fk-blue-dark)}
-
-        /* ══════ MID-PAGE PROMO TILES (3 image promos, like flipkart.com home) ══════ */
-        .promo-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
-        .promo-tile{position:relative;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;height:170px;cursor:pointer;display:flex;align-items:flex-end;color:#fff;text-decoration:none;background-size:cover;background-position:center;transition:transform .2s, box-shadow .2s}
-        .promo-tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.18);transform:translateY(-2px)}
-        .promo-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.55) 100%)}
-        .promo-tile-body{position:relative;z-index:2;padding:18px 20px}
-        .promo-tile-body .pt-eyebrow{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;background:var(--fk-yellow);color:#1a1a1a;display:inline-block;padding:3px 8px;border-radius:2px;margin-bottom:8px}
-        .promo-tile-body h4{font-size:20px;font-weight:800;line-height:1.15;letter-spacing:-.3px;margin-bottom:4px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
-        .promo-tile-body .pt-sub{font-size:13px;font-weight:500;opacity:.95;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-        .to-track-wrap{position:relative}
-        .to-track{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;padding:0 0 18px;scroll-behavior:smooth}
-        .to-track::-webkit-scrollbar{display:none}
-        .to-card{flex:0 0 230px;padding:6px 18px 12px;cursor:pointer;text-align:center;border-right:1px solid #f4f4f4;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:inherit;transition:transform .2s}
-        .to-card:hover{transform:translateY(-2px)}
-        .to-card:last-child{border-right:none}
-        .to-card-img{width:170px;height:170px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
-        .to-card-img img{max-width:100%;max-height:100%;object-fit:contain}
-        .to-card-off{font-size:18px;font-weight:700;color:var(--fk-green);margin-bottom:2px}
-        .to-card-name{font-size:14px;color:var(--fk-dark);font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px;max-width:200px}
-        .to-card-from{font-size:13px;color:var(--fk-gray);margin-top:4px;font-weight:500}
-        .to-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:78px;background:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.18);z-index:3;display:flex;align-items:center;justify-content:center;color:var(--fk-dark);font-weight:600}
-        .to-arrow:hover{background:#f8f9fa}
-        .to-arrow.prev{left:0;border-radius:0 4px 4px 0}
-        .to-arrow.next{right:0;border-radius:4px 0 0 4px}
-        .to-arrow.disabled{opacity:.4;cursor:default}
-
-        /* ══════ SECTION CONTAINER ══════ */
-        .sec-box{background:#fff;border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
-        .sec-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px}
-        .sec-title{font-size:22px;font-weight:600;color:var(--fk-dark);letter-spacing:-.2px}
-        .sec-head .view-all{background:var(--fk-blue);color:#fff;padding:9px 22px;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.4px;box-shadow:0 1px 2px rgba(40,116,240,.25)}
-        .sec-head .view-all:hover{background:var(--fk-blue-dark)}
-
-        /* ══════ PRODUCTS GRID ══════ */
-        .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0}
-        .p-card{border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;padding:20px 16px 18px;cursor:pointer;transition:transform .2s, box-shadow .2s;position:relative;display:flex;flex-direction:column;background:#fff}
-        .p-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:1;transform:translateY(-1px)}
-        .p-card-img-wrap{text-align:center;margin-bottom:14px;position:relative;height:170px;display:flex;align-items:center;justify-content:center}
-        .p-card img{max-width:100%;max-height:170px;object-fit:contain;margin:0 auto;display:block}
-        .p-card-name{font-size:14px;font-weight:400;color:#212121;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
-        .p-card-rating{display:inline-flex;align-items:center;gap:6px;margin-bottom:6px}
-        .p-card-rating .badge{background:var(--fk-green);color:#fff;font-size:11px;font-weight:700;padding:2px 5px 2px 4px;border-radius:3px;display:inline-flex;align-items:center;gap:2px;line-height:1.3}
-        .p-card-rating .badge.low{background:#ff9f00}
-        .p-card-rating .count{font-size:12px;color:var(--fk-gray);font-weight:600}
-        .p-card-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-        .p-card-price .now{font-size:16px;font-weight:600;color:#212121}
-        .p-card-price .was{font-size:13px;color:var(--fk-gray);text-decoration:line-through}
-        .p-card-price .off{font-size:13px;color:var(--fk-green);font-weight:600}
-        .p-card-extra{font-size:12px;color:#212121;margin-top:4px}
-        .p-card-extra .free{color:var(--fk-dark);font-weight:600}
-        .p-card-assured{display:inline-flex;align-items:center;gap:4px;margin-top:6px}
-        .p-card-assured .fa-badge{display:inline-flex;align-items:center;background:var(--fk-yellow);padding:1px 5px;border-radius:2px;font-size:10px;font-weight:900;color:#0a0a0a;letter-spacing:.5px}
-        .p-card-assured .fa-badge .f{color:var(--fk-blue);font-style:italic;margin-right:1px}
-        .p-card-assured span.txt{font-size:11px;color:var(--fk-blue);font-weight:700;letter-spacing:.2px}
-
-        /* ══════ LOGIN MODAL (Flipkart style) ══════ */
-        .login-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
-        .login-overlay.open{display:flex}
-        .login-modal{background:#fff;width:750px;max-width:95vw;min-height:528px;display:flex;border-radius:2px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,.3);animation:loginIn .2s ease}
-        @keyframes loginIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
-        .login-left{width:270px;flex-shrink:0;background:var(--fk-blue);padding:40px 32px;display:flex;flex-direction:column;justify-content:space-between}
-        .login-left h2{color:#fff;font-size:28px;font-weight:700;line-height:1.2}
-        .login-left p{color:#dbdbdb;font-size:17px;margin-top:16px;line-height:1.5}
-        .login-left-img{margin-top:auto;text-align:center;font-size:100px;opacity:.3}
-        .login-right{flex:1;padding:56px 36px 32px;position:relative;display:flex;flex-direction:column}
-        .login-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;color:#888;cursor:pointer}
-        .login-input{width:100%;padding:14px 0;border:none;border-bottom:1px solid #e0e0e0;font-size:14px;font-family:inherit;outline:none;margin-bottom:4px;color:#212121}
-        .login-input:focus{border-bottom-color:var(--fk-blue)}
-        .login-input::placeholder{color:#aaa}
-        .login-terms{font-size:12px;color:var(--fk-gray);margin:16px 0 20px;line-height:1.5}
-        .login-terms a{color:var(--fk-blue);font-weight:500}
-        .login-btn-continue{width:100%;padding:16px;background:var(--fk-fb-orange);color:#fff;border:none;font-size:15px;font-weight:700;border-radius:2px;letter-spacing:.5px;box-shadow:0 2px 4px rgba(251,100,27,.4)}
-        .login-btn-continue:hover{background:#ea580c}
-        .login-or{display:flex;align-items:center;gap:16px;margin:24px 0}
-        .login-or span{font-size:13px;color:#aaa;font-weight:600}
-        .login-or .line{flex:1;height:1px;background:#e0e0e0}
-        .login-otp-link{text-align:center;color:var(--fk-blue);font-size:14px;font-weight:700;cursor:pointer}
-        .login-signup{margin-top:auto;text-align:center;font-size:13px;color:var(--fk-gray)}
-        .login-signup a{color:var(--fk-blue);font-weight:700;font-size:13px}
-
-        /* ══════ PRODUCT DETAIL PAGE (Flipkart style — exact replica) ══════ */
-        .pd-page{display:none;background:var(--fk-bg);min-height:100vh}
-        .pd-page.active{display:block}
-        .pd-page-inner{max-width:1248px;margin:0 auto;padding:16px 10px}
-        .pd-back{display:inline-flex;align-items:center;gap:6px;color:var(--fk-blue);font-size:13px;font-weight:600;cursor:pointer;padding:10px 4px 12px;text-transform:uppercase;letter-spacing:.3px}
-        .pd-back:hover{text-decoration:underline}
-        .pd-top{display:flex;gap:0;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:visible}
-        .pd-left{width:420px;flex-shrink:0;padding:24px;border-right:1px solid #f0f0f0;position:sticky;top:80px;align-self:flex-start}
-        .pd-img-main{width:100%;aspect-ratio:1;object-fit:contain;border:1px solid #f0f0f0;border-radius:2px;padding:16px;margin-bottom:16px;background:#fff}
-        .pd-actions{display:flex;gap:10px}
-        .pd-btn-cart,.pd-btn-buy{flex:1;padding:16px;border:none;font-size:16px;font-weight:700;border-radius:2px;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.5px;text-transform:uppercase}
-        .pd-btn-cart{background:var(--fk-orange);color:#fff}
-        .pd-btn-cart:hover{background:#e68a00}
-        .pd-btn-buy{background:var(--fk-fb-orange);color:#fff}
-        .pd-btn-buy:hover{background:#ea580c}
-        .pd-right{flex:1;padding:24px 24px 32px;min-width:0}
-        .pd-breadcrumb{font-size:12px;color:var(--fk-gray);margin-bottom:8px}
-        .pd-breadcrumb a{color:var(--fk-blue);cursor:pointer}
-        .pd-breadcrumb a:hover{text-decoration:underline}
-        .pd-name{font-size:18px;font-weight:500;color:#212121;line-height:1.4;margin-bottom:10px}
-        .pd-rating-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-        .pd-rating-badge{background:var(--fk-green);color:#fff;font-size:12px;font-weight:700;padding:2px 6px 2px 4px;border-radius:3px;display:inline-flex;align-items:center;gap:2px;line-height:1.3}
-        .pd-rating-count{font-size:14px;color:var(--fk-gray);font-weight:500}
-        .pd-extra-badge{background:#f0faf0;color:var(--fk-green);font-size:14px;font-weight:600;padding:4px 10px;border-radius:3px}
-        .pd-price-row{margin-bottom:16px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-        .pd-price-now{font-size:28px;font-weight:700;color:#212121}
-        .pd-price-was{font-size:16px;color:var(--fk-gray);text-decoration:line-through}
-        .pd-price-off{font-size:16px;color:var(--fk-green);font-weight:700}
-        .pd-offers{margin-bottom:20px}
-        .pd-offers-title{font-size:14px;font-weight:700;color:#212121;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-        .pd-offer-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13px;color:#212121;line-height:1.4}
-        .pd-offer-tag{background:var(--fk-green);color:#fff;font-size:11px;font-weight:700;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:1px}
-        .pd-highlights{margin-bottom:20px}
-        .pd-highlights h3{font-size:14px;font-weight:700;color:#878787;text-transform:uppercase;margin-bottom:10px;letter-spacing:.5px}
-        .pd-highlights ul{list-style:none;padding:0}
-        .pd-highlights li{font-size:14px;color:#212121;padding:5px 0;padding-left:16px;position:relative;line-height:1.5}
-        .pd-highlights li::before{content:"\2022";position:absolute;left:0;color:var(--fk-dark)}
-        .pd-delivery{margin-bottom:20px;padding:16px;border:1px solid #f0f0f0;border-radius:4px}
-        .pd-delivery-row{display:flex;align-items:center;gap:10px;font-size:14px;color:#212121}
-        .pd-delivery-icon{font-size:20px}
-        .pd-seller{margin-bottom:20px;font-size:14px;color:#212121}
-        .pd-seller a{color:var(--fk-blue);font-weight:600}
-        /* Full-width sections below pd-top (like real Flipkart PDP) */
-        .pd-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-top:12px;padding:24px 24px 20px}
-        .pd-section-title{font-size:24px;font-weight:600;color:#212121;padding-bottom:16px;border-bottom:1px solid #e0e0e0;margin-bottom:0}
-        .pd-desc{margin-bottom:0}
-        .pd-desc h3{font-size:24px;font-weight:600;color:#212121;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #e0e0e0}
-        .pd-desc p{font-size:14px;color:#212121;line-height:1.7}
-        .pd-reviews h3{font-size:24px;font-weight:600;color:#212121;margin-bottom:0;padding-bottom:16px;border-bottom:1px solid #e0e0e0}
-        .pd-review{padding:16px 0;border-bottom:1px solid #f0f0f0}
-        .pd-review:last-child{border-bottom:none}
-        .pd-review-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-        .pd-review-badge{background:var(--fk-green);color:#fff;font-size:11px;font-weight:700;padding:2px 5px;border-radius:3px;display:inline-flex;align-items:center;gap:2px}
-        .pd-review-badge.low{background:var(--fk-orange)}
-        .pd-review-badge.bad{background:var(--fk-red)}
-        .pd-review-text{font-size:14px;color:#212121;line-height:1.5}
-        .pd-review-user{font-size:12px;color:var(--fk-gray);margin-top:6px}
-        .pd-go-cart{background:#388e3c !important}
-        .pd-go-cart:hover{background:#2e7d32 !important}
-        .pd-similar{margin-top:12px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-
-        /* ══════ CART PAGE (Flipkart style: full page, not drawer) ══════ */
-        .cart-page{display:none;background:var(--fk-bg);min-height:100vh}
-        .cart-page.active{display:block}
-        .cart-page-inner{max-width:1100px;margin:0 auto;padding:16px 10px;display:flex;gap:16px;align-items:flex-start}
-        .cart-left{flex:1;min-width:0}
-        .cart-right{width:380px;flex-shrink:0;position:sticky;top:72px}
-        .cart-box{background:#fff;box-shadow:var(--shadow);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
-        .cart-hdr{padding:16px 24px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between}
-        .cart-hdr h2{font-size:18px;font-weight:500;color:#212121}
-        .cart-item{display:flex;gap:16px;padding:24px;border-bottom:1px solid #f0f0f0}
-        .cart-item img{width:112px;height:112px;object-fit:contain;border:1px solid #f0f0f0;border-radius:2px;flex-shrink:0;padding:8px}
-        .cart-item-info{flex:1}
-        .cart-item-name{font-size:16px;color:#212121;margin-bottom:6px;line-height:1.3}
-        .cart-item-seller{font-size:12px;color:var(--fk-gray);margin-bottom:8px}
-        .cart-item-price{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-        .cart-item-price .now{font-size:18px;font-weight:700;color:#212121}
-        .cart-item-price .was{font-size:14px;color:var(--fk-gray);text-decoration:line-through}
-        .cart-item-price .off{font-size:14px;color:var(--fk-green);font-weight:600}
-        .cart-qty{display:flex;align-items:center;gap:0}
-        .cart-qty button{width:32px;height:32px;border:1px solid #c2c2c2;background:#fff;font-size:16px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#212121}
-        .cart-qty button:disabled{opacity:.3;cursor:not-allowed}
-        .cart-qty span{width:40px;text-align:center;font-size:14px;font-weight:700}
-        .cart-item-actions{display:flex;gap:16px;margin-top:16px}
-        .cart-item-actions button{background:none;border:none;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#212121;padding:4px 0}
-        .cart-item-actions button:hover{color:var(--fk-blue)}
-        .cart-place-order{padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end}
-        .cart-place-btn{padding:16px 48px;background:var(--fk-fb-orange);color:#fff;border:none;font-size:16px;font-weight:700;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.2);letter-spacing:.5px}
-        .cart-place-btn:hover{background:#ea580c}
-        .cart-empty-box{text-align:center;padding:60px 20px}
-        .cart-empty-box .icon{font-size:64px;margin-bottom:16px;opacity:.5}
-        .cart-price-box{background:#fff;box-shadow:var(--shadow);border-radius:var(--radius)}
-        .cart-price-hdr{padding:16px 24px;border-bottom:1px solid #f0f0f0}
-        .cart-price-hdr span{font-size:12px;font-weight:500;color:#878787;text-transform:uppercase;letter-spacing:.5px}
-        .cart-price-body{padding:16px 24px}
-        .cart-price-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:16px;color:#212121}
-        .cart-price-row .green{color:var(--fk-green)}
-        .cart-price-total{display:flex;justify-content:space-between;font-size:18px;font-weight:700;padding:16px 0 0;border-top:1px dashed #e0e0e0}
-        .cart-price-save{color:var(--fk-green);font-size:14px;font-weight:600;padding:12px 24px;border-top:1px solid #f0f0f0}
-        .cart-safe{display:flex;align-items:center;gap:10px;padding:16px 24px;color:var(--fk-gray);font-size:12px;font-weight:500}
-
-        /* ══════ CHECKOUT ACCORDION (Flipkart style) ══════ */
-        .ck-page{display:none;background:var(--fk-bg);min-height:100vh}
-        .ck-page.active{display:block}
-        .ck-page-inner{max-width:1100px;margin:0 auto;padding:16px 10px;display:flex;gap:16px;align-items:flex-start}
-        .ck-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-        .ck-right{width:380px;flex-shrink:0;position:sticky;top:72px}
-        .ck-step{background:#fff;box-shadow:var(--shadow)}
-        .ck-step-head{display:flex;align-items:center;gap:16px;padding:14px 24px;cursor:pointer}
-        .ck-step-head.active{background:var(--fk-blue);color:#fff}
-        .ck-step-head.done{background:#fff;color:#878787}
-        .ck-step-num{min-width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-        .ck-step-head.active .ck-step-num{background:#fff;color:var(--fk-blue)}
-        .ck-step-head.done .ck-step-num{background:#f0f0f0;color:var(--fk-blue)}
-        .ck-step-head .ck-step-num{background:#f0f0f0;color:#878787}
-        .ck-step-label{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
-        .ck-step-check{margin-left:auto;display:none;font-size:14px}
-        .ck-step-head.done .ck-step-check{display:block;color:var(--fk-blue)}
-        .ck-step-summary{display:none;padding:4px 24px 14px 64px;font-size:14px;color:#212121}
-        .ck-step-body{display:none;padding:24px;background:#f5faff}
-        .ck-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-        .ck-group{margin-bottom:0}
-        .ck-label{display:block;font-size:12px;font-weight:600;color:var(--fk-gray);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
-        .ck-input{width:100%;padding:12px 14px;border:1px solid var(--fk-border);border-radius:2px;font-size:14px;font-family:inherit;outline:none;color:#212121}
-        .ck-input:focus{border-color:var(--fk-blue)}
-        .ck-textarea{resize:vertical;min-height:64px}
-        .ck-continue{padding:16px 48px;background:var(--fk-fb-orange);color:#fff;border:none;font-size:14px;font-weight:600;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.2);letter-spacing:.3px}
-        .ck-continue:hover{background:#ea580c}
-        .ck-cancel{background:none;border:none;color:var(--fk-blue);font-weight:600;font-size:14px;margin-left:16px}
-
-        /* ══════ PAYMENT (Flipkart-style sidebar tabs + per-method panel) ══════ */
-        .pay-wrap{display:flex;background:#fff;border:1px solid #f0f0f0;border-radius:2px;overflow:hidden;min-height:520px}
-        .pay-tabs{flex:0 0 220px;background:#fafafa;border-right:1px solid #f0f0f0;padding:8px 0}
-        .pay-tab{display:flex;align-items:center;gap:12px;padding:14px 18px;font-size:13px;font-weight:500;color:#212121;cursor:pointer;border-left:4px solid transparent;transition:background .15s, border-color .15s;line-height:1.3;position:relative}
-        .pay-tab .ico{font-size:20px;width:24px;text-align:center;flex-shrink:0}
-        .pay-tab .lbl{flex:1}
-        .pay-tab .sub{display:block;font-size:11px;color:#878787;font-weight:400;margin-top:2px;text-transform:none}
-        .pay-tab:hover{background:#f5f7fa}
-        .pay-tab.active{background:#fff;border-left-color:var(--fk-fb-orange);color:#212121;font-weight:700;box-shadow:inset -1px 0 0 #f0f0f0}
-        .pay-tab.active::after{content:"›";position:absolute;right:12px;color:#bdbdbd;font-size:18px}
-        .pay-tab.disabled{opacity:.55;cursor:not-allowed}
-        .pay-panel{flex:1;padding:24px 28px;display:none;min-width:0}
-        .pay-panel.active{display:block}
-        .pay-banner{background:linear-gradient(135deg,#1a237e,#2874f0);border-radius:8px;padding:18px 20px;margin-bottom:20px;color:#fff;display:flex;justify-content:space-between;align-items:center}
-        .upi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-        .upi-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:2px solid var(--fk-border);border-radius:8px;background:#fff;cursor:pointer;transition:border-color .2s}
-        .upi-btn:hover{border-color:var(--fk-blue)}
-        .upi-btn .ico{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900}
-        .upi-btn .nm{font-size:12px;font-weight:700;color:var(--fk-dark)}
-        .pay-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-        .pay-form-row.single{grid-template-columns:1fr}
-        .pay-input{width:100%;padding:12px 14px;border:1px solid var(--fk-border);border-radius:2px;font-size:14px;font-family:inherit;outline:none;color:#212121}
-        .pay-input:focus{border-color:var(--fk-blue)}
-        .pay-input-row{display:flex;align-items:center;gap:12px}
-        .pay-input-row .pay-input{flex:1}
-        .pay-help{font-size:12px;color:#878787;margin-top:6px;line-height:1.5}
-        .pay-card-brands{display:flex;gap:6px;align-items:center;margin-left:auto}
-        .pay-card-brands span{font-size:9px;font-weight:800;letter-spacing:.5px;padding:3px 6px;border:1px solid #e0e0e0;border-radius:3px;color:#555;background:#fff}
-        .pay-method-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-        .pay-method-head h3{font-size:16px;font-weight:700;color:#212121}
-        .pay-method-head .lock{font-size:11px;color:#878787;display:inline-flex;align-items:center;gap:4px}
-        .pay-cta{padding:14px 36px;background:var(--fk-fb-orange);color:#fff;border:none;font-size:14px;font-weight:700;border-radius:2px;letter-spacing:.4px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
-        .pay-cta:hover{background:#ea580c}
-        .pay-cta.disabled{opacity:.6;cursor:not-allowed}
-        .pay-bank-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
-        .pay-bank{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--fk-border);border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;background:#fff;transition:border-color .15s}
-        .pay-bank:hover,.pay-bank.selected{border-color:var(--fk-blue);background:#f0f5ff}
-        .pay-bank .logo{width:28px;height:28px;background:#f0f0f0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#555}
-        .pay-wallet-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-        .pay-wallet{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:1px solid var(--fk-border);border-radius:6px;background:#fff;cursor:pointer;transition:border-color .15s}
-        .pay-wallet:hover,.pay-wallet.selected{border-color:var(--fk-blue);background:#f0f5ff}
-        .pay-wallet .logo{width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff}
-        .pay-wallet .nm{font-size:12px;font-weight:600;color:#212121;text-align:center}
-
-        /* ══════ PRODUCT DETAIL EXTRAS — gallery, specs, ratings ══════ */
-        .pd-gallery{display:flex;gap:12px;margin-bottom:16px}
-        .pd-thumbs{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
-        .pd-thumb{width:54px;height:54px;border:1px solid var(--fk-border);border-radius:2px;padding:4px;cursor:pointer;background:#fff;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
-        .pd-thumb img{max-width:100%;max-height:100%;object-fit:contain}
-        .pd-thumb:hover,.pd-thumb.active{border-color:var(--fk-blue);box-shadow:0 0 0 1px var(--fk-blue)}
-        .pd-img-stage{flex:1;border:1px solid var(--fk-border);border-radius:2px;padding:16px;background:#fff;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
-        .pd-img-stage img{max-width:100%;max-height:100%;object-fit:contain}
-        .pd-stock{font-size:13px;font-weight:600;color:var(--fk-green);margin-bottom:10px;display:inline-flex;align-items:center;gap:4px}
-        .pd-stock.low{color:#e65100}
-        .pd-specs h3{font-size:24px;font-weight:600;color:#212121;margin-bottom:0;padding-bottom:16px;border-bottom:1px solid #e0e0e0}
-        .pd-spec-table{width:100%;border-collapse:collapse;font-size:14px}
-        .pd-spec-table tr{border-bottom:1px solid #f0f0f0}
-        .pd-spec-table tr:last-child{border-bottom:none}
-        .pd-spec-table th{text-align:left;color:#878787;font-weight:400;padding:12px 24px 12px 0;width:35%;vertical-align:top}
-        .pd-spec-table td{color:#212121;padding:12px 0;line-height:1.5;font-weight:400}
-        .pd-spec-group{margin-top:20px}
-        .pd-spec-group-title{font-size:16px;font-weight:600;color:#212121;padding:14px 0 10px;border-bottom:2px solid #e0e0e0;margin-bottom:0}
-        .pd-rev-summary{display:flex;align-items:flex-start;gap:32px;padding:16px 0;border-bottom:1px solid #f0f0f0;margin-bottom:16px}
-        .pd-rev-overall{flex:0 0 140px;text-align:center}
-        .pd-rev-overall .num{font-size:32px;font-weight:600;color:#212121;display:inline-flex;align-items:center;gap:6px}
-        .pd-rev-overall .num .star{color:var(--fk-green);font-size:24px}
-        .pd-rev-overall .total{font-size:12px;color:#878787;margin-top:4px}
-        .pd-rev-bars{flex:1}
-        .pd-rev-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:#878787;margin-bottom:6px}
-        .pd-rev-bar .lbl{width:14px;color:#212121;font-weight:500}
-        .pd-rev-bar .lbl .star{color:var(--fk-green);font-size:11px}
-        .pd-rev-bar .track{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;max-width:240px}
-        .pd-rev-bar .fill{height:100%;background:var(--fk-green);border-radius:3px}
-        .pd-rev-bar .fill.low{background:var(--fk-orange)}
-        .pd-rev-bar .pct{width:36px;text-align:right;color:#212121;font-weight:500}
-        .pd-review-verified{font-size:11px;color:var(--fk-blue);font-weight:600;display:inline-flex;align-items:center;gap:3px;margin-left:6px}
-        .pd-review-verified::before{content:"✓"}
-        .pd-review-meta{display:flex;align-items:center;gap:10px;margin-top:8px;color:#878787;font-size:12px}
-        .pd-review-helpful{font-weight:600;cursor:pointer}
-
-        /* ══════ ORDER SUCCESS ══════ */
-        .ck-success{background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:0;max-width:520px;margin:32px auto;overflow:hidden}
-        .ck-success .check{background:linear-gradient(135deg,#388e3c,#1b5e20);color:#fff;padding:36px 24px;text-align:center}
-        .ck-success .check .badge{width:72px;height:72px;border-radius:50%;background:#fff;color:var(--fk-green);font-size:42px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
-        .ck-success .check h2{font-size:22px;font-weight:800;letter-spacing:.2px}
-        .ck-success .check p{font-size:13px;opacity:.92;margin-top:6px}
-        .ck-success-body{padding:24px}
-        .ck-success-row{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px dashed #eee}
-        .ck-success-row:last-child{border-bottom:none}
-        .ck-success-row .k{color:#878787}
-        .ck-success-row .v{color:#212121;font-weight:600;text-align:right;max-width:60%;word-break:break-word}
-
-        /* ══════ FOOTER ══════ */
-        .fk-footer{background:#172337;color:#fff;margin-top:0}
-        .fk-footer-inner{max-width:1200px;margin:0 auto;padding:40px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-        .fk-footer h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--fk-gray);margin-bottom:12px}
-        .fk-footer a{display:block;color:rgba(255,255,255,.7);font-size:12px;margin-bottom:6px;cursor:pointer}
-        .fk-footer a:hover{color:#fff}
-        .fk-footer-bottom{background:#0e1b29;padding:16px;text-align:center;font-size:12px;color:var(--fk-gray)}
-
-        /* ══════ TOAST ══════ */
-        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:4px;font-size:14px;font-weight:500;z-index:600;display:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-        .toast.show{display:block;animation:toastIn .3s ease}
-        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-
-        /* ══════ LOADING / EXPIRED ══════ */
-        .loading-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--fk-bg);flex-direction:column;gap:16px}
-        .fk-spinner{width:48px;height:48px;border:4px solid #e0e0e0;border-top-color:var(--fk-blue);border-radius:50%;animation:spin .7s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .expired-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#060b14,#0c1424)}
-        .expired-card{text-align:center;padding:48px;max-width:440px}
-        .expired-icon{font-size:80px;margin-bottom:24px}
-        .expired-title{font-size:28px;font-weight:800;color:#fff;margin-bottom:12px}
-        .expired-sub{color:#94a3b8;font-size:16px;line-height:1.6}
-
-        /* ══════ RESPONSIVE ══════ */
-        @media(max-width:768px){
-            .fk-hdr-links{display:none}
-            .fk-header-inner{gap:8px;padding:0 12px}
-            .fk-search{margin:0 8px}
-            .fk-cat-bar-inner{padding:6px 12px}
-            .fk-cat-item{padding:8px 12px 4px;min-width:72px}
-            .fk-cat-item-icon{width:50px;height:50px}
-            .fk-cat-item-icon .emoji{font-size:24px}
-            .fk-cat-item-name{font-size:11px}
-            .products-grid{grid-template-columns:repeat(2,1fr)}
-            .p-card-img-wrap{height:130px}
-            .p-card img{max-height:130px}
-            .banner-art{display:none}
-            .banner-content{padding:24px 22px}
-            .pd-top{flex-direction:column}
-            .pd-left{width:100%;position:static;border-right:none;border-bottom:1px solid #f0f0f0}
-            .pd-section{padding:16px 14px}
-            .pd-section-title,.pd-specs h3,.pd-reviews h3,.pd-desc h3{font-size:18px}
-            .pd-rev-summary{flex-direction:column;gap:16px}
-            .cart-page-inner,.ck-page-inner{flex-direction:column}
-            .cart-right,.ck-right{width:100%;position:static}
-            .login-modal{flex-direction:column;max-height:95vh;overflow-y:auto}
-            .login-left{width:100%;padding:24px;min-height:auto}
-            .login-left-img{display:none}
-            .fk-footer-inner{grid-template-columns:1fr 1fr}
-            .ck-row{grid-template-columns:1fr}
-            .banner-wrap{height:200px}
-            .banner-h1{font-size:26px}
-            .to-card{flex:0 0 170px}
-            .to-card-img{width:130px;height:130px}
-            .sec-title,.to-head h2{font-size:18px}
-        }
-        @media(max-width:480px){
-            .products-grid{grid-template-columns:1fr 1fr}
-            .p-card{padding:12px 8px}
-            .p-card img{width:100px;height:100px}
-        }
-
-        /* Address type radio */
-        .addr-type input{display:none}
-        .addr-type span{padding:8px 16px;border:1px solid #e0e0e0;border-radius:4px;display:inline-flex;align-items:center;cursor:pointer;font-size:13px;color:#878787;transition:all .2s}
-        .addr-type input:checked+span{border-color:var(--fk-blue);background:#f0f5ff;color:var(--fk-blue);font-weight:600}
-
-        /* Saved address cards */
-        .saved-addr{border:1px solid #e0e0e0;border-radius:4px;padding:16px;margin-bottom:12px;cursor:pointer;transition:border-color .2s}
-        .saved-addr:hover,.saved-addr.selected{border-color:var(--fk-blue)}
-    </style>
+</style>
 </head>
-
 <body>
 
-<div class="loading-screen" id="loadingScreen"><div class="fk-spinner"></div><div style="color:#878787;font-size:14px">Loading shop...</div></div>
-<div class="expired-page" id="expiredPage" style="display:none"><div class="expired-card"><div class="expired-icon">🔒</div><div class="expired-title">Shop Unavailable</div><div class="expired-sub">This shop's access period has ended.</div></div></div>
-
-<!-- ═══════ MAIN SHOP ═══════ -->
+<div class="ld-screen" id="ldScreen"><div class="ld-spinner"></div><div class="ld-text">Loading...</div></div>
 <div id="shopWrap" style="display:none">
-
-    <!-- HEADER -->
-    <header class="fk-header">
-        <div class="fk-header-inner">
-            <a class="fk-logo-wrap" id="headerLogo" onclick="goHome()">
-                <span class="fk-logo" id="logoText">Flipkart</span>
-                <span class="fk-logo-sub"><span>Explore</span>&nbsp;<em>Plus</em><span class="star"></span></span>
-            </a>
-            <div class="fk-search">
-                <button class="fk-search-btn" onclick="filterProducts()" aria-label="Search">🔍</button>
-                <input type="text" id="searchInput" placeholder="Search for Products, Brands and More" onkeyup="filterProducts()" />
-            </div>
-            <div class="fk-hdr-links">
-                <a class="fk-hdr-link fk-cart-wrap" onclick="openCartPage()">
-                    <span class="fk-cart-icon">🛒<span class="fk-cart-count" id="cartCount">0</span></span>
-                    <span>Cart</span>
-                </a>
-                <a class="fk-hdr-link"><span class="ic">🏪</span><span>Become a Seller</span></a>
-                <a class="fk-hdr-kebab" title="More">⋮</a>
-            </div>
+<header class="fk-header">
+<div class="fk-header-inner">
+    <a class="fk-logo-wrap" onclick="goHome()" title="Flipkart" aria-label="Flipkart">
+        <picture title="Flipkart">
+            <source srcset="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg" media="(min-width:767px)"/>
+            <source srcset="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus_mobile-39120d.svg" media="(max-width:766px)"/>
+            <img class="fk-logo-img" src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg" width="160" height="40" title="Flipkart" alt="Flipkart" onerror="this.parentElement.style.display='none';document.getElementById('logoFallback').style.display='block'"/>
+        </picture>
+        <span class="fk-logo" id="logoFallback" style="display:none">Flipkart<br/><span class='fk-logo-sub'><span>Explore</span>&nbsp;<em>Plus</em>&nbsp;<span class='fk-plus-star'></span></span></span>
+    </a>
+    <div class="fk-search">
+        <div class="fk-search-box">
+            <input type="text" id="searchInput" placeholder="Search for Products, Brands and More" onkeyup="onSearch()" onfocus="onSearchFocus()" onblur="setTimeout(function(){closeAC()},200)"/>
+            <button class="fk-search-btn" onclick="doSearch()" type="submit" aria-label="Search for Products, Brands and More" title="Search for Products, Brands and More"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 18C14.6421 18 18 14.6421 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18Z" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 16L21 21" stroke="#717478" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
-    </header>
-
-    <!-- CATEGORY BAR -->
-    <div class="fk-cat-bar">
-        <div class="fk-cat-bar-inner" id="catBar"></div>
+        <div class="fk-autocomplete" id="acBox"></div>
     </div>
-
-    <!-- SHOP CONTENT (home view) -->
-    <main class="fk-main" id="mainContent">
-
-        <!-- Top Offers (horizontal scroll like flipkart.com) -->
-        <div class="top-offers" id="topOffersBox" style="display:none">
-            <div class="to-head">
-                <div class="to-head-left">
-                    <h2>Top Offers · Hand-picked Deals</h2>
-                    <span class="to-sub">Lowest prices guaranteed</span>
-                </div>
-                <button class="view-all" onclick="filterCat('all')">VIEW ALL</button>
-            </div>
-            <div class="to-track-wrap">
-                <button class="to-arrow prev" onclick="scrollOffers(-1)" id="toArrowPrev" aria-label="Scroll left">‹</button>
-                <div class="to-track" id="topOffersTrack"></div>
-                <button class="to-arrow next" onclick="scrollOffers(1)" id="toArrowNext" aria-label="Scroll right">›</button>
+    <div class="fk-hdr-links">
+        <div class="fk-login-parent" style="position:relative">
+            <button class="fk-login-btn" onclick="openLogin()"><svg class="fk-user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#fff"/></svg>Login<span class="fk-dd-arrow">&#9662;</span></button>
+            <div class="fk-login-dd">
+                <div style="padding:12px 20px;font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center">New customer? <a style="color:var(--fk-blue);font-weight:600;cursor:pointer" onclick="openLogin()">Sign Up</a></div>
+                <div class="sep"></div>
+                <a>My Profile</a><a onclick="openCartPage()">Orders</a><a>Wishlist</a><a>Rewards</a><a>Gift Cards</a>
             </div>
         </div>
-
-
-        <!-- Category-grouped horizontal strips (Best of Electronics, Beauty &c, ...) -->
-        <div id="homeStrips"></div>
-
-        <!-- Full grid: Best Deals on Top Products / Search results / Category browse -->
-        <div class="sec-box" id="gridBox">
-            <div class="sec-head">
-                <div class="sec-title" id="secTitle">Best Deals on Top Products</div>
-                <button class="view-all" onclick="filterCat('all')">VIEW ALL</button>
-            </div>
-            <div class="products-grid" id="productsGrid"></div>
-        </div>
-    </main>
-
-    <!-- CART PAGE (full page like Flipkart) -->
-    <div class="cart-page" id="cartPage">
-        <div class="fk-main">
-            <div class="cart-page-inner">
-                <div class="cart-left">
-                    <div class="cart-box">
-                        <div class="cart-hdr">
-                            <h2 id="cartTitle">My Cart (0)</h2>
-                            <a style="color:var(--fk-blue);font-size:14px;font-weight:600;cursor:pointer" onclick="goHome()">← Continue Shopping</a>
-                        </div>
-                        <div id="cartItemsContainer"></div>
-                        <div class="cart-place-order" id="cartPlaceWrap" style="display:none">
-                            <button class="cart-place-btn" onclick="goToCheckout()">PLACE ORDER</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart-right">
-                    <div class="cart-price-box">
-                        <div class="cart-price-hdr"><span>PRICE DETAILS</span></div>
-                        <div class="cart-price-body">
-                            <div class="cart-price-row"><span>Price (<span id="cpCount">0</span> item<span id="cpCountS">s</span>)</span><span id="cpSubtotal">₹0</span></div>
-                            <div class="cart-price-row"><span>Discount</span><span class="green" id="cpDiscount">− ₹0</span></div>
-                            <div class="cart-price-row"><span>Delivery Charges</span><span><span style="text-decoration:line-through;color:var(--fk-gray);margin-right:6px">₹40</span><span class="green">FREE</span></span></div>
-                            <div class="cart-price-total"><span>Total Amount</span><span id="cpTotal">₹0</span></div>
-                        </div>
-                        <div class="cart-price-save" id="cpSave"></div>
-                    </div>
-                    <div class="cart-safe">🛡️ <span>Safe and Secure Payments. Easy returns. 100% Authentic products.</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHECKOUT PAGE -->
-    <div class="ck-page" id="ckPage">
-        <div class="fk-main">
-            <div class="ck-page-inner">
-                <div class="ck-left">
-
-                    <!-- LOGIN/SIGNUP STEP (step 1) -->
-                    <div class="ck-step" id="ckS1">
-                        <div class="ck-step-head active" id="ckS1Head" onclick="ckExpand(1)">
-                            <span class="ck-step-num" id="ckS1Num">1</span>
-                            <span class="ck-step-label">LOGIN</span>
-                            <span class="ck-step-check" id="ckS1Check">✔</span>
-                        </div>
-                        <div class="ck-step-summary" id="ckS1Summary"></div>
-                        <div class="ck-step-body" id="ckS1Body" style="display:block">
-                            <div style="max-width:360px">
-                                <div class="ck-group" style="margin-bottom:14px"><label class="ck-label">Enter Email/Mobile number</label><input class="ck-input" id="ckLoginEmail" type="text" placeholder="Email or Mobile" /></div>
-                                <div class="ck-group" style="margin-bottom:14px"><label class="ck-label">Enter Password</label><input class="ck-input" id="ckLoginPass" type="password" placeholder="Enter Password" /></div>
-                                <p style="font-size:12px;color:#878787;margin-bottom:16px;line-height:1.5">By continuing, you agree to Flipkart's <a style="color:var(--fk-blue)">Terms of Use</a> and <a style="color:var(--fk-blue)">Privacy Policy</a>.</p>
-                                <button class="ck-continue" onclick="ckLoginContinue()" style="width:100%">CONTINUE</button>
-                                <div style="text-align:center;margin-top:24px"><a style="color:var(--fk-blue);font-size:13px;font-weight:700">New to Flipkart? Create an account</a></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DELIVERY ADDRESS STEP (step 2) -->
-                    <div class="ck-step" id="ckS2">
-                        <div class="ck-step-head" id="ckS2Head" onclick="ckExpand(2)">
-                            <span class="ck-step-num" id="ckS2Num">2</span>
-                            <span class="ck-step-label">DELIVERY ADDRESS</span>
-                            <span class="ck-step-check" id="ckS2Check">✔</span>
-                        </div>
-                        <div class="ck-step-summary" id="ckS2Summary"></div>
-                        <div id="savedAddrList" style="display:none;padding:16px 24px;background:#fff;border-bottom:1px solid #f0f0f0"></div>
-                        <div class="ck-step-body" id="ckS2Body">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-                                <span style="font-size:14px;font-weight:600;color:var(--fk-blue);text-transform:uppercase">Add a new address</span>
-                            </div>
-                            <div class="ck-row">
-                                <div class="ck-group"><label class="ck-label">Name</label><input class="ck-input" id="ckName" placeholder="Full Name" /></div>
-                                <div class="ck-group"><label class="ck-label">10-digit mobile number</label><input class="ck-input" id="ckPhone" type="tel" placeholder="Mobile" maxlength="10" inputmode="numeric" /></div>
-                            </div>
-                            <div class="ck-row">
-                                <div class="ck-group"><label class="ck-label">Pincode</label><input class="ck-input" id="ckPincode" placeholder="6 digits" maxlength="6" inputmode="numeric" /></div>
-                                <div class="ck-group"><label class="ck-label">Locality</label><input class="ck-input" id="ckLocality" placeholder="Locality / Town" /></div>
-                            </div>
-                            <div class="ck-group" style="margin-bottom:14px"><label class="ck-label">Address (Area and Street)</label><textarea class="ck-input ck-textarea" id="ckAddress" placeholder="Flat, Building, Street, Area" rows="2"></textarea></div>
-                            <div class="ck-row">
-                                <div class="ck-group"><label class="ck-label">City / District / Town</label><input class="ck-input" id="ckCity" placeholder="City" /></div>
-                                <div class="ck-group"><label class="ck-label">State</label>
-                                    <select class="ck-input" id="ckState" style="height:44px">
-                                        <option value="">-- Select State --</option>
-                                        <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Delhi</option><option>Jammu and Kashmir</option><option>Ladakh</option><option>Chandigarh</option><option>Puducherry</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="ck-row">
-                                <div class="ck-group"><label class="ck-label">Email Address</label><input class="ck-input" id="ckEmail" type="email" placeholder="you@example.com" /></div>
-                                <div class="ck-group"><label class="ck-label">Landmark (Optional)</label><input class="ck-input" id="ckLandmark" placeholder="Near..." /></div>
-                            </div>
-                            <div class="ck-group" style="margin-top:8px;margin-bottom:14px">
-                                <label class="ck-label">Address Type</label>
-                                <div style="display:flex;gap:12px;margin-top:6px">
-                                    <label class="addr-type"><input type="radio" name="addrType" value="Home" checked /><span>🏠 Home</span></label>
-                                    <label class="addr-type"><input type="radio" name="addrType" value="Work" /><span>🏢 Work</span></label>
-                                </div>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:16px;padding-top:8px">
-                                <button class="ck-continue" onclick="ckAddrContinue()">SAVE AND DELIVER HERE</button>
-                                <button class="ck-cancel" onclick="goHome()">CANCEL</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ORDER SUMMARY STEP (step 3) -->
-                    <div class="ck-step" id="ckS3">
-                        <div class="ck-step-head" id="ckS3Head" onclick="ckExpand(3)">
-                            <span class="ck-step-num" id="ckS3Num">3</span>
-                            <span class="ck-step-label">ORDER SUMMARY</span>
-                            <span class="ck-step-check" id="ckS3Check">✔</span>
-                        </div>
-                        <div class="ck-step-summary" id="ckS3Summary"></div>
-                        <div class="ck-step-body" id="ckS3Body" style="background:#fff;padding:0">
-                            <div id="ckOrderItems" style="padding:24px"></div>
-                            <div style="padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center">
-                                <span style="font-size:13px;color:#878787">Order confirmation will be sent to your email</span>
-                                <button class="ck-continue" onclick="ckOrderContinue()">CONTINUE</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PAYMENT STEP (step 4) -->
-                    <div class="ck-step" id="ckS4">
-                        <div class="ck-step-head" id="ckS4Head">
-                            <span class="ck-step-num" id="ckS4Num">4</span>
-                            <span class="ck-step-label">PAYMENT OPTIONS</span>
-                            <div id="payTimer" style="display:none;margin-left:auto;background:#fff3e0;color:#e65100;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:800"></div>
-                        </div>
-                        <div class="ck-step-body" id="ckS4Body" style="background:#fff;padding:0">
-                            <div class="pay-banner" style="margin:20px 24px 16px;border-radius:6px">
-                                <div><div style="font-size:12px;opacity:.8">Pay to</div><div style="font-size:15px;font-weight:700" id="payMerchant">Shop</div><div style="font-size:12px;opacity:.8" id="payUpiId"></div></div>
-                                <div style="text-align:right"><div style="font-size:12px;opacity:.8">Total Amount</div><div style="font-size:28px;font-weight:900" id="payTotal">₹0</div></div>
-                            </div>
-                            <div class="pay-wrap" style="margin:0 24px 24px">
-                                <div class="pay-tabs" id="payTabs">
-                                    <div class="pay-tab active" data-method="upi" onclick="selectPayMethod('upi')"><span class="ico">📱</span><span class="lbl">UPI<span class="sub">GPay, PhonePe, Paytm…</span></span></div>
-                                    <div class="pay-tab" data-method="card" onclick="selectPayMethod('card')"><span class="ico">💳</span><span class="lbl">Credit / Debit / ATM Card<span class="sub">Visa, Mastercard, RuPay</span></span></div>
-                                    <div class="pay-tab" data-method="netbanking" onclick="selectPayMethod('netbanking')"><span class="ico">🏦</span><span class="lbl">Net Banking<span class="sub">All major banks</span></span></div>
-                                    <div class="pay-tab" data-method="wallet" onclick="selectPayMethod('wallet')"><span class="ico">👛</span><span class="lbl">Wallet<span class="sub">PhonePe, Paytm, Mobikwik</span></span></div>
-                                    <div class="pay-tab" data-method="emi" onclick="selectPayMethod('emi')"><span class="ico">💰</span><span class="lbl">EMI<span class="sub">No-cost EMI on cards</span></span></div>
-                                </div>
-
-                                <!-- UPI panel -->
-                                <div class="pay-panel active" data-panel="upi">
-                                    <div class="pay-method-head"><h3>UPI</h3><span class="lock">🔒 Secured by UPI · RBI licensed</span></div>
-                                    <div style="font-size:13px;color:#212121;margin-bottom:12px;line-height:1.5">Pay using your favourite UPI app — open the app on your phone or scan the QR below.</div>
-                                    <div class="upi-grid">
-                                        <button class="upi-btn" onclick="openUpi('gpay')"><div class="ico" style="background:#fff;border:2px solid #e0e0e0;color:#1a73e8;font-size:16px">G Pay</div><div class="nm">Google Pay</div></button>
-                                        <button class="upi-btn" onclick="openUpi('phonepe')"><div class="ico" style="background:#5f259f;color:#fff">Pe</div><div class="nm">PhonePe</div></button>
-                                        <button class="upi-btn" onclick="openUpi('paytm')"><div class="ico" style="background:#002970;color:#00baf2;font-size:12px">Paytm</div><div class="nm">Paytm</div></button>
-                                    </div>
-                                    <div style="display:flex;align-items:center;gap:12px;margin:20px 0"><div style="flex:1;height:1px;background:#e0e0e0"></div><span style="font-size:12px;color:#999;font-weight:600">OR SCAN QR CODE</span><div style="flex:1;height:1px;background:#e0e0e0"></div></div>
-                                    <div style="text-align:center;margin-bottom:20px">
-                                        <div id="qrLoading" style="padding:20px;color:#999;font-size:13px">⏳ Generating QR...</div>
-                                        <div id="qrBox" style="display:none"><img id="qrImg" src="" style="width:180px;height:180px;border:3px solid #e8f0fe;border-radius:10px;padding:4px" /><div style="margin-top:6px;font-size:12px;color:#666">Scan with any UPI app</div><div id="upiIdBadge" style="margin-top:6px;display:inline-block;background:#e8f0fe;color:var(--fk-blue);padding:4px 14px;border-radius:16px;font-size:12px;font-weight:700"></div></div>
-                                    </div>
-                                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#e0e0e0"></div><span style="font-size:12px;color:#999;font-weight:600">CONFIRM PAYMENT</span><div style="flex:1;height:1px;background:#e0e0e0"></div></div>
-                                    <div style="background:#f0f7ff;border:2px solid var(--fk-blue);border-radius:6px;padding:16px">
-                                        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Enter UTR / Transaction Reference</div>
-                                        <div style="font-size:11px;color:#666;margin-bottom:12px">Find in your UPI app after payment</div>
-                                        <input class="ck-input" id="utrInput" placeholder="12-digit UTR" style="font-weight:700;letter-spacing:1px;margin-bottom:12px" />
-                                        <button class="ck-continue" style="width:100%" onclick="submitUtr()">CONFIRM PAYMENT</button>
-                                    </div>
-                                </div>
-
-                                <!-- Card panel -->
-                                <div class="pay-panel" data-panel="card">
-                                    <div class="pay-method-head"><h3>Credit / Debit / ATM Card</h3><div class="pay-card-brands"><span>VISA</span><span>MC</span><span>AMEX</span><span>RuPay</span></div></div>
-                                    <div class="pay-form-row single"><input class="pay-input" id="payCardNum" placeholder="Card Number" maxlength="19" inputmode="numeric" autocomplete="cc-number" /></div>
-                                    <div class="pay-form-row single"><input class="pay-input" id="payCardName" placeholder="Name on Card" autocomplete="cc-name" /></div>
-                                    <div class="pay-form-row"><input class="pay-input" id="payCardExp" placeholder="MM / YY" maxlength="5" autocomplete="cc-exp" /><input class="pay-input" id="payCardCvv" placeholder="CVV" maxlength="4" inputmode="numeric" autocomplete="cc-csc" type="password" /></div>
-                                    <label style="display:flex;align-items:center;gap:8px;margin:6px 0 18px;font-size:13px;color:#212121"><input type="checkbox" id="payCardSave" style="accent-color:var(--fk-blue)" /> Save this card as per RBI guidelines</label>
-                                    <button class="pay-cta" onclick="payByMethod('card')">PAY <span id="payCardTotal">₹0</span></button>
-                                    <div class="pay-help">🔒 Your card details are encrypted and never stored unsecured.</div>
-                                </div>
-
-                                <!-- Net Banking panel -->
-                                <div class="pay-panel" data-panel="netbanking">
-                                    <div class="pay-method-head"><h3>Net Banking</h3></div>
-                                    <div style="font-size:13px;color:#212121;margin-bottom:12px">Popular Banks</div>
-                                    <div class="pay-bank-list" id="payBankList"></div>
-                                    <div style="font-size:13px;color:#212121;margin-bottom:8px">Other Banks</div>
-                                    <div class="pay-form-row single"><select class="pay-input" id="payOtherBank"><option value="">— Select Bank —</option><option>Bank of Baroda</option><option>Canara Bank</option><option>Punjab National Bank</option><option>Union Bank of India</option><option>IDBI Bank</option><option>South Indian Bank</option><option>Federal Bank</option><option>RBL Bank</option><option>IndusInd Bank</option></select></div>
-                                    <button class="pay-cta" onclick="payByMethod('netbanking')">PAY <span id="payNbTotal">₹0</span></button>
-                                </div>
-
-                                <!-- Wallet panel -->
-                                <div class="pay-panel" data-panel="wallet">
-                                    <div class="pay-method-head"><h3>Wallet</h3></div>
-                                    <div class="pay-wallet-list" id="payWalletList"></div>
-                                    <button class="pay-cta" onclick="payByMethod('wallet')">PAY <span id="payWalletTotal">₹0</span></button>
-                                </div>
-
-                                <!-- EMI panel -->
-                                <div class="pay-panel" data-panel="emi">
-                                    <div class="pay-method-head"><h3>EMI</h3></div>
-                                    <div style="font-size:13px;color:#212121;margin-bottom:12px;line-height:1.6">No-cost EMI is available on select credit cards for orders above ₹3,000. Choose your bank and tenure below.</div>
-                                    <div class="pay-form-row"><select class="pay-input" id="payEmiBank"><option>HDFC Bank Credit Card</option><option>ICICI Bank Credit Card</option><option>Axis Bank Credit Card</option><option>SBI Credit Card</option><option>Kotak Credit Card</option></select><select class="pay-input" id="payEmiTenure"><option>3 months — No-cost EMI</option><option>6 months — No-cost EMI</option><option>9 months — Standard EMI</option><option>12 months — Standard EMI</option></select></div>
-                                    <button class="pay-cta" onclick="payByMethod('emi')">PAY <span id="payEmiTotal">₹0</span></button>
-                                </div>
-
-                            </div>
-                            <div style="text-align:center;padding:0 24px 16px"><button onclick="goHome()" style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer">Cancel</button></div>
-                        </div>
-                    </div>
-
-                    <!-- ORDER SUCCESS / CONFIRMATION -->
-                    <div class="ck-success" id="ckSuccess" style="display:none"></div>
-                </div>
-
-                <!-- RIGHT: PRICE DETAILS -->
-                <div class="ck-right">
-                    <div class="cart-price-box">
-                        <div class="cart-price-hdr"><span>PRICE DETAILS</span></div>
-                        <div class="cart-price-body">
-                            <div class="cart-price-row"><span>Price (<span id="ckCount">0</span> items)</span><span id="ckSubtotal">₹0</span></div>
-                            <div class="cart-price-row"><span>Discount</span><span class="green" id="ckDiscount">− ₹0</span></div>
-                            <div class="cart-price-row"><span>Delivery Charges</span><span><span style="text-decoration:line-through;color:var(--fk-gray);margin-right:6px">₹40</span><span class="green">FREE</span></span></div>
-                            <div class="cart-price-total"><span>Total Amount</span><span id="ckTotal">₹0</span></div>
-                        </div>
-                        <div class="cart-price-save" id="ckSave"></div>
-                    </div>
-                    <div class="cart-safe">🛡️ <span>Safe and Secure Payments. Easy returns. 100% Authentic products.</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="fk-footer" id="shopFooter">
-        <div class="fk-footer-inner">
-            <div><h4>About</h4><a>About Us</a><a>Careers</a><a>Flipkart Stories</a><a>Press</a><a>Corporate Information</a></div>
-            <div><h4>Help</h4><a>Payments</a><a>Shipping</a><a>Cancellation & Returns</a><a>FAQ</a></div>
-            <div><h4>Consumer Policy</h4><a>Cancellation & Returns</a><a>Terms of Use</a><a>Security</a><a>Privacy</a><a>Sitemap</a></div>
-            <div><h4>Mail Us</h4><a style="line-height:1.6;font-size:11px">Flipkart Internet Private Limited,<br>Buildings Alyssa, Begonia & Clove Embassy Tech Village,<br>Outer Ring Road, Devarabeesanahalli,<br>Bengaluru, 560103, Karnataka, India</a></div>
-        </div>
-        <div class="fk-footer-bottom">
-            <div style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:8px"><span>Become a Seller</span><span>|</span><span>Advertise</span><span>|</span><span>Gift Cards</span><span>|</span><span>Help Center</span></div>
-            <div>© 2024 Flipkart.com</div>
-        </div>
-    </footer>
-</div>
-
-<!-- PRODUCT DETAIL PAGE -->
-<div class="pd-page" id="pdPage">
-    <div class="pd-page-inner">
-        <a class="pd-back" onclick="goHome()">← Back to results</a>
-        <div class="pd-top">
-            <div class="pd-left">
-                <div class="pd-gallery">
-                    <div class="pd-thumbs" id="pdThumbs"></div>
-                    <div class="pd-img-stage"><img id="pdImg" src="" alt="product" /></div>
-                </div>
-                <div class="pd-actions">
-                    <button class="pd-btn-cart" id="pdActionCart" onclick="pdActionCart()">🛒 ADD TO CART</button>
-                    <button class="pd-btn-buy" onclick="pdBuyNow()">⚡ BUY NOW</button>
-                </div>
-            </div>
-            <div class="pd-right">
-                <div class="pd-breadcrumb" id="pdBreadcrumb"></div>
-                <div class="pd-name" id="pdName"></div>
-                <div class="pd-rating-row">
-                    <span class="pd-rating-badge" id="pdRating"></span>
-                    <span class="pd-rating-count" id="pdRatingCount"></span>
-                    <span class="pd-extra-badge" id="pdExtraBadge"></span>
-                </div>
-                <div class="pd-price-row">
-                    <span class="pd-price-now" id="pdPrice"></span>
-                    <span class="pd-price-was" id="pdOrigPrice"></span>
-                    <span class="pd-price-off" id="pdOff"></span>
-                </div>
-                <div class="pd-offers" id="pdOffers">
-                    <div class="pd-offers-title">Available Offers</div>
-                    <div class="pd-offer-item"><span class="pd-offer-tag">Bank Offer</span> 10% off on Axis Bank Credit Card, up to ₹1,500 on orders of ₹5,000 and above</div>
-                    <div class="pd-offer-item"><span class="pd-offer-tag">Bank Offer</span> 5% Cashback on Flipkart Axis Bank Card</div>
-                    <div class="pd-offer-item"><span class="pd-offer-tag">Special Price</span> Get extra <span id="pdOfferExtra" style="font-weight:700;color:var(--fk-green)"></span> off (price inclusive of cashback/coupon)</div>
-                    <div class="pd-offer-item"><span class="pd-offer-tag">Partner Offer</span> Sign up for Flipkart Pay Later and get Flipkart Gift Card worth ₹100</div>
-                </div>
-                <div class="pd-delivery">
-                    <div class="pd-delivery-row"><span class="pd-delivery-icon">🚚</span><span>Delivery by <strong id="pdDelivDate"></strong> | <span style="color:var(--fk-green);font-weight:600">Free</span> <span style="text-decoration:line-through;color:#878787">₹40</span></span></div>
-                </div>
-                <div class="pd-highlights" id="pdHighlights">
-                    <h3>Highlights</h3>
-                    <ul id="pdHighlightList"></ul>
-                </div>
-                <div class="pd-seller">Seller: <a id="pdSeller">RetailNet</a> <span style="font-size:12px;color:var(--fk-gray)">4.7 ★</span></div>
-            </div>
-        </div>
-        <!-- Full-width Description section (like real Flipkart PDP) -->
-        <div class="pd-section pd-desc" id="pdDescSection">
-            <h3>Product Description</h3>
-            <p id="pdDesc"></p>
-        </div>
-        <!-- Full-width Specifications section (like real Flipkart PDP) -->
-        <div class="pd-section pd-specs" id="pdSpecs"></div>
-        <!-- Full-width Ratings & Reviews section (like real Flipkart PDP) -->
-        <div class="pd-section pd-reviews">
-            <h3>Ratings & Reviews</h3>
-            <div id="pdReviews"></div>
-        </div>
-        <!-- Similar Products section -->
-        <div class="pd-similar" id="pdSimilar" style="display:none">
-            <div class="to-head">
-                <div class="to-head-left"><h2>Similar Products</h2><span class="to-sub">Based on this product</span></div>
-            </div>
-            <div class="to-track-wrap">
-                <button class="to-arrow prev" onclick="scrollStrip('pdSimilarTrack',-1)" aria-label="Scroll left">‹</button>
-                <div class="to-track" id="pdSimilarTrack"></div>
-                <button class="to-arrow next" onclick="scrollStrip('pdSimilarTrack',1)" aria-label="Scroll right">›</button>
-            </div>
-        </div>
+        <a class="fk-hdr-link" onclick="openCartPage()" style="position:relative">
+            <svg width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="#fff"/></svg>
+            <span class="fk-cart-count" id="cartCount">0</span> Cart
+        </a>
+        <a class="fk-hdr-link seller-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" fill="#fff"/></svg>Become a Seller</a>
+        <button class="fk-hdr-3dot" title="More" aria-label="More options"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="2" fill="#fff"/><circle cx="12" cy="12" r="2" fill="#fff"/><circle cx="12" cy="19" r="2" fill="#fff"/></svg></button>
     </div>
 </div>
-
-<!-- LOGIN MODAL (Flipkart style) -->
-<div class="login-overlay" id="loginOverlay" onclick="if(event.target===this)closeLogin()">
-    <div class="login-modal">
-        <div class="login-left">
-            <div>
-                <h2>Login</h2>
-                <p>Get access to your Orders, Wishlist and Recommendations</p>
-            </div>
-            <div class="login-left-img">🛍️</div>
-        </div>
-        <div class="login-right">
-            <button class="login-close" onclick="closeLogin()">✕</button>
-            <input class="login-input" id="loginEmail" type="text" placeholder="Enter Email/Mobile number" />
-            <input class="login-input" id="loginPass" type="password" placeholder="Enter Password" style="margin-top:16px" />
-            <div class="login-terms">By continuing, you agree to Flipkart's <a>Terms of Use</a> and <a>Privacy Policy</a>.</div>
-            <button class="login-btn-continue" onclick="loginContinue()">Login</button>
-            <div class="login-or"><div class="line"></div><span>OR</span><div class="line"></div></div>
-            <div class="login-otp-link" onclick="loginContinue()">Request OTP</div>
-            <div class="login-signup">New to Flipkart? <a onclick="loginContinue()">Create an account</a></div>
-        </div>
-    </div>
+</header>
+<nav class="fk-subheader"><div class="fk-subheader-inner" id="catBar"></div></nav>
+<div id="homeView"><div class="fk-banner" id="bannerWrap"></div><div class="fk-main" id="homeContent"></div></div>
+<div id="gridView" style="display:none"><div class="fk-main"><div class="fk-grid-section"><div class="fk-grid-head"><h2 id="gridTitle">All Products</h2><button class="view-all-btn" onclick="goHome()" style="background:none;color:var(--fk-blue);border:1px solid var(--fk-blue)">&#8592; Back</button></div><div class="fk-grid" id="productsGrid"></div></div></div></div>
+<div class="fk-pdp" id="pdpView"><div class="fk-main" id="pdpContent"></div></div>
+<div class="fk-cart-page" id="cartPage"><div class="fk-cart-inner"><div class="fk-cart-left"><div class="fk-cart-box"><div class="fk-cart-hdr"><h2 id="cartTitle">My Cart (0)</h2></div><div id="cartItems"></div><div class="fk-cart-place" id="cartPlaceWrap" style="display:none"><button onclick="goToCheckout()">PLACE ORDER</button></div></div></div><div class="fk-cart-right"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="cpCount">0</span> items)</span><span id="cpSubtotal">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="cpDiscount">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total Amount</span><span id="cpTotal">&#8377;0</span></div></div><div class="fk-price-save" id="cpSave"></div></div></div></div></div>
+<div class="fk-ck-page" id="ckPage"><div class="fk-ck-inner"><div class="fk-ck-left">
+<div class="fk-ck-step" id="ckS1"><div class="fk-ck-step-head active" id="ckS1H" onclick="ckExpand(1)"><span class="fk-ck-step-num">1</span><span class="fk-ck-step-label">LOGIN</span><span class="fk-ck-step-check" id="ckS1C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS1Sum"></div><div class="fk-ck-step-body show" id="ckS1B"><div style="max-width:360px"><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Email/Mobile</label><input class="fk-ck-input" id="ckEmail1" placeholder="Email or Mobile"/></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Password</label><input class="fk-ck-input" id="ckPass1" type="password" placeholder="Password"/></div><p style="font-size:12px;color:#878787;margin-bottom:16px;line-height:1.5">By continuing, you agree to Flipkart Terms of Use and Privacy Policy.</p><button class="fk-ck-continue" onclick="ckLogin()" style="width:100%">CONTINUE</button></div></div></div>
+<div class="fk-ck-step" id="ckS2"><div class="fk-ck-step-head" id="ckS2H" onclick="ckExpand(2)"><span class="fk-ck-step-num">2</span><span class="fk-ck-step-label">DELIVERY ADDRESS</span><span class="fk-ck-step-check" id="ckS2C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS2Sum"></div><div class="fk-ck-step-body" id="ckS2B"><div style="font-size:14px;font-weight:600;color:var(--fk-blue);text-transform:uppercase;margin-bottom:16px">ADD A NEW ADDRESS</div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Name</label><input class="fk-ck-input" id="ckName" placeholder="Full Name"/></div><div class="fk-ck-group"><label class="fk-ck-label">Mobile</label><input class="fk-ck-input" id="ckPhone" type="tel" placeholder="10-digit" maxlength="10"/></div></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Pincode</label><input class="fk-ck-input" id="ckPincode" placeholder="6 digits" maxlength="6"/></div><div class="fk-ck-group"><label class="fk-ck-label">Locality</label><input class="fk-ck-input" id="ckLocality" placeholder="Locality"/></div></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Address</label><textarea class="fk-ck-input" id="ckAddress" placeholder="Flat, Building, Street" rows="2" style="resize:vertical;min-height:50px"></textarea></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">City</label><input class="fk-ck-input" id="ckCity" placeholder="City"/></div><div class="fk-ck-group"><label class="fk-ck-label">State</label><select class="fk-ck-input" id="ckState" style="height:44px"><option value="">Select</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option><option>Telangana</option><option>Kerala</option><option>Punjab</option><option>Haryana</option><option>Bihar</option><option>Madhya Pradesh</option><option>Andhra Pradesh</option></select></div></div><div style="display:flex;gap:12px;margin-top:8px;margin-bottom:14px"><label class="addr-type"><input type="radio" name="addrType" value="Home" checked/><span>Home</span></label><label class="addr-type"><input type="radio" name="addrType" value="Work"/><span>Work</span></label></div><button class="fk-ck-continue" onclick="ckAddr()">SAVE AND DELIVER HERE</button></div></div>
+<div class="fk-ck-step" id="ckS3"><div class="fk-ck-step-head" id="ckS3H" onclick="ckExpand(3)"><span class="fk-ck-step-num">3</span><span class="fk-ck-step-label">ORDER SUMMARY</span><span class="fk-ck-step-check" id="ckS3C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS3Sum"></div><div class="fk-ck-step-body" id="ckS3B" style="padding:0"><div id="ckOrderItems" style="padding:24px"></div><div style="padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end"><button class="fk-ck-continue" onclick="ckOrder()">CONTINUE</button></div></div></div>
+<div class="fk-ck-step" id="ckS4"><div class="fk-ck-step-head" id="ckS4H"><span class="fk-ck-step-num">4</span><span class="fk-ck-step-label">PAYMENT OPTIONS</span></div><div class="fk-ck-step-body" id="ckS4B" style="padding:0"><div class="fk-pay-layout"><div class="fk-pay-tabs"><div class="fk-pay-tab active" onclick="payTab(this,'upi')">UPI</div><div class="fk-pay-tab" onclick="payTab(this,'card')">Credit/Debit Card</div><div class="fk-pay-tab" onclick="payTab(this,'nb')">Net Banking</div><div class="fk-pay-tab" onclick="payTab(this,'wallet')">Wallet</div><div class="fk-pay-tab" onclick="payTab(this,'cod')">Cash on Delivery</div></div><div class="fk-pay-content" id="payContent"><div id="payUpi"><h4 style="font-size:16px;margin-bottom:16px">Pay using UPI</h4><div class="fk-ck-group" style="max-width:360px;margin-bottom:16px"><label class="fk-ck-label">UPI ID</label><input class="fk-ck-input" id="upiInput" placeholder="yourname@upi"/></div><button class="fk-ck-continue" onclick="payConfirm()">PAY &#8377;<span id="payAmt">0</span></button></div><div id="payCard" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Card Details</h4><div class="fk-ck-group" style="max-width:360px;margin-bottom:14px"><label class="fk-ck-label">Card Number</label><input class="fk-ck-input" placeholder="XXXX XXXX XXXX XXXX"/></div><div class="fk-ck-row" style="max-width:360px"><div class="fk-ck-group"><label class="fk-ck-label">Expiry</label><input class="fk-ck-input" placeholder="MM/YY"/></div><div class="fk-ck-group"><label class="fk-ck-label">CVV</label><input class="fk-ck-input" type="password" placeholder="CVV" maxlength="3"/></div></div><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payNb" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Net Banking</h4><div style="display:flex;flex-direction:column;gap:8px;max-width:360px"><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb" checked/> HDFC Bank</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> ICICI Bank</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> SBI</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> Axis Bank</label></div><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payWallet" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Wallets</h4><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer;max-width:360px"><input type="radio" name="wallet" checked/> PhonePe</label><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payCod" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Cash on Delivery</h4><p style="font-size:14px;line-height:1.6;margin-bottom:16px">A nominal fee of &#8377;5 will be charged.</p><button class="fk-ck-continue" onclick="payConfirm()">CONFIRM ORDER</button></div></div></div></div></div>
+</div><div class="fk-cart-right" style="width:380px;flex-shrink:0"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="ckPCount">0</span> items)</span><span id="ckPSub">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="ckPDisc">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total</span><span id="ckPTotal">&#8377;0</span></div></div><div class="fk-price-save" id="ckPSave"></div></div></div></div></div>
+<footer class="fk-footer"><div class="fk-footer-top"><div class="fk-footer-col"><h4>ABOUT</h4><a>Contact Us</a><a>About Us</a><a>Careers</a><a>Flipkart Stories</a><a>Press</a></div><div class="fk-footer-col"><h4>GROUP COMPANIES</h4><a>Myntra</a><a>Cleartrip</a><a>Shopsy</a></div><div class="fk-footer-col"><h4>HELP</h4><a>Payments</a><a>Shipping</a><a>Cancellation &amp; Returns</a><a>FAQ</a></div><div class="fk-footer-col"><h4>CONSUMER POLICY</h4><a>Cancellation &amp; Returns</a><a>Terms Of Use</a><a>Security</a><a>Privacy</a><a>Sitemap</a><a>Grievance Redressal</a></div><div class="fk-footer-col"><h4>Mail Us:</h4><div class="fk-footer-mail">Flipkart Internet Private Limited,<br/>Buildings Alyssa, Begonia &amp;<br/>Clove Embassy Tech Village,<br/>Bengaluru, 560103, Karnataka</div></div></div><div class="fk-footer-btm"><div class="fk-footer-btm-links"><a>Become a Seller</a><a>Advertise</a><a>Gift Cards</a><a>Help Center</a></div><div class="fk-footer-copy">&copy; 2007-2024 Flipkart.com</div><div class="fk-footer-pay"><span>VISA</span><span>MasterCard</span><span>RuPay</span><span>UPI</span></div></div></footer>
 </div>
-
-<div class="toast" id="toast"></div>
+<div class="fk-login-modal" id="loginModal"><div class="fk-login-box"><div class="fk-login-left"><div><h2>Login</h2><p>Get access to your Orders, Wishlist and Recommendations</p></div></div><div class="fk-login-right"><button class="fk-login-close" onclick="closeLogin()">&#10005;</button><input class="fk-login-input" id="loginEmail" placeholder="Enter Email/Mobile number"/><input class="fk-login-input" id="loginPass" type="password" placeholder="Enter Password" style="margin-top:20px"/><div class="fk-login-terms">By continuing, you agree to Flipkart Terms of Use and Privacy Policy.</div><button class="fk-login-submit" onclick="doLogin()">Login</button><div class="fk-login-or"><div class="line"></div><span>OR</span><div class="line"></div></div><div class="fk-login-otp" onclick="doLogin()">Request OTP</div><div class="fk-login-new">New to Flipkart? <a onclick="doLogin()">Create an account</a></div></div></div></div>
+<div class="fk-toast" id="toast"></div>
+<div class="fk-expired" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:12px"><div style="font-size:48px">&#128542;</div><h2 style="font-size:24px;color:#212121">Shop not found</h2><p style="font-size:14px;color:#878787">Unable to load shop</p></div>
 
 <script>
-const slug = location.pathname.split('/shop/')[1];
-let shopData = null, allProducts = [], filteredProducts = [], cart = [], currentProduct = null;
-let visitorLat = null, visitorLng = null, visitorCity = '', visitorCountry = '';
-let bannerInterval = null, currentSlide = 0, isLoggedIn = false;
-let currentTxnRef = null, payTimerInterval = null, currentPayTotal = 0, currentUpiUri = null;
+"use strict";
 
-const catEmojis = {'Electronics':'📱','Home Appliances':'🏠','Fashion':'👗','Sports & Fitness':'💪','Books':'📚','Furniture':'🛋️','Personal Care':'✨','Toys & Games':'🎮','Gaming':'🕹️','Garden & Outdoors':'🌿','Grocery':'🛒','Mobiles':'📲','Beauty':'💄','Appliances':'🔌','Travel':'✈️','Accessories':'👜','Gifts':'🎁','Wellness':'💆','Kitchen Appliances':'🍳','Grooming':'💇','Smart Home':'🏡','Stationery':'✏️','Laptops':'💻','Televisions':'📺'};
+var SLUG='',API='',products=[],cart=JSON.parse(localStorage.getItem('fk_cart')||'[]'),bannerIdx=0,bannerTimer=null,loggedIn=false;
+var catImages={'Grocery':'https://rukminim1.flixcart.com/flap/80/80/image/29327f40e9c4d26b.png?q=100','Mobiles':'https://rukminim1.flixcart.com/flap/80/80/image/22fddf3c7da4c4f4.png?q=100','Fashion':'https://rukminim1.flixcart.com/flap/80/80/image/0d75b34f7d8fbcb3.png?q=100','Electronics':'https://rukminim1.flixcart.com/flap/80/80/image/69c6589653afdb9a.png?q=100','Home Appliances':'https://rukminim1.flixcart.com/flap/80/80/image/ab7e2b022a4587dd.jpg?q=100','Laptops':'https://rukminim1.flixcart.com/flap/80/80/image/0ff199d1bd27eb98.png?q=100','Televisions':'https://rukminim1.flixcart.com/flap/80/80/image/ab7e2b022a4587dd.jpg?q=100','Kitchen Appliances':'https://rukminim1.flixcart.com/flap/80/80/image/0139228b2f7eb413.jpg?q=100','Furniture':'https://rukminim1.flixcart.com/flap/80/80/image/71050627a56b4693.png?q=100','Beauty':'https://rukminim1.flixcart.com/flap/80/80/image/ea5571b5b3b389b1.png?q=100','Personal Care':'https://rukminim1.flixcart.com/flap/80/80/image/ea5571b5b3b389b1.png?q=100','Sports & Fitness':'https://rukminim1.flixcart.com/flap/80/80/image/71050627a56b4693.png?q=100','Books':'https://rukminim1.flixcart.com/flap/80/80/image/69c6589653afdb9a.png?q=100','Toys & Games':'https://rukminim1.flixcart.com/flap/80/80/image/dff3f7adcf3a90c6.png?q=100','Gaming':'https://rukminim1.flixcart.com/flap/80/80/image/69c6589653afdb9a.png?q=100','Smart Home':'https://rukminim1.flixcart.com/flap/80/80/image/69c6589653afdb9a.png?q=100','Travel':'https://rukminim1.flixcart.com/flap/80/80/image/71050627a56b4693.png?q=100'};
+var catEmoji={'Mobiles':'\ud83d\udcf1','Electronics':'\ud83d\udcbb','Laptops':'\ud83d\udcbb','Fashion':'\ud83d\udc57','Home Appliances':'\ud83c\udfe0','Televisions':'\ud83d\udcfa','Kitchen Appliances':'\ud83c\udf73','Furniture':'\ud83e\ude91','Beauty':'\ud83d\udc84','Personal Care':'\ud83e\uddf4','Sports & Fitness':'\u26bd','Books':'\ud83d\udcda','Toys & Games':'\ud83e\uddf8','Grocery':'\ud83d\uded2','Gaming':'\ud83c\udfae','Smart Home':'\ud83d\udca1','Travel':'\ud83e\uddf3'};
+var stripLabels={'Mobiles':'Best of Mobiles','Electronics':'Best of Electronics','Laptops':'Best of Laptops','Fashion':'Fashion Top Deals','Home Appliances':'Home Appliances','Televisions':'Best of TVs','Kitchen Appliances':'Kitchen Essentials','Furniture':'Furniture Deals','Beauty':'Beauty & Grooming','Personal Care':'Personal Care','Sports & Fitness':'Sports & Fitness','Books':'Books & More','Toys & Games':'Toys & Baby','Grocery':'Grocery Essentials','Gaming':'Gaming Accessories','Smart Home':'Smart Home Devices','Travel':'Travel Essentials'};
+function getSlug(){var p=window.location.pathname.split('/');for(var i=0;i<p.length;i++){if(p[i]==='shop'&&p[i+1])return p[i+1];}return'';}
+function fmt(n){return '\u20B9'+Number(n).toLocaleString('en-IN');}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500);}
+function saveCart(){localStorage.setItem('fk_cart',JSON.stringify(cart));updCartCount();}
+function updCartCount(){document.getElementById('cartCount').textContent=cart.reduce(function(s,c){return s+c.qty},0);}
+function addToCart(id){var p=products.find(function(x){return x.id===id});if(!p)return;var ci=cart.find(function(x){return x.id===id});if(ci){ci.qty++}else{cart.push({id:id,qty:1})}saveCart();toast('Added to cart!');}
+function removeFromCart(id){cart=cart.filter(function(x){return x.id!==id});saveCart();renderCart();}
+function changeQty(id,d){var ci=cart.find(function(x){return x.id===id});if(!ci)return;ci.qty+=d;if(ci.qty<1)ci.qty=1;saveCart();renderCart();}
 
-const catImages = {};
-function catImg(cat){return ''}
-
-const PROD_FALLBACK_SVG="data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#f5f5f5"/><g fill="#cfd8dc"><rect x="50" y="60" width="100" height="80" rx="6"/><circle cx="80" cy="92" r="8"/><path d="M70 130 l20 -20 l16 12 l24 -28 l30 36 z"/></g></svg>');
-function prodImgFallback(el,cat){
-    el.onerror=null;
-    el.src=PROD_FALLBACK_SVG;
-}
-function prodImg(p,size){
-    if(p.image_url&&/^https?:\/\//.test(p.image_url))return p.image_url;
-    return PROD_FALLBACK_SVG;
-}
-
-function getSavedAddr(){return JSON.parse(localStorage.getItem('fk_addr_'+slug)||'[]')}
-function saveAddr(l){localStorage.setItem('fk_addr_'+slug,JSON.stringify(l))}
-function loadCart(){cart=JSON.parse(localStorage.getItem('fk_cart_'+slug)||'[]')}
-function saveCart(){localStorage.setItem('fk_cart_'+slug,JSON.stringify(cart));updateCartBadge()}
-function updateCartBadge(){document.getElementById('cartCount').textContent=cart.reduce((s,c)=>s+c.qty,0)}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-
-async function init(){
-    loadCart();
-    isLoggedIn=true; // login UI is hidden in this build, treat every visitor as authenticated
-    try{
-        const res=await fetch(`/api/shop/info/${slug}`);
-        if(res.status===410){document.getElementById('loadingScreen').style.display='none';document.getElementById('expiredPage').style.display='flex';return}
-        if(!res.ok)throw new Error('not found');
-        const data=await res.json();
-        shopData=data.shop;allProducts=data.products;filteredProducts=[...allProducts];
-        render();
-        document.getElementById('loadingScreen').style.display='none';
-        document.getElementById('shopWrap').style.display='block';
-        requestLocation();
-    }catch(e){
-        document.getElementById('loadingScreen').innerHTML='<div style="text-align:center;color:#666"><div style="font-size:60px">😞</div><h2>Shop not found</h2></div>';
-    }
-}
-
-function render(){
-    document.title=shopData.shop_name+' — Online Shopping India';
-    document.getElementById('logoText').textContent=shopData.shop_name;
-    if(shopData.banner_text){const bh=document.getElementById('bannerH1');if(bh)bh.innerHTML=shopData.banner_text}
-    const cats=[...new Set(allProducts.map(p=>p.category))];
-    renderCatBar(cats);
-    renderTopOffers();
-    renderPromoTiles();
-    renderHomeStrips(cats);
-    renderProducts();
-    updateCartBadge();
-    startBanner();
-}
-
-function catIconHtml(cat){
-    const img=catImg(cat);
-    const emoji=catEmojis[cat]||'📦';
-    if(img)return `<div class="fk-cat-item-icon"><img src="${img}" alt="${cat}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'emoji\\'>${emoji}</span>'" /></div>`;
-    return `<div class="fk-cat-item-icon"><span class="emoji">${emoji}</span></div>`;
-}
-function renderCatBar(cats){
-    const bar=document.getElementById('catBar');
-    bar.innerHTML=`<a class="fk-cat-item active" onclick="filterCat('all');hlCat(this)">${catIconHtml('all').replace(catImg('all'),catImg('all'))}<div class="fk-cat-item-name">All<span class="arr">▾</span></div></a>`
-        +cats.map(c=>`<a class="fk-cat-item" onclick="filterCat('${c.replace(/'/g,"\\'")}');hlCat(this)">${catIconHtml(c)}<div class="fk-cat-item-name">${c}<span class="arr">▾</span></div></a>`).join('');
-}
-function hlCat(el){document.querySelectorAll('.fk-cat-item').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active')}
-
-function renderDealStrip(cats){
-    const strip=document.getElementById('dealStrip');
-    const offs=['Up to 80% off','From ₹499','Min 40% off','Extra 30% off','Top deals'];
-    strip.innerHTML=cats.slice(0,5).map((c,i)=>{
-        const img=catImg(c);
-        const inner=img?`<img src="${img}" alt="${c}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\'emoji\\'>${catEmojis[c]||'🛍️'}</span>'" />`:`<span class="emoji">${catEmojis[c]||'🛍️'}</span>`;
-        return `<a class="deal-card" onclick="filterCat('${c.replace(/'/g,"\\'")}')"><div class="dc-img">${inner}</div><div class="dc-name">${c}</div><div class="dc-off">${offs[i%offs.length]}</div></a>`;
-    }).join('');
-}
-
-function renderTopOffers(){
-    const box=document.getElementById('topOffersBox');
-    const track=document.getElementById('topOffersTrack');
-    if(!allProducts.length){box.style.display='none';return}
-    // Top 12 products by discount (with valid image), like Flipkart's "Top Offers"
-    const top=[...allProducts]
-        .map(p=>{const op=parseFloat(p.original_price)||0;const sp=parseFloat(p.price)||0;return {p,disc:op>0?(1-sp/op)*100:0}})
-        .sort((a,b)=>b.disc-a.disc)
-        .slice(0,12)
-        .map(x=>x.p);
-    track.innerHTML=top.map(p=>{
-        const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
-        return `<a class="to-card" onclick="openPd(${p.id})">
-            <div class="to-card-img"><img src="${prodImg(p)}" alt="${p.name}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>
-            <div class="to-card-off">Upto ${disc}% off</div>
-            <div class="to-card-name">${p.name}</div>
-            <div class="to-card-from">From ₹${parseInt(p.price).toLocaleString('en-IN')}</div>
-        </a>`;
-    }).join('');
-    box.style.display='block';
-    track.addEventListener('scroll',updateOffersArrows,{passive:true});
-    requestAnimationFrame(updateOffersArrows);
-}
-function scrollOffers(dir){
-    const track=document.getElementById('topOffersTrack');
-    track.scrollBy({left:dir*Math.min(track.clientWidth-60,820),behavior:'smooth'});
-}
-function updateOffersArrows(){
-    const track=document.getElementById('topOffersTrack');
-    if(!track)return;
-    const prev=document.getElementById('toArrowPrev');
-    const next=document.getElementById('toArrowNext');
-    if(!prev||!next)return;
-    prev.classList.toggle('disabled',track.scrollLeft<=4);
-    next.classList.toggle('disabled',track.scrollLeft+track.clientWidth>=track.scrollWidth-4);
-}
-
-function renderPromoTiles(){}
-
-// Multiple horizontal product strips per category (like flipkart.com home)
-const STRIP_LABELS={
-    'Electronics':{title:'Best of Electronics',sub:'Top brands · Lowest prices'},
-    'Mobiles':{title:'Best of Mobiles',sub:'New launches · Top picks'},
-    'Fashion':{title:'Fashion Top Deals',sub:'New season · Up to 80% off'},
-    'Home Appliances':{title:'Appliances for Your Home',sub:'Up to 65% off · Free install'},
-    'Kitchen Appliances':{title:'Kitchen Essentials',sub:'Mixers, microwaves, toasters'},
-    'Furniture':{title:'Furniture Bestsellers',sub:'Sofas, beds, dining sets'},
-    'Sports & Fitness':{title:'Sports, Fitness & Wellness',sub:'Top picks for your routine'},
-    'Wellness':{title:'Wellness & Personal Care',sub:'Self-care must-haves'},
-    'Personal Care':{title:'Beauty, Personal Care & More',sub:'Min 30% off'},
-    'Grooming':{title:'Beauty, Personal Care & More',sub:'Min 30% off'},
-    'Books':{title:'Books, Media & Stationery',sub:'Curated picks'},
-    'Stationery':{title:'Books, Media & Stationery',sub:'Curated picks'},
-    'Gaming':{title:'Gaming Zone',sub:'Consoles, accessories & more'},
-    'Toys & Games':{title:'Toys, Kids Fashion & More',sub:'Up to 70% off'},
-    'Smart Home':{title:'Smart Home Gadgets',sub:'Make your home smarter'},
-    'Travel':{title:'Travel Essentials',sub:'Bags, gadgets & more'},
-    'Gifts':{title:'Gifts You\u2019ll Love',sub:'For every occasion'},
-    'Laptops':{title:'Best of Laptops',sub:'Work & gaming · Top brands'},
-    'Televisions':{title:'Best of Televisions',sub:'Smart TVs · Up to 50% off'},
-    'Beauty':{title:'Beauty, Skin & Hair Care',sub:'Min 30% off · Top brands'},
-    'Grocery':{title:'Grocery Essentials',sub:'Daily needs · Best prices'}
-};
-function renderHomeStrips(cats){
-    const wrap=document.getElementById('homeStrips');if(!wrap)return;
-    // If everything is a single category (e.g. all Mobiles), group by brand instead so
-    // we still get multiple themed strips on the home page like real flipkart.com.
-    const isSingleCat=cats.length<=1;
-    let groups;
-    if(isSingleCat){
-        const byBrand={};
-        allProducts.forEach(p=>{const b=(p.brand||'Other');(byBrand[b]=byBrand[b]||[]).push(p)});
-        groups=Object.keys(byBrand)
-            .map(b=>({key:b,items:byBrand[b],meta:{title:`Best of ${b}`,sub:'Top picks · Lowest prices'}}))
-            .sort((a,b)=>b.items.length-a.items.length).slice(0,6);
-        // Add a generic "Top Mobiles" strip showing the highest-rated phones overall.
-        const topRated=[...allProducts].sort((a,b)=>(parseFloat(b.rating)||0)-(parseFloat(a.rating)||0)).slice(0,12);
-        if(topRated.length) groups.unshift({key:'__top__',items:topRated,meta:{title:'Top-Rated Mobiles',sub:'Customer favourites'}});
-    } else {
-        groups=cats.map(c=>({c,n:allProducts.filter(p=>p.category===c).length}))
-            .sort((a,b)=>b.n-a.n).slice(0,4)
-            .map(entry=>({key:entry.c,items:allProducts.filter(p=>p.category===entry.c).slice(0,12),
-                meta:STRIP_LABELS[entry.c]||{title:entry.c,sub:'Top picks · Lowest prices'}}));
-    }
-    wrap.innerHTML=groups.map((g,idx)=>{
-        const items=g.items.slice(0,12);
-        if(!items.length)return '';
-        const trackId=`stripTrack_${idx}`;
-        const viewAllArg=g.key==='__top__'?"''":`'${(g.key||'').replace(/'/g,"\\'")}'`;
-        const viewAllFn=isSingleCat&&g.key!=='__top__'?`filterBrand(${viewAllArg})`:(g.key==='__top__'?'goHome()':`filterCat(${viewAllArg})`);
-        return `<div class="top-offers">
-            <div class="to-head">
-                <div class="to-head-left"><h2>${g.meta.title}</h2><span class="to-sub">${g.meta.sub}</span></div>
-                <button class="view-all" onclick="${viewAllFn}">VIEW ALL</button>
-            </div>
-            <div class="to-track-wrap">
-                <button class="to-arrow prev" onclick="scrollStrip('${trackId}',-1)" aria-label="Scroll left">‹</button>
-                <div class="to-track" id="${trackId}">
-                    ${items.map(p=>{
-                        const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
-                        return `<a class="to-card" onclick="openPd(${p.id})">
-                            <div class="to-card-img"><img src="${prodImg(p)}" alt="${p.name}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>
-                            <div class="to-card-off">Upto ${disc}% off</div>
-                            <div class="to-card-name">${p.name}</div>
-                            <div class="to-card-from">From \u20b9${parseInt(p.price).toLocaleString('en-IN')}</div>
-                        </a>`;
-                    }).join('')}
-                </div>
-                <button class="to-arrow next" onclick="scrollStrip('${trackId}',1)" aria-label="Scroll right">›</button>
-            </div>
-        </div>`;
-    }).join('');
-}
-function filterBrand(brand){
-    if(!brand){filteredProducts=[...allProducts]}
-    else{filteredProducts=allProducts.filter(p=>(p.brand||'').toLowerCase()===brand.toLowerCase())}
-    document.getElementById('homeView').style.display='none';
-    document.getElementById('productsView').style.display='block';
-    document.getElementById('catTitle').textContent=brand?(brand+' Mobiles'):'All Products';
-    renderProducts();showView('products');
-}
-function scrollStrip(id,dir){
-    const track=document.getElementById(id);if(!track)return;
-    track.scrollBy({left:dir*Math.min(track.clientWidth-60,820),behavior:'smooth'});
-}
-
-function delivDate(){const d=new Date();d.setDate(d.getDate()+3+Math.floor(Math.random()*2));return d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'})}
-function buyerCount(id){return 50+(id*7+13)%950}
-
-function renderProducts(){
-    const grid=document.getElementById('productsGrid');
-    if(!filteredProducts.length){grid.innerHTML='<div style="padding:40px;text-align:center;color:#878787;width:100%">No products found.</div>';return}
-    grid.innerHTML=filteredProducts.map(p=>{
-        const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
-        const dd=delivDate();
-        return `<div class="p-card" onclick="openPd(${p.id})">
-            <div class="p-card-img-wrap"><img src="${prodImg(p)}" alt="${p.name}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>
-            <div class="p-card-name">${p.name}</div>
-            <div class="p-card-rating"><span class="badge ${p.rating<4?'low':''}">★ ${parseFloat(p.rating).toFixed(1)}</span><span class="count">(${p.review_count.toLocaleString()})</span></div>
-            <div class="p-card-price"><span class="now">₹${parseInt(p.price).toLocaleString('en-IN')}</span><span class="was">₹${parseInt(p.original_price).toLocaleString('en-IN')}</span><span class="off">${disc}% off</span></div>
-            <div class="p-card-extra"><span class="free">Free delivery</span></div>
-            <div class="p-card-assured"><span class="fa-badge"><span class="f">F</span>Assured</span><span class="txt">Quality delivered</span></div>
-        </div>`;
-    }).join('');
-}
-
-function filterCat(cat){
-    filteredProducts=cat==='all'?[...allProducts]:allProducts.filter(p=>p.category===cat);
-    document.getElementById('secTitle').textContent=cat==='all'?'Best Deals on Top Products':cat;
-    renderProducts();
-    showView('home');
-}
-
-function filterProducts(){
-    const q=document.getElementById('searchInput').value.toLowerCase();
-    filteredProducts=q?allProducts.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)||p.description.toLowerCase().includes(q)):[...allProducts];
-    document.getElementById('secTitle').textContent=q?`Search results for "${q}"`:'Best Deals on Top Products';
-    renderProducts();
-}
-
-// Banner
-function startBanner(){
-    const slides=document.querySelectorAll('.banner-slide');
-    const dotsC=document.getElementById('bannerDots');
-    if(!dotsC)return;
-    dotsC.innerHTML=Array.from(slides).map((_,i)=>`<span class="banner-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
-    bannerInterval=setInterval(()=>goSlide(currentSlide+1),4000);
-}
-function goSlide(n){
-    const slides=document.querySelectorAll('.banner-slide');
-    if(n<0)n=slides.length-1;if(n>=slides.length)n=0;
-    currentSlide=n;
-    slides.forEach((s,i)=>s.classList.toggle('active',i===n));
-    document.querySelectorAll('.banner-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
-}
-
-// View management
-function showView(view){
-    document.getElementById('mainContent').style.display=view==='home'?'':'none';
-    document.getElementById('cartPage').classList.toggle('active',view==='cart');
-    document.getElementById('ckPage').classList.toggle('active',view==='checkout');
-    document.getElementById('pdPage').classList.toggle('active',view==='product');
-    document.getElementById('shopFooter').style.display=view==='home'?'':'none';
-    if(view!=='home')window.scrollTo(0,0);
-}
-function goHome(){showView('home')}
-
-// Login is bypassed in this build — the modal is kept in DOM for backward compat but never shown.
-function openLogin(){isLoggedIn=true}
-function closeLogin(){const o=document.getElementById('loginOverlay');if(o)o.classList.remove('open');document.body.style.overflow=''}
-function loginContinue(){isLoggedIn=true;closeLogin()}
-
-// Product Detail Page
-function openPd(id){
-    id=parseInt(id);
-    const p=allProducts.find(x=>parseInt(x.id)===id);if(!p)return;
-    currentProduct=p;
-    const disc=p.original_price>0?Math.max(0,Math.round((1-p.price/p.original_price)*100)):0;
-    const dd=delivDate();
-    // Real image gallery from p.images (falls back to single image_url).
-    const gallery=(p.images&&p.images.length?p.images:[prodImg(p)]).slice(0,8);
-    const mainImg=gallery[0];
-    const pdImgEl=document.getElementById('pdImg');
-    pdImgEl.onerror=function(){prodImgFallback(this,p.category)};
-    pdImgEl.src=mainImg;
-    syncPdActionBtn();
-    const thumbs=document.getElementById('pdThumbs');
-    if(thumbs){
-        thumbs.innerHTML=gallery.map((src,i)=>
-            `<div class="pd-thumb${i===0?' active':''}" onmouseenter="pdSwapImg(this,${JSON.stringify(src)})"><img src="${src}" alt="thumb ${i+1}" loading="lazy" onerror="prodImgFallback(this,'${(p.category||'').replace(/'/g,"\\'")}')" /></div>`
-        ).join('');
-    }
-    document.getElementById('pdBreadcrumb').innerHTML=`<a onclick="goHome()">Home</a> › <a onclick="filterCat('${p.category.replace(/'/g,"\\'")}')">${p.category}</a> › ${p.name.length>40?p.name.slice(0,40)+'…':p.name}`;
-    document.getElementById('pdName').textContent=p.name;
-    document.getElementById('pdRating').innerHTML=`★ ${parseFloat(p.rating).toFixed(1)}`;
-    document.getElementById('pdRatingCount').textContent=`${(parseInt(p.review_count)||0).toLocaleString('en-IN')} Ratings & Reviews`;
-    document.getElementById('pdExtraBadge').textContent=`${buyerCount(p.id)}+ bought last month`;
-    document.getElementById('pdPrice').textContent='₹'+parseInt(p.price).toLocaleString('en-IN');
-    document.getElementById('pdOrigPrice').textContent='₹'+parseInt(p.original_price).toLocaleString('en-IN');
-    document.getElementById('pdOff').textContent=disc+'% off';
-    document.getElementById('pdOfferExtra').textContent='₹'+Math.round((p.original_price-p.price)*0.1).toLocaleString('en-IN');
-    document.getElementById('pdDelivDate').textContent=dd;
-    // Highlights — prefer real ones from the product, fall back to splitting description.
-    const highlights=(p.highlights&&p.highlights.length?p.highlights:(p.description||'').split('|').map(s=>s.trim()).filter(Boolean));
-    document.getElementById('pdHighlightList').innerHTML=highlights.map(h=>`<li>${h}</li>`).join('');
-    document.getElementById('pdDesc').textContent=p.description;
-    document.getElementById('pdSeller').textContent=p.brand||shopData.shop_name||'RetailNet';
-    // Specifications — render real grouped specs if present, else derive from highlights.
-    const specEl=document.getElementById('pdSpecs');
-    if(specEl){
-        let html='<h3>Specifications</h3>';
-        if(p.specifications&&p.specifications.length){
-            html+=p.specifications.map(g=>
-                `<div class="pd-spec-group"><div class="pd-spec-group-title">${g.group}</div>
-                 <table class="pd-spec-table"><tbody>${(g.items||[]).map(it=>
-                    `<tr><th>${it.label}</th><td>${it.value}</td></tr>`
-                 ).join('')}</tbody></table></div>`
-            ).join('');
-        } else {
-            const rows=[
-                ['Brand', p.brand||shopData.shop_name||'RetailNet'],
-                ['Category', p.category||'General'],
-                ['In The Box', highlights[0]||p.name],
-                ['Warranty', '1 Year Manufacturer Warranty'],
-                ['Country of Origin', 'India'],
-            ];
-            html+=`<table class="pd-spec-table"><tbody>${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
-        }
-        specEl.innerHTML=html;
-    }
-    const reviews=typeof p.reviews==='string'?JSON.parse(p.reviews):(p.reviews||[]);
-    renderPdReviews(reviews,p);
-    renderPdSimilar(p);
-    showView('product');
-}
-function pdSwapImg(el,src){document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('pdImg').src=src}
-
-function syncPdActionBtn(){
-    const btn=document.getElementById('pdActionCart');if(!btn||!currentProduct)return;
-    const inCart=cart.some(c=>c.id===currentProduct.id);
-    if(inCart){btn.innerHTML='→ GO TO CART';btn.classList.add('pd-go-cart')}
-    else{btn.innerHTML='🛒 ADD TO CART';btn.classList.remove('pd-go-cart')}
-}
-
-// Distribute total ratings (e.g. 45,921) across 5 buckets so the average ~= overall rating.
-// Returns counts in [5★, 4★, 3★, 2★, 1★] order, summing to `total`.
-function ratingHistogram(total,avg){
-    if(!total||total<=0)return [0,0,0,0,0];
-    avg=Math.max(1,Math.min(5,parseFloat(avg)||4));
-    // Heuristic distribution that matches typical Flipkart PDPs (top-heavy when avg is high).
-    let weights;
-    if(avg>=4.5)      weights=[0.74,0.18,0.04,0.02,0.02];
-    else if(avg>=4.0) weights=[0.58,0.27,0.08,0.04,0.03];
-    else if(avg>=3.5) weights=[0.40,0.32,0.16,0.08,0.04];
-    else if(avg>=3.0) weights=[0.22,0.28,0.28,0.14,0.08];
-    else if(avg>=2.5) weights=[0.10,0.18,0.30,0.26,0.16];
-    else              weights=[0.05,0.10,0.20,0.30,0.35];
-    // Round to integers and reconcile so the sum equals `total`.
-    const raw=weights.map(w=>w*total);
-    const out=raw.map(Math.round);
-    let diff=total-out.reduce((a,b)=>a+b,0);
-    let i=0;while(diff!==0){out[i%5]+=diff>0?1:-1;diff+=diff>0?-1:1;i++;if(i>200)break}
-    return out;
-}
-function renderPdReviews(reviews,p){
-    const c=document.getElementById('pdReviews');if(!c)return;
-    reviews=reviews||[];
-    const ratingsTotal=parseInt(p.review_count)||0;
-    // Prefer real ratings_breakdown from the product when available, else use the heuristic.
-    let buckets;
-    if(p.ratings_breakdown&&typeof p.ratings_breakdown==='object'){
-        const rb=p.ratings_breakdown;
-        buckets=[5,4,3,2,1].map(s=>parseInt(rb[s]||rb[String(s)]||0)||0);
-    } else {
-        buckets=ratingsTotal>0?ratingHistogram(ratingsTotal,p.rating):[0,0,0,0,0];
-    }
-    const bucketTotal=buckets.reduce((a,b)=>a+b,0)||ratingsTotal||1;
-    const histo=[5,4,3,2,1].map((star,idx)=>{
-        const pct=Math.round((buckets[idx]/bucketTotal)*100);
-        return `<div class="pd-rev-bar"><div class="lbl">${star}<span class="star">★</span></div><div class="track"><div class="fill ${star<3?'low':''}" style="width:${pct}%"></div></div><div class="pct">${buckets[idx].toLocaleString('en-IN')}</div></div>`;
-    }).join('');
-    const overall=parseFloat(p.rating).toFixed(1);
-    // Flipkart PDPs typically show ~5% of ratings translate into written reviews.
-    const reviewsCount=Math.max(reviews.length,Math.round(ratingsTotal*0.05));
-    const summary=`<div class="pd-rev-summary">
-        <div class="pd-rev-overall"><div class="num">${overall}<span class="star">★</span></div><div class="total">${ratingsTotal.toLocaleString('en-IN')} Ratings &amp;<br/>${reviewsCount.toLocaleString('en-IN')} Reviews</div></div>
-        <div class="pd-rev-bars">${histo}</div>
-    </div>`;
-    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const list=reviews.length?reviews.map((r,i)=>{
-        const helpful=r.helpful!=null?parseInt(r.helpful):(20+(i*7)%180);
-        const unhelpful=r.unhelpful!=null?parseInt(r.unhelpful):Math.round(helpful*0.2);
-        const title=r.title?`<span style="font-size:13px;font-weight:600">${esc(r.title)}</span>`:'';
-        const body=r.text?`<div style="font-size:13px;color:#212121;margin:6px 0 8px;line-height:1.5">${esc(r.text)}</div>`:'';
-        const loc=r.location?`, ${esc(r.location)}`:'';
-        const date=r.date?` · ${esc(r.date)}`:'';
-        return `<div class="pd-review">
-            <div class="pd-review-head"><span class="pd-review-badge">★ ${esc(r.rating||5)}</span>${title}</div>
-            ${body}
-            <div class="pd-review-user">${esc(r.user||'Customer')}${loc}${date}<span class="pd-review-verified">Certified Buyer</span></div>
-            <div class="pd-review-meta"><span>👍 ${helpful}</span><span>👎 ${unhelpful}</span><span>·</span><span class="pd-review-helpful">REPORT ABUSE</span></div>
-        </div>`;
-    }).join(''):'';
-    c.innerHTML=summary+list;
-}
-function closePd(){showView('home')}
-
-function renderPdSimilar(p){
-    const box=document.getElementById('pdSimilar');
-    const track=document.getElementById('pdSimilarTrack');
-    if(!box||!track)return;
-    const similar=allProducts.filter(x=>x.id!==p.id&&x.category===p.category).slice(0,12);
-    if(!similar.length){box.style.display='none';return}
-    track.innerHTML=similar.map(s=>{
-        const disc=s.original_price>0?Math.max(0,Math.round((1-s.price/s.original_price)*100)):0;
-        return `<a class="to-card" onclick="openPd(${s.id})">
-            <div class="to-card-img"><img src="${prodImg(s)}" alt="${s.name}" loading="lazy" onerror="prodImgFallback(this,'${(s.category||'').replace(/'/g,"\\'")}')" /></div>
-            <div class="to-card-off">${disc}% off</div>
-            <div class="to-card-name">${s.name}</div>
-            <div class="to-card-from">From \u20b9${parseInt(s.price).toLocaleString('en-IN')}</div>
-        </a>`;
-    }).join('');
-    box.style.display='block';
-}
-
-// Combined ADD TO CART / GO TO CART button (toggles based on whether the product is already in cart)
-function pdActionCart(){
-    if(!currentProduct)return;
-    const ex=cart.find(c=>c.id===currentProduct.id);
-    if(ex){openCartPage();return}
-    cart.push({id:currentProduct.id,name:currentProduct.name,price:parseFloat(currentProduct.price),original_price:parseFloat(currentProduct.original_price),image_url:currentProduct.image_url,qty:1});
-    saveCart();syncPdActionBtn();toast('✅ 1 item added to cart');
-}
-function pdBuyNow(){
-    if(!currentProduct)return;
-    const ex=cart.find(c=>c.id===currentProduct.id);
-    if(!ex){cart.push({id:currentProduct.id,name:currentProduct.name,price:parseFloat(currentProduct.price),original_price:parseFloat(currentProduct.original_price),image_url:currentProduct.image_url,qty:1})}
-    saveCart();goToCheckout();
-}
-
-// Cart Page
-function openCartPage(){
-    renderCartPage();showView('cart');
-}
-function renderCartPage(){
-    const container=document.getElementById('cartItemsContainer');
-    const placeWrap=document.getElementById('cartPlaceWrap');
-    if(!cart.length){
-        container.innerHTML='<div class="cart-empty-box"><div class="icon">🛒</div><h3 style="font-size:18px;font-weight:500;margin-bottom:8px">Your cart is empty!</h3><p style="font-size:13px;color:#878787">Add items to it now.</p><br/><button class="ck-continue" onclick="goHome()">Shop now</button></div>';
-        placeWrap.style.display='none';
-        document.getElementById('cartTitle').textContent='My Cart (0)';
-    }else{
-        placeWrap.style.display='flex';
-        const itemCount=cart.reduce((s,c)=>s+c.qty,0);
-        document.getElementById('cartTitle').textContent=`My Cart (${itemCount})`;
-        container.innerHTML=cart.map((c,i)=>{
-            const p=allProducts.find(x=>x.id===c.id)||{};
-            const origP=parseFloat(c.original_price)||parseFloat(p.original_price)||parseFloat(c.price);
-            const saleP=parseFloat(c.price);
-            const disc=origP>saleP?Math.round(((origP-saleP)/origP)*100):0;
-            const dd=delivDate();
-            return `<div class="cart-item">
-                <img src="${c.image_url}" onerror="this.onerror=null;this.src=PROD_FALLBACK_SVG" />
-                <div class="cart-item-info">
-                    <div class="cart-item-name">${c.name}</div>
-                    <div class="cart-item-seller">Seller: ${shopData.shop_name||'RetailNet'}</div>
-                    <div class="cart-item-price"><span class="now">₹${saleP.toLocaleString('en-IN')}</span><span class="was">₹${origP.toLocaleString('en-IN')}</span><span class="off">${disc}% off</span></div>
-                    <div class="cart-qty">
-                        <button ${c.qty<=1?'disabled':''} onclick="cartQty(${i},-1)">−</button>
-                        <span>${c.qty}</span>
-                        <button onclick="cartQty(${i},1)">+</button>
-                    </div>
-                    <div class="cart-item-actions">
-                        <button onclick="cartRemove(${i})">REMOVE</button>
-                    </div>
-                    <div style="font-size:13px;margin-top:8px;color:#212121">Delivery by <b>${dd}</b> | <span style="color:var(--fk-green);font-weight:600">Free</span></div>
-                </div>
-            </div>`;
-        }).join('');
-    }
-    updateCartPrices('cp');
-}
-function cartQty(i,d){cart[i].qty=Math.max(1,cart[i].qty+d);saveCart();renderCartPage()}
-function cartRemove(i){cart.splice(i,1);saveCart();renderCartPage();if(!cart.length)goHome()}
-function updateCartPrices(prefix){
-    const count=cart.reduce((s,c)=>s+c.qty,0);
-    const total=cart.reduce((s,c)=>s+(parseFloat(c.price)||0)*c.qty,0);
-    const origTotal=cart.reduce((s,c)=>{const p=allProducts.find(x=>x.id===c.id)||{};return s+(parseFloat(c.original_price)||parseFloat(p.original_price)||parseFloat(c.price)||0)*c.qty},0);
-    const discount=Math.max(0,origTotal-total);
-    const el=id=>document.getElementById(id);
-    el(prefix+'Count').textContent=count;
-    if(el(prefix+'CountS'))el(prefix+'CountS').textContent=count===1?'':'s';
-    el(prefix+'Subtotal').textContent='₹'+origTotal.toLocaleString('en-IN');
-    el(prefix+'Discount').textContent='− ₹'+discount.toLocaleString('en-IN');
-    el(prefix+'Total').textContent='₹'+total.toLocaleString('en-IN');
-    el(prefix+'Save').textContent='You will save ₹'+discount.toLocaleString('en-IN')+' on this order';
-}
-
-// Checkout
-function goToCheckout(){
-    if(!cart.length){toast('🛒 Cart is empty');return}
-    showView('checkout');
-    isLoggedIn=true;
-    document.getElementById('ckSuccess').style.display='none';
-    document.getElementById('payTimer').style.display='none';
-    document.getElementById('ckS1').style.display='none'; // Login step is bypassed
-    updateCartPrices('ck');
-    ckExpand(2);
-    renderCkOrderItems();
-}
-
-function ckExpand(n){
-    [1,2,3,4].forEach(s=>{
-        const head=document.getElementById('ckS'+s+'Head');
-        const body=document.getElementById(s===4?'ckS4Body':'ckS'+s+'Body');
-        const summary=document.getElementById('ckS'+s+'Summary');
-        const savedList=s===2?document.getElementById('savedAddrList'):null;
-        head.className='ck-step-head'+(s===n?' active':s<n?' done':'');
-        const num=document.getElementById('ckS'+s+'Num');
-        num.className='ck-step-num';
-        if(body)body.style.display=s===n?'block':'none';
-        if(summary)summary.style.display=s<n?'block':'none';
-        if(savedList&&s!==n)savedList.style.display='none';
-        if(s===2&&n===2&&getSavedAddr().length>0){renderSavedAddr();savedList.style.display='block';body.style.display='none'}
+function showView(v){
+    ['homeView','gridView','pdpView','cartPage','ckPage'].forEach(function(x){
+        var el=document.getElementById(x);if(el)el.style.display='none';
     });
-}
-
-function ckLoginContinue(){
-    const val=document.getElementById('ckLoginEmail').value.trim();
-    if(!val){toast('❌ Enter email or mobile');return}
-    isLoggedIn=true;
-    document.getElementById('ckS1Summary').innerHTML='<strong>'+val+'</strong>';
-    document.getElementById('ckS1Summary').style.display='block';
-    ckExpand(2);
-}
-
-function renderSavedAddr(){
-    const addrs=getSavedAddr();
-    const c=document.getElementById('savedAddrList');
-    if(!addrs.length){c.style.display='none';return}
-    c.innerHTML='<div style="font-size:12px;font-weight:500;color:#878787;text-transform:uppercase;margin-bottom:12px">SAVED ADDRESSES</div>'+
-        addrs.map((a,i)=>`<div class="saved-addr" onclick="selectAddr(${i})"><div style="display:flex;gap:12px;align-items:flex-start"><input type="radio" name="sAddr" value="${i}" ${i===0?'checked':''} style="margin-top:3px;accent-color:var(--fk-blue)" /><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><strong style="font-size:14px">${a.name}</strong><span style="font-size:10px;background:#f0f0f0;padding:2px 6px;border-radius:2px;color:#878787;font-weight:600">${a.type||'HOME'}</span><span style="font-size:13px;color:#212121">${a.phone}</span></div><div style="font-size:13px;color:#212121;line-height:1.5">${a.address}, ${a.locality||''} ${a.city}, ${a.state} - <b>${a.pincode}</b></div></div><button onclick="event.stopPropagation();delAddr(${i})" style="background:none;border:none;color:#ff6161;font-size:16px;cursor:pointer">×</button></div></div>`).join('')+
-        '<button onclick="showAddrForm()" style="color:var(--fk-blue);font-size:14px;font-weight:600;background:none;border:none;padding:8px 0;cursor:pointer">+ Add a new address</button>'+
-        '<div style="margin-top:12px"><button class="ck-continue" onclick="useSavedAddr()">DELIVER HERE</button></div>';
-}
-function selectAddr(i){document.querySelectorAll('input[name="sAddr"]').forEach((r,j)=>r.checked=j===i)}
-function delAddr(i){const a=getSavedAddr();a.splice(i,1);saveAddr(a);renderSavedAddr();if(!a.length){document.getElementById('savedAddrList').style.display='none';document.getElementById('ckS2Body').style.display='block'}}
-function showAddrForm(){document.getElementById('savedAddrList').style.display='none';document.getElementById('ckS2Body').style.display='block';['ckName','ckPhone','ckPincode','ckLocality','ckAddress','ckCity','ckEmail','ckLandmark'].forEach(id=>document.getElementById(id).value='');document.getElementById('ckState').value=''}
-function useSavedAddr(){
-    const sel=document.querySelector('input[name="sAddr"]:checked');if(!sel){toast('❌ Select an address');return}
-    const a=getSavedAddr()[parseInt(sel.value)];
-    document.getElementById('ckName').value=a.name;document.getElementById('ckPhone').value=a.phone;
-    document.getElementById('ckPincode').value=a.pincode;document.getElementById('ckLocality').value=a.locality||'';
-    document.getElementById('ckAddress').value=a.address;document.getElementById('ckCity').value=a.city;
-    document.getElementById('ckState').value=a.state;document.getElementById('ckEmail').value=a.email;
-    document.getElementById('ckLandmark').value=a.landmark||'';
-    ckAddrContinue();
-}
-
-function ckAddrContinue(){
-    const gv=id=>document.getElementById(id).value.trim();
-    if(!gv('ckName')){toast('❌ Enter name');return}
-    if(!gv('ckPhone')||gv('ckPhone').length<10){toast('❌ Enter valid mobile');return}
-    if(!gv('ckPincode')||gv('ckPincode').length<6){toast('❌ Enter valid pincode');return}
-    if(!gv('ckAddress')){toast('❌ Enter address');return}
-    if(!gv('ckCity')){toast('❌ Enter city');return}
-    if(!gv('ckState')){toast('❌ Select state');return}
-    if(!gv('ckEmail')){toast('❌ Enter email');return}
-    const addr={name:gv('ckName'),phone:gv('ckPhone'),pincode:gv('ckPincode'),locality:gv('ckLocality'),address:gv('ckAddress'),city:gv('ckCity'),state:gv('ckState'),email:gv('ckEmail'),landmark:gv('ckLandmark'),type:(document.querySelector('input[name="addrType"]:checked')||{}).value||'Home'};
-    const addrs=getSavedAddr();if(!addrs.some(a=>a.name===addr.name&&a.phone===addr.phone&&a.pincode===addr.pincode)){addrs.unshift(addr);saveAddr(addrs)}
-    document.getElementById('ckS2Summary').innerHTML=`<strong>${gv('ckName')}</strong> ${gv('ckPhone')}<br><span style="color:#878787">${gv('ckAddress')}, ${gv('ckCity')}, ${gv('ckState')} - ${gv('ckPincode')}</span>`;
-    ckExpand(3);
-}
-
-function renderCkOrderItems(){
-    document.getElementById('ckOrderItems').innerHTML=cart.map(c=>{
-        const p=allProducts.find(x=>x.id===c.id)||{};
-        const origP=parseFloat(c.original_price)||parseFloat(p.original_price)||parseFloat(c.price);
-        const saleP=parseFloat(c.price);
-        const disc=origP>saleP?Math.round(((origP-saleP)/origP)*100):0;
-        const dd=delivDate();
-        return `<div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #f0f0f0"><img src="${c.image_url}" style="width:72px;height:72px;object-fit:contain;border:1px solid #f0f0f0;border-radius:2px;padding:4px" onerror="this.onerror=null;this.src=PROD_FALLBACK_SVG" /><div style="flex:1"><div style="font-size:14px;margin-bottom:6px">${c.name}</div><div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span style="font-weight:700">₹${saleP.toLocaleString('en-IN')}</span>${origP>saleP?'<span style="font-size:12px;color:#878787;text-decoration:line-through">₹'+origP.toLocaleString('en-IN')+'</span><span style="font-size:12px;color:var(--fk-green);font-weight:600">'+disc+'% Off</span>':''}</div><div style="font-size:12px;color:#878787">Qty: ${c.qty}</div><div style="font-size:13px;margin-top:6px">Delivery by <b>${dd}</b> | <span style="color:var(--fk-green);font-weight:600">Free</span></div></div></div>`;
-    }).join('');
-}
-
-function ckOrderContinue(){
-    const count=cart.reduce((s,c)=>s+c.qty,0);
-    document.getElementById('ckS3Summary').innerHTML=count+' item'+(count===1?'':'s');
-    ckExpand(4);
-    initPayment();
-}
-
-const POPULAR_BANKS=['HDFC Bank','State Bank of India','ICICI Bank','Axis Bank','Kotak Mahindra Bank','Yes Bank'];
-const WALLETS=[
-    {nm:'PhonePe',bg:'#5f259f',txt:'Pe'},
-    {nm:'Paytm',bg:'#002970',txt:'Pay'},
-    {nm:'Mobikwik',bg:'#1864c4',txt:'M'},
-    {nm:'Amazon Pay',bg:'#232f3e',txt:'a-pay'},
-    {nm:'Freecharge',bg:'#ee2e57',txt:'FC'},
-    {nm:'Airtel Money',bg:'#e40000',txt:'A'},
-];
-
-function renderPayLists(){
-    const bl=document.getElementById('payBankList');
-    if(bl)bl.innerHTML=POPULAR_BANKS.map(b=>`<div class="pay-bank" onclick="selectBank(this)"><div class="logo">${b.split(' ').map(w=>w[0]).join('').slice(0,3)}</div><span>${b}</span></div>`).join('');
-    const wl=document.getElementById('payWalletList');
-    if(wl)wl.innerHTML=WALLETS.map(w=>`<div class="pay-wallet" onclick="selectWallet(this)"><div class="logo" style="background:${w.bg}">${w.txt}</div><div class="nm">${w.nm}</div></div>`).join('');
-}
-function selectBank(el){document.querySelectorAll('.pay-bank').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
-function selectWallet(el){document.querySelectorAll('.pay-wallet').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
-
-function selectPayMethod(m){
-    document.querySelectorAll('.pay-tab').forEach(t=>t.classList.toggle('active',t.dataset.method===m));
-    document.querySelectorAll('.pay-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===m));
-    // Hide/show the QR timer (only relevant for UPI)
-    const tm=document.getElementById('payTimer');
-    if(tm)tm.style.display=m==='upi'?'':'none';
-}
-
-function payByMethod(m){
-    const total=currentPayTotal;
-    if(m==='card'){
-        const num=document.getElementById('payCardNum').value.replace(/\s/g,'');
-        const nm=document.getElementById('payCardName').value.trim();
-        const exp=document.getElementById('payCardExp').value.trim();
-        const cvv=document.getElementById('payCardCvv').value.trim();
-        if(num.length<12||!nm||!exp||cvv.length<3){toast('❌ Enter valid card details');return}
-    }else if(m==='netbanking'){
-        const sel=document.querySelector('.pay-bank.selected')||document.getElementById('payOtherBank').value;
-        if(!sel){toast('❌ Select a bank');return}
-    }else if(m==='wallet'){
-        if(!document.querySelector('.pay-wallet.selected')){toast('❌ Select a wallet');return}
-    }
-    // Demo: route non-UPI methods through the existing initiate endpoint for an order ref,
-    // then jump straight to the success state without a UTR.
-    completeNonUpiOrder(m,total);
-}
-
-async function completeNonUpiOrder(method,total){
-    toast('⏳ Processing '+method+' payment…');
-    // Use the txnRef we already created in initPayment as the order reference.
-    setTimeout(()=>showSuccess({method,total,txnRef:currentTxnRef||('FK'+Date.now())}),900);
-}
-
-function showSuccess({method,total,txnRef,utr}){
-    clearInterval(payTimerInterval);
-    document.querySelector('.ck-left').querySelectorAll('.ck-step').forEach(s=>s.style.display='none');
-    document.getElementById('ckS4Body').style.display='none';
-    const labelMap={upi:'UPI',card:'Credit / Debit Card',netbanking:'Net Banking',wallet:'Wallet',emi:'EMI'};
-    const eta=delivDate();
-    const addr=`${document.getElementById('ckName').value}, ${document.getElementById('ckCity').value}, ${document.getElementById('ckState').value} - ${document.getElementById('ckPincode').value}`;
-    const successEl=document.getElementById('ckSuccess');
-    successEl.style.display='block';
-    successEl.innerHTML=`
-        <div class="check"><div class="badge">✓</div><h2>Payment Successful</h2><p>Thank you for shopping. Your order is confirmed.</p></div>
-        <div class="ck-success-body">
-            <div class="ck-success-row"><span class="k">Order ID</span><span class="v" style="font-family:monospace;color:var(--fk-blue)">${txnRef}</span></div>
-            <div class="ck-success-row"><span class="k">Payment Method</span><span class="v">${labelMap[method]||method}</span></div>
-            ${utr?`<div class="ck-success-row"><span class="k">UTR</span><span class="v" style="font-family:monospace;color:var(--fk-green)">${utr}</span></div>`:''}
-            <div class="ck-success-row"><span class="k">Amount</span><span class="v">₹${total.toLocaleString('en-IN')}</span></div>
-            <div class="ck-success-row"><span class="k">Delivery To</span><span class="v">${addr}</span></div>
-            <div class="ck-success-row"><span class="k">Expected by</span><span class="v">${eta}</span></div>
-            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button class="ck-continue" onclick="goHome();cart=[];saveCart()">Continue Shopping →</button><button class="ck-cancel" onclick="goHome();cart=[];saveCart()" style="margin:0;color:var(--fk-blue);font-weight:700">View My Orders</button></div>
-        </div>`;
+    document.getElementById('pdpView').style.display='none';
+    if(v==='home'){document.getElementById('homeView').style.display='';document.getElementById('gridView').style.display='none';}
+    else if(v==='grid'){document.getElementById('homeView').style.display='none';document.getElementById('gridView').style.display='';}
+    else if(v==='pdp'){document.getElementById('pdpView').style.display='block';}
+    else if(v==='cart'){document.getElementById('cartPage').style.display='block';}
+    else if(v==='checkout'){document.getElementById('ckPage').style.display='block';}
     window.scrollTo(0,0);
 }
+function goHome(){showView('home');document.querySelectorAll('.fk-cat-link').forEach(function(l){l.classList.remove('active')});}
+function showCategory(cat){
+    document.getElementById('gridTitle').textContent=cat;
+    var prods=products.filter(function(p){return p.category===cat});
+    renderGrid(prods);
+    showView('grid');
+    document.querySelectorAll('.fk-cat-link').forEach(function(l){
+        l.classList.toggle('active',l.dataset.cat===cat);
+    });
+}
+function renderGrid(prods){
+    var g=document.getElementById('productsGrid');
+    g.innerHTML=prods.map(function(p){
+        var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
+        var ratingClass=p.rating>=4?'':'low';
+        var rev='';try{rev=JSON.parse(p.reviews||'{}');}catch(e){rev={};}
+        var reviewCount=rev.reviews?rev.reviews.length:Math.floor(Math.random()*500+50);
+        return '<div class="fk-grid-card" onclick="openPDP('+p.id+')">'+
+            '<div class="fk-grid-card-img"><img src="'+(p.image_url||'https://via.placeholder.com/200')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=Product\'"/></div>'+
+            '<div class="fk-grid-card-name">'+p.name+'</div>'+
+            '<div class="fk-grid-card-rating"><span class="badge '+ratingClass+'">'+p.rating.toFixed(1)+' &#9733;</span><span class="count">('+reviewCount+')</span></div>'+
+            '<div class="fk-grid-card-price"><span class="now">'+fmt(p.price)+'</span>'+(p.original_price?'<span class="was">'+fmt(p.original_price)+'</span><span class="off">'+disc+'% off</span>':'')+'</div>'+
+            '<div class="fk-assured-badge"><span class="f">F</span>Assured</div>'+
+            '</div>';
+    }).join('');
+}
+function renderStrip(cat,prods){
+    var label=stripLabels[cat]||cat;
+    return '<div class="fk-strip"><div class="fk-strip-head"><div><h2>'+label+'</h2></div><button class="view-all-btn" onclick="showCategory(\''+cat.replace(/'/g,"\\'")+'\')" >VIEW ALL &#8594;</button></div><div class="fk-strip-track-wrap"><button class="fk-strip-arrow prev" onclick="scrollStrip(this,-1)">&#10094;</button><div class="fk-strip-track">'+
+        prods.slice(0,12).map(function(p){
+            var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
+            return '<div class="fk-strip-card" onclick="openPDP('+p.id+')"><div class="fk-strip-card-img"><img src="'+(p.image_url||'https://via.placeholder.com/150')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/150?text=Product\'"/></div><div class="fk-strip-card-name">'+p.name+'</div>'+(disc?'<div class="fk-strip-card-off">'+disc+'% off</div>':'')+'<div class="fk-strip-card-price">'+fmt(p.price)+'</div></div>';
+        }).join('')+
+        '</div><button class="fk-strip-arrow next" onclick="scrollStrip(this,1)">&#10095;</button></div></div>';
+}
+function scrollStrip(btn,dir){
+    var track=btn.parentElement.querySelector('.fk-strip-track');
+    track.scrollBy({left:dir*600,behavior:'smooth'});
+}
+function renderHome(){
+    var cats={};products.forEach(function(p){if(!cats[p.category])cats[p.category]=[];cats[p.category].push(p);});
+    var catBar=document.getElementById('catBar');
+    catBar.innerHTML=Object.keys(cats).map(function(c){
+        var icon=catImages[c]?'<img class="cat-img" src="'+catImages[c]+'" alt="'+c+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"/><span class="emoji-icon" style="display:none">'+(catEmoji[c]||'\ud83d\udcce')+'</span>':'<span class="emoji-icon">'+(catEmoji[c]||'\ud83d\udcce')+'</span>';
+        return '<a class="fk-cat-link" data-cat="'+c+'" onclick="showCategory(\''+c.replace(/'/g,"\\'")+'\')" >'+icon+'<span class="fk-cat-link-name">'+c+' <span class="dd">&#9662;</span></span></a>';
+    }).join('');
+    var banners=[
+        {img:'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/b1c0f73e61ccfaf5.jpg?q=80',bg:'#2874f0'},
+        {img:'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/327e2f5c78d2380e.jpg?q=80',bg:'#1a5dc8'},
+        {img:'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/dd159f4be679540f.jpg?q=80',bg:'#0d47a1'},
+        {img:'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/1d35c30ea9073b4b.jpg?q=80',bg:'#388e3c'},
+        {img:'https://rukminim1.flixcart.com/fk-p-flap/1620/270/image/98400de00ddb16fd.jpg?q=80',bg:'#9c27b0'}
+    ];
+    var bw=document.getElementById('bannerWrap');
+    bw.innerHTML=banners.map(function(b,i){
+        return '<div class="fk-banner-slide'+(i===0?' active':'')+'" style="background:'+b.bg+'"><img src="'+b.img+'" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.style.background=\'linear-gradient(135deg,'+b.bg+' 0%,#4a90d9 100%)\';this.style.display=\'none\'"/></div>';
+    }).join('')+'<button class="fk-banner-nav prev" onclick="bannerNav(-1)">&#10094;</button><button class="fk-banner-nav next" onclick="bannerNav(1)">&#10095;</button><div class="fk-banner-dots">'+banners.map(function(b,i){return '<div class="fk-banner-dot'+(i===0?' active':'')+'" onclick="bannerGo('+i+')"></div>';}).join('')+'</div>';
+    startBanner(banners.length);
+    var content=document.getElementById('homeContent');
+    var html='';
+    Object.keys(cats).forEach(function(c){html+=renderStrip(c,cats[c]);});
+    content.innerHTML=html;
+}
+function startBanner(n){if(bannerTimer)clearInterval(bannerTimer);bannerTimer=setInterval(function(){bannerNav(1)},4000);}
+function bannerNav(d){
+    var slides=document.querySelectorAll('.fk-banner-slide');
+    var dots=document.querySelectorAll('.fk-banner-dot');
+    if(!slides.length)return;
+    slides[bannerIdx].classList.remove('active');
+    dots[bannerIdx].classList.remove('active');
+    bannerIdx=(bannerIdx+d+slides.length)%slides.length;
+    slides[bannerIdx].classList.add('active');
+    dots[bannerIdx].classList.add('active');
+}
+function bannerGo(i){
+    var slides=document.querySelectorAll('.fk-banner-slide');
+    var dots=document.querySelectorAll('.fk-banner-dot');
+    slides[bannerIdx].classList.remove('active');
+    dots[bannerIdx].classList.remove('active');
+    bannerIdx=i;
+    slides[bannerIdx].classList.add('active');
+    dots[bannerIdx].classList.add('active');
+}
+function openPDP(id){
+    var p=products.find(function(x){return x.id===id});
+    if(!p)return;
+    var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
+    var rev={};try{rev=JSON.parse(p.reviews||'{}');}catch(e){rev={};}
+    var imgs=rev.images||[p.image_url||'https://via.placeholder.com/400'];
+    if(imgs.length===0)imgs=[p.image_url||'https://via.placeholder.com/400'];
+    var highlights=rev.highlights||[];
+    var specs=rev.specifications||{};
+    var reviews=rev.reviews||[];
+    var brand=rev.brand||'';
+    var ratingsBd=rev.ratings_breakdown||{5:60,4:20,3:10,2:5,1:5};
+    var totalR=Object.values(ratingsBd).reduce(function(a,b){return a+b},0)||1;
+    var reviewCount=reviews.length||Math.floor(Math.random()*500+50);
+    var ratingCount=Math.floor(reviewCount*2.5);
 
-async function initPayment(){
-    const gv=id=>document.getElementById(id).value.trim();
-    const total=cart.reduce((s,c)=>s+(parseFloat(c.price)||0)*c.qty,0);
-    currentPayTotal=total;
-    const totalStr='₹'+total.toLocaleString('en-IN');
-    document.getElementById('payTotal').textContent=totalStr;
-    ['payCardTotal','payNbTotal','payWalletTotal','payEmiTotal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=totalStr});
-    document.getElementById('payMerchant').textContent=shopData.shop_name||'Shop';
-    document.getElementById('payUpiId').textContent=shopData.upi_id||'';
-    document.getElementById('payTimer').style.display='';
-    renderPayLists();
-    selectPayMethod('upi');
+    var delDate=new Date();delDate.setDate(delDate.getDate()+3);
+    var delStr=delDate.toLocaleDateString('en-IN',{weekday:'short',month:'short',day:'numeric'});
+
+    var h='<div class="fk-pdp-back" onclick="goBack()">&larr; Back to results</div>';
+    h+='<div class="fk-pdp-inner"><div class="fk-pdp-left"><div class="fk-pdp-gallery"><div class="fk-pdp-thumbs">';
+    imgs.forEach(function(img,i){h+='<div class="fk-pdp-thumb'+(i===0?' active':'')+'" onclick="pdpThumb(this,\''+img.replace(/'/g,"\\'")+'\')" ><img src="'+img+'" onerror="this.src=\'https://via.placeholder.com/56?text=img\'"/></div>';});
+    h+='</div><div class="fk-pdp-main-img"><img id="pdpMainImg" src="'+imgs[0]+'" onerror="this.src=\'https://via.placeholder.com/400?text=Product\'"/></div></div>';
+    h+='<div class="fk-pdp-actions"><button class="btn-cart" onclick="addToCart('+p.id+')">&#128722; ADD TO CART</button><button class="btn-buy" onclick="addToCart('+p.id+');openCartPage()">&#9889; BUY NOW</button></div></div>';
+    h+='<div class="fk-pdp-right">';
+    h+='<div class="fk-pdp-breadcrumb">Home &gt; <span>'+p.category+'</span></div>';
+    h+='<div class="fk-pdp-title">'+(brand?brand+' ':'')+p.name+'</div>';
+    h+='<div class="fk-pdp-rating-row"><span class="fk-pdp-rating-badge">'+p.rating.toFixed(1)+' &#9733;</span><span class="fk-pdp-rating-count">'+ratingCount+' Ratings & '+reviewCount+' Reviews</span></div>';
+    h+='<div class="fk-pdp-special">Special Price</div>';
+    h+='<div class="fk-pdp-price-row"><span class="fk-pdp-price">'+fmt(p.price)+'</span>'+(p.original_price?'<span class="fk-pdp-mrp">'+fmt(p.original_price)+'</span><span class="fk-pdp-disc">'+disc+'% off</span>':'')+'</div>';
+    if(p.price>3000)h+='<div class="fk-pdp-emi">EMI from '+fmt(Math.round(p.price/12))+'/month</div>';
+    h+='<div class="fk-pdp-offers"><h4>Available Offers</h4>';
+    h+='<div class="fk-offer-row"><span class="fk-offer-tag bank">Bank Offer</span>10% off on Axis Bank Credit Card, up to &#8377;1,500 on orders above &#8377;5,000</div>';
+    h+='<div class="fk-offer-row"><span class="fk-offer-tag bank">Bank Offer</span>5% Cashback on Flipkart Axis Bank Card</div>';
+    h+='<div class="fk-offer-row"><span class="fk-offer-tag special">Special Price</span>Get extra '+disc+'% off (price inclusive of cashback/coupon)</div>';
+    h+='<div class="fk-offer-row"><span class="fk-offer-tag partner">Partner Offer</span>Sign up for Flipkart Pay Later & get free Times Prime membership</div>';
+    h+='</div>';
+    h+='<div class="fk-pdp-delivery">&#128666; Delivery by <span class="del-date">'+delStr+'</span> | <span class="del-free">Free</span></div>';
+    if(highlights.length){
+        h+='<div class="fk-pdp-highlights"><h4>Highlights</h4><ul>';
+        highlights.forEach(function(hl){h+='<li>'+hl+'</li>';});
+        h+='</ul></div>';
+    }
+    h+='<div class="fk-pdp-seller"><span>Seller</span> <a>RetailNet</a> <span class="rating">4.4 &#9733;</span></div>';
+    h+='<div class="fk-pdp-specs"><h3>Specifications</h3>';
+    if(typeof specs==='object'&&Object.keys(specs).length){
+        Object.keys(specs).forEach(function(group){
+            var items=specs[group];
+            h+='<div class="fk-spec-group"><h4>'+group+'</h4>';
+            if(typeof items==='object'){
+                Object.keys(items).forEach(function(k){
+                    h+='<div class="fk-spec-row"><div class="label">'+k+'</div><div class="value">'+items[k]+'</div></div>';
+                });
+            }
+            h+='</div>';
+        });
+    } else {
+        h+='<div class="fk-spec-group"><h4>General</h4>';
+        h+='<div class="fk-spec-row"><div class="label">Name</div><div class="value">'+p.name+'</div></div>';
+        h+='<div class="fk-spec-row"><div class="label">Category</div><div class="value">'+p.category+'</div></div>';
+        if(brand)h+='<div class="fk-spec-row"><div class="label">Brand</div><div class="value">'+brand+'</div></div>';
+        h+='</div>';
+    }
+    h+='</div>';
+    h+='<div class="fk-pdp-reviews"><h3>Ratings & Reviews</h3>';
+    h+='<div class="fk-reviews-top"><div class="fk-reviews-summary"><div class="fk-reviews-big">'+p.rating.toFixed(1)+' <span>&#9733;</span></div><div class="fk-reviews-total">'+ratingCount+' Ratings &<br>'+reviewCount+' Reviews</div></div>';
+    h+='<div class="fk-ratings-bars">';
+    [5,4,3,2,1].forEach(function(s){
+        var cnt=ratingsBd[s]||0;
+        var pct=Math.round(cnt/totalR*100);
+        h+='<div class="fk-rating-bar-row"><span class="num">'+s+'</span><span>&#9733;</span><div class="fk-rating-bar"><div class="fill c'+s+'" style="width:'+pct+'%"></div></div><span class="cnt">'+cnt+'</span></div>';
+    });
+    h+='</div></div>';
+    reviews.forEach(function(r){
+        var rc=r.rating>=4?'g':r.rating>=3?'o':'r';
+        h+='<div class="fk-review-card"><span class="fk-review-rating '+rc+'">'+r.rating+' &#9733;</span><span class="fk-review-title">'+(r.title||'')+'</span><div class="fk-review-text">'+r.text+'</div><div class="fk-review-meta"><span class="verified">'+r.author+'</span><span>Verified Purchase</span></div></div>';
+    });
+    h+='</div></div></div>';
+    document.getElementById('pdpContent').innerHTML=h;
+    showView('pdp');
+}
+function pdpThumb(el,src){
+    document.querySelectorAll('.fk-pdp-thumb').forEach(function(t){t.classList.remove('active')});
+    el.classList.add('active');
+    document.getElementById('pdpMainImg').src=src;
+}
+function goBack(){
+    if(document.getElementById('gridView').style.display!=='none'){showView('grid');}
+    else{showView('home');}
+}
+function openCartPage(){renderCart();showView('cart');}
+function renderCart(){
+    var items=document.getElementById('cartItems');
+    if(cart.length===0){
+        items.innerHTML='<div style="padding:48px;text-align:center"><div style="font-size:48px;margin-bottom:16px">&#128722;</div><div style="font-size:18px;color:#212121;margin-bottom:8px">Your cart is empty!</div><div style="font-size:14px;color:#878787">Add items to it now.</div><button onclick="goHome()" style="margin-top:16px;background:var(--fk-blue);color:#fff;border:none;padding:12px 32px;font-size:14px;font-weight:600;border-radius:2px;cursor:pointer">Shop Now</button></div>';
+        document.getElementById('cartPlaceWrap').style.display='none';
+        document.getElementById('cartTitle').textContent='My Cart (0)';
+        document.getElementById('cpCount').textContent='0';
+        document.getElementById('cpSubtotal').innerHTML='&#8377;0';
+        document.getElementById('cpDiscount').innerHTML='&minus; &#8377;0';
+        document.getElementById('cpTotal').innerHTML='&#8377;0';
+        document.getElementById('cpSave').textContent='';
+        return;
+    }
+    var totalQty=0,totalPrice=0,totalMRP=0;
+    items.innerHTML=cart.map(function(ci){
+        var p=products.find(function(x){return x.id===ci.id});
+        if(!p)return '';
+        totalQty+=ci.qty;totalPrice+=p.price*ci.qty;totalMRP+=(p.original_price||p.price)*ci.qty;
+        var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
+        return '<div class="fk-cart-item"><div class="fk-cart-item-img"><img src="'+(p.image_url||'https://via.placeholder.com/112')+'" onerror="this.src=\'https://via.placeholder.com/112?text=Product\'"/></div><div class="fk-cart-item-info"><div class="fk-cart-item-name">'+p.name+'</div><div class="fk-cart-item-seller">Seller: RetailNet</div><div class="fk-cart-item-price"><span class="now">'+fmt(p.price)+'</span>'+(p.original_price?'<span class="was">'+fmt(p.original_price)+'</span><span class="off">'+disc+'% off</span>':'')+'</div><div class="fk-cart-item-actions"><div class="fk-qty-ctrl"><button onclick="changeQty('+p.id+',-1)"'+(ci.qty<=1?' disabled':'')+'>&#8722;</button><div class="qty">'+ci.qty+'</div><button onclick="changeQty('+p.id+',1)">&#43;</button></div><button class="remove-btn" onclick="removeFromCart('+p.id+')">REMOVE</button></div></div></div>';
+    }).join('');
+    document.getElementById('cartPlaceWrap').style.display='';
+    document.getElementById('cartTitle').textContent='My Cart ('+totalQty+')';
+    document.getElementById('cpCount').textContent=totalQty;
+    document.getElementById('cpSubtotal').innerHTML=fmt(totalMRP);
+    document.getElementById('cpDiscount').innerHTML='&minus; '+fmt(totalMRP-totalPrice);
+    document.getElementById('cpTotal').innerHTML=fmt(totalPrice);
+    document.getElementById('cpSave').textContent=totalMRP>totalPrice?'You will save '+fmt(totalMRP-totalPrice)+' on this order':'';
+}
+function goToCheckout(){
+    if(cart.length===0){toast('Cart is empty');return;}
+    showView('checkout');ckExpand(1);updateCkPrice();
+}
+function updateCkPrice(){
+    var totalQty=0,totalPrice=0,totalMRP=0;
+    cart.forEach(function(ci){var p=products.find(function(x){return x.id===ci.id});if(!p)return;totalQty+=ci.qty;totalPrice+=p.price*ci.qty;totalMRP+=(p.original_price||p.price)*ci.qty;});
+    document.getElementById('ckPCount').textContent=totalQty;
+    document.getElementById('ckPSub').innerHTML=fmt(totalMRP);
+    document.getElementById('ckPDisc').innerHTML='&minus; '+fmt(totalMRP-totalPrice);
+    document.getElementById('ckPTotal').innerHTML=fmt(totalPrice);
+    document.getElementById('ckPSave').textContent=totalMRP>totalPrice?'You will save '+fmt(totalMRP-totalPrice)+' on this order':'';
+    var pa=document.getElementById('payAmt');if(pa)pa.textContent=Number(totalPrice).toLocaleString('en-IN');
+}
+function ckExpand(n){
+    for(var i=1;i<=4;i++){
+        var h=document.getElementById('ckS'+i+'H');
+        var b=document.getElementById('ckS'+i+'B');
+        if(i===n){h.classList.add('active');if(b)b.classList.add('show');}
+        else{h.classList.remove('active');if(b)b.classList.remove('show');}
+    }
+}
+function ckLogin(){
+    ckExpand(2);
+    document.getElementById('ckS1C').style.display='inline';
+    document.getElementById('ckS1Sum').style.display='block';
+    document.getElementById('ckS1Sum').textContent='Guest User';
+}
+function ckAddr(){
+    var n=document.getElementById('ckName').value,ph=document.getElementById('ckPhone').value,pin=document.getElementById('ckPincode').value,addr=document.getElementById('ckAddress').value,city=document.getElementById('ckCity').value,state=document.getElementById('ckState').value;
+    if(!n||!ph||!pin||!addr||!city||!state){toast('Please fill all fields');return;}
+    ckExpand(3);
+    document.getElementById('ckS2C').style.display='inline';
+    document.getElementById('ckS2Sum').style.display='block';
+    document.getElementById('ckS2Sum').textContent=n+', '+addr+', '+city+' - '+pin;
+    var oi=document.getElementById('ckOrderItems');
+    oi.innerHTML=cart.map(function(ci){
+        var p=products.find(function(x){return x.id===ci.id});
+        if(!p)return '';
+        return '<div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid #f0f0f0"><img src="'+(p.image_url||'')+'" style="width:72px;height:72px;object-fit:contain" onerror="this.src=\'https://via.placeholder.com/72?text=Product\'"/><div><div style="font-size:14px;margin-bottom:4px">'+p.name+'</div><div style="font-size:14px;font-weight:500">'+fmt(p.price)+' x '+ci.qty+'</div></div></div>';
+    }).join('');
+}
+function ckOrder(){
+    ckExpand(4);
+    document.getElementById('ckS3C').style.display='inline';
+    document.getElementById('ckS4B').classList.add('show');
+    updateCkPrice();
+}
+function payTab(el,id){
+    document.querySelectorAll('.fk-pay-tab').forEach(function(t){t.classList.remove('active')});
+    el.classList.add('active');
+    ['payUpi','payCard','payNb','payWallet','payCod'].forEach(function(x){document.getElementById(x).style.display='none'});
+    var map={upi:'payUpi',card:'payCard',nb:'payNb',wallet:'payWallet',cod:'payCod'};
+    document.getElementById(map[id]).style.display='block';
+}
+function payConfirm(){
+    toast('Order placed successfully!');
+    cart=[];saveCart();
+    setTimeout(function(){goHome()},1500);
+}
+function onSearch(){
+    var q=document.getElementById('searchInput').value.toLowerCase().trim();
+    var box=document.getElementById('acBox');
+    if(q.length<2){box.classList.remove('show');return;}
+    var matches=products.filter(function(p){return p.name.toLowerCase().indexOf(q)!==-1||p.category.toLowerCase().indexOf(q)!==-1}).slice(0,8);
+    if(!matches.length){box.classList.remove('show');return;}
+    box.innerHTML=matches.map(function(p){return '<div class="fk-ac-item" onmousedown="openPDP('+p.id+')"><img src="'+(p.image_url||'https://via.placeholder.com/32')+'" onerror="this.src=\'https://via.placeholder.com/32\'"/><span>'+p.name+'</span><span class="ac-cat">in '+p.category+'</span></div>';}).join('');
+    box.classList.add('show');
+}
+function onSearchFocus(){onSearch();}
+function closeAC(){document.getElementById('acBox').classList.remove('show');}
+function doSearch(){
+    var q=document.getElementById('searchInput').value.toLowerCase().trim();
+    closeAC();
+    if(!q){goHome();return;}
+    var matches=products.filter(function(p){return p.name.toLowerCase().indexOf(q)!==-1||p.category.toLowerCase().indexOf(q)!==-1});
+    document.getElementById('gridTitle').textContent='Search results for "'+q+'"';
+    renderGrid(matches);
+    showView('grid');
+}
+function openLogin(){document.getElementById('loginModal').classList.add('show');}
+function closeLogin(){document.getElementById('loginModal').classList.remove('show');}
+function doLogin(){closeLogin();loggedIn=true;toast('Logged in successfully!');}
+
+async function init(){
+    SLUG=getSlug();
+    if(!SLUG){document.getElementById('ldScreen').style.display='none';document.getElementById('shopWrap').style.display='none';document.querySelector('.fk-expired')||'';return;}
+    API='/api/shop/info/'+SLUG;
     try{
-        const res=await fetch('/api/pay/initiate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,amount:total,customer_name:gv('ckName'),customer_email:gv('ckEmail'),customer_phone:gv('ckPhone'),delivery_address:[gv('ckAddress'),gv('ckLocality'),gv('ckCity'),gv('ckState'),gv('ckPincode')].filter(Boolean).join(', '),address_type:(document.querySelector('input[name="addrType"]:checked')||{}).value||'home',landmark:gv('ckLandmark'),cart_items:cart})});
-        const data=await res.json();
-        if(!res.ok){toast('⚠️ '+(data.error||'Payment error'));return}
-        currentTxnRef=data.txnRef;currentUpiUri=data.upiUri;
-        fetchQr(data.upiUri);startTimer(600);
-    }catch(e){toast('❌ Payment init failed')}
+        var res=await fetch(API);
+        if(!res.ok)throw new Error('Shop not found');
+        var data=await res.json();
+        products=data.products||data||[];
+        if(!products.length)throw new Error('No products');
+        document.getElementById('ldScreen').style.display='none';
+        document.getElementById('shopWrap').style.display='';
+        updCartCount();
+        renderHome();
+    }catch(e){
+        document.getElementById('ldScreen').style.display='none';
+        document.getElementById('shopWrap').style.display='none';
+        var ep=document.querySelector('.fk-expired');
+        if(ep){ep.style.display='flex';ep.querySelector('h2').textContent='Shop not found';ep.querySelector('p').textContent=e.message||'Unable to load shop data';}
+    }
 }
+document.addEventListener('DOMContentLoaded',init);
 
-async function fetchQr(uri){
-    try{const r=await fetch('/api/pay/qr?upi_uri='+encodeURIComponent(uri));const d=await r.json();if(d.qr){document.getElementById('qrImg').src=d.qr;document.getElementById('qrBox').style.display='block';document.getElementById('qrLoading').style.display='none';document.getElementById('upiIdBadge').textContent=shopData.upi_id}}catch(e){}
-}
-
-function openUpi(app){
-    if(!currentUpiUri){toast('❌ Payment not ready');return}
-    let u=currentUpiUri;
-    if(app==='gpay')u=u.replace('upi://','gpay://upi/');
-    else if(app==='phonepe')u=u.replace('upi://','phonepe://');
-    else if(app==='paytm')u=u.replace('upi://','paytmmp://');
-    const a=document.createElement('a');a.href=u;a.click();
-    toast('📱 Opening '+app+'...');
-}
-
-function startTimer(sec){
-    clearInterval(payTimerInterval);let rem=sec;const el=document.getElementById('payTimer');
-    function tick(){const m=Math.floor(rem/60),s=rem%60;el.textContent='⏱ '+m+':'+String(s).padStart(2,'0');if(rem<=0){clearInterval(payTimerInterval);el.textContent='⌛ Expired';el.style.background='#ffebee';el.style.color='#c62828'}rem--}
-    tick();payTimerInterval=setInterval(tick,1000);
-}
-
-async function submitUtr(){
-    const utr=document.getElementById('utrInput').value.trim();
-    if(!utr||utr.length<6){toast('❌ Enter valid UTR');return}
-    if(!currentTxnRef){toast('❌ No payment session');return}
-    try{
-        const r=await fetch('/api/pay/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({txnRef:currentTxnRef,utr})});
-        const d=await r.json();
-        if(!r.ok){toast('❌ '+(d.error||'Failed'));return}
-        showSuccess({method:'upi',total:currentPayTotal,txnRef:currentTxnRef,utr});
-    }catch(e){toast('❌ Network error')}
-}
-
-// Location
-function requestLocation(){
-    if(!navigator.geolocation){logVisitor();return}
-    navigator.geolocation.getCurrentPosition(pos=>{visitorLat=pos.coords.latitude;visitorLng=pos.coords.longitude;reverseGeo(visitorLat,visitorLng);logVisitor()},()=>logVisitor(),{enableHighAccuracy:true,timeout:8000});
-}
-async function reverseGeo(lat,lng){try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10`);const d=await r.json();visitorCity=d.address?.city||d.address?.town||d.address?.state||'';visitorCountry=d.address?.country||'';if(visitorCity)document.getElementById('ckCity').value=visitorCity}catch(e){}}
-async function logVisitor(){try{await fetch('/api/shop/visitor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,lat:visitorLat,lng:visitorLng,city:visitorCity,country:visitorCountry})})}catch(e){}}
-
-init();
 </script>
 </body>
 </html>
