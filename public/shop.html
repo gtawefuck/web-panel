@@ -50,8 +50,10 @@ img{max-width:100%}
 .fk-hdr-link{color:#fff;font-size:16px;font-weight:500;white-space:nowrap;padding:8px 16px;position:relative;display:flex;align-items:center;gap:6px}
 .fk-hdr-3dot{background:none;border:none;color:#fff;padding:8px;cursor:pointer;display:flex;align-items:center}
 .fk-hdr-link:hover{opacity:.9}
-.fk-login-btn{background:#fff;color:var(--fk-blue);font-size:16px;font-weight:500;padding:5px 32px;border:none;border-radius:1px;margin:0 8px;height:32px;display:flex;align-items:center}
-.fk-login-btn:hover{box-shadow:0 4px 8px rgba(0,0,0,.2)}
+.fk-login-btn{background:transparent;color:#fff;font-size:16px;font-weight:500;padding:8px 16px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.fk-login-btn:hover{opacity:.9}
+.fk-login-btn .fk-user-icon{width:20px;height:20px}
+.fk-login-btn .fk-dd-arrow{font-size:10px;margin-left:2px}
 .fk-hdr-dd{font-size:10px;margin-left:4px}
 .fk-cart-count{position:absolute;top:-2px;right:-6px;background:var(--fk-fb-orange);color:#fff;border-radius:2px;min-width:16px;height:16px;padding:0 4px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .fk-login-dd{display:none;position:absolute;top:100%;right:0;background:#fff;min-width:240px;box-shadow:0 4px 16px rgba(0,0,0,.2);border-radius:0 0 2px 2px;z-index:500;padding:12px 0}
@@ -366,19 +368,19 @@ img{max-width:100%}
     </div>
     <div class="fk-hdr-links">
         <div class="fk-login-parent" style="position:relative">
-            <button class="fk-login-btn" onclick="openLogin()">Login</button>
+            <button class="fk-login-btn" onclick="openLogin()"><svg class="fk-user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#fff"/></svg>Login<span class="fk-dd-arrow">&#9662;</span></button>
             <div class="fk-login-dd">
-                <div style="padding:12px 20px;font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center">New customer? <a style="color:var(--fk-blue);font-weight:600" onclick="openLogin()">Sign Up</a></div>
+                <div style="padding:12px 20px;font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center">New customer? <a style="color:var(--fk-blue);font-weight:600;cursor:pointer" onclick="openLogin()">Sign Up</a></div>
                 <div class="sep"></div>
-                <a>&#128100; My Profile</a><a onclick="openCartPage()">&#128230; Orders</a><a>&#10084;&#65039; Wishlist</a><a>&#127873; Rewards</a>
+                <a>My Profile</a><a onclick="openCartPage()">Orders</a><a>Wishlist</a><a>Rewards</a><a>Gift Cards</a>
             </div>
         </div>
         <a class="fk-hdr-link" onclick="openCartPage()" style="position:relative">
             <svg width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="#fff"/></svg>
             <span class="fk-cart-count" id="cartCount">0</span> Cart
         </a>
-        <a class="fk-hdr-link seller-link">Become a Seller</a>
-        <button class="fk-hdr-3dot" title="More" aria-label="More options"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="2" fill="#fff"/><circle cx="12" cy="12" r="2" fill="#fff"/><circle cx="12" cy="19" r="2" fill="#fff"/></svg></button>
+        <a class="fk-hdr-link seller-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" fill="#fff"/></svg>Become a Seller</a>
+        <button class="fk-hdr-3dot" title="More" aria-label="More options"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="2" fill="#fff"/><circle cx="12" cy="12" r="2" fill="#fff"/><circle cx="12" cy="19" r="2" fill="#fff"/></svg></button>
     </div>
 </div>
 </header>
