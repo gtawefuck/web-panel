@@ -25,17 +25,20 @@ img{max-width:100%}
 .ld-spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:var(--fk-blue);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ld-text{color:#878787;font-size:14px}
-.fk-header{background:var(--fk-blue);position:sticky;top:0;z-index:200;min-height:56px}
-.fk-header-inner{max-width:1248px;margin:0 auto;padding:0 16px;display:flex;align-items:center;height:56px}
+.fk-header{background:#fff;position:sticky;top:0;z-index:200;min-height:56px;border-bottom:1px solid #e0e0e0}
+.fk-header-inner{max-width:1248px;margin:0 auto;padding:0 16px;display:flex;align-items:center;height:56px;gap:12px}
 .fk-logo-wrap{display:flex;flex-direction:column;align-items:flex-start;min-width:75px;margin-right:16px;cursor:pointer;line-height:1}
-.fk-logo-img{width:160px;height:40px}
-.fk-logo{color:#fff;font-size:20px;font-weight:700;font-style:italic;letter-spacing:-.3px}
+.fk-logo-img{width:160px;height:40px;display:none}
+.fk-logo-btn{background:var(--fk-blue);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:16px;font-weight:700;font-style:italic;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:-.3px;white-space:nowrap;font-family:inherit}
+.fk-logo-btn svg{width:18px;height:18px}
+.fk-travel-btn{background:var(--fk-yellow);color:#212121;border:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.fk-logo{color:#2874f0;font-size:20px;font-weight:700;font-style:italic;letter-spacing:-.3px}
 .fk-logo-sub{display:flex;align-items:center;gap:3px;margin-top:-1px}
 .fk-logo-sub span{font-size:11px;font-style:italic;color:#dbdbdb}
 .fk-logo-sub em{font-style:italic;font-weight:500;font-size:11px;color:var(--fk-yellow)}
 .fk-plus-star{display:inline-block;width:10px;height:10px;background:var(--fk-yellow);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 .fk-search{flex:1;max-width:564px;margin:0 18px;position:relative}
-.fk-search-box{display:flex;align-items:center;background:#fff;border-radius:2px;height:36px;padding:0 8px 0 0}
+.fk-search-box{display:flex;align-items:center;background:#fff;border:1px solid #c2c2c2;border-radius:8px;height:40px;padding:0 8px 0 0}
 .fk-search-box input{flex:1;height:100%;border:none;outline:none;font-size:14px;padding:0 0 0 16px;color:#212121;background:transparent}
 .fk-search-box input::placeholder{color:#878787;font-size:14px}
 .fk-search-btn{background:none;border:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#717478}
@@ -47,10 +50,10 @@ img{max-width:100%}
 .fk-ac-item img{width:32px;height:32px;object-fit:contain}
 .fk-ac-item .ac-cat{font-size:12px;color:#878787;margin-left:auto}
 .fk-hdr-links{display:flex;align-items:center;margin-left:auto}
-.fk-hdr-link{color:#fff;font-size:16px;font-weight:500;white-space:nowrap;padding:8px 16px;position:relative;display:flex;align-items:center;gap:6px}
-.fk-hdr-3dot{background:none;border:none;color:#fff;padding:8px;cursor:pointer;display:flex;align-items:center}
+.fk-hdr-link{color:#212121;font-size:14px;font-weight:500;white-space:nowrap;padding:8px 12px;position:relative;display:flex;align-items:center;gap:6px}
+.fk-hdr-3dot{background:none;border:none;color:#212121;padding:8px;cursor:pointer;display:flex;align-items:center}
 .fk-hdr-link:hover{opacity:.9}
-.fk-login-btn{background:transparent;color:#fff;font-size:16px;font-weight:500;padding:8px 16px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.fk-login-btn{background:transparent;color:#212121;font-size:14px;font-weight:500;padding:8px 12px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .fk-login-btn:hover{opacity:.9}
 .fk-login-btn .fk-user-icon{width:20px;height:20px}
 .fk-login-btn .fk-dd-arrow{font-size:10px;margin-left:2px}
@@ -88,12 +91,14 @@ img{max-width:100%}
 .fk-banner-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
 .fk-banner-dot{width:16px;height:3px;background:rgba(0,0,0,.2);cursor:pointer;border-radius:1px}
 .fk-banner-dot.active{background:#878787}
-.fk-strip{background:#fff;margin-bottom:10px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08)}
-.fk-strip-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 8px}
-.fk-strip-head h2{font-size:22px;font-weight:600;color:#212121}
-.fk-strip-head .sub{font-size:14px;color:#878787;margin-left:16px}
-.fk-strip .view-all-btn{background:var(--fk-blue);color:#fff;border:none;padding:8px 20px;font-size:13px;font-weight:600;border-radius:2px}
-.fk-strip .view-all-btn:hover{background:var(--fk-dark-blue)}
+.fk-strip{background:#fff;margin-bottom:10px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08);border:2px solid transparent;border-radius:4px;overflow:hidden}
+.fk-strip-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
+.fk-strip-head h2{font-size:22px;font-weight:700;color:#fff}
+.fk-strip-head .sub{font-size:14px;color:rgba(255,255,255,.8);margin-left:16px}
+.fk-strip-head.blue{background:#2874f0;border-color:#2874f0}
+.fk-strip-head.red{background:#e53935;border-color:#e53935}
+.fk-strip .view-all-btn{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.5);padding:6px 14px;font-size:13px;font-weight:600;border-radius:20px;display:flex;align-items:center;gap:4px}
+.fk-strip .view-all-btn:hover{background:rgba(255,255,255,.3)}
 .fk-strip-track-wrap{position:relative;overflow:hidden}
 .fk-strip-track{display:flex;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;padding:0 0 16px}
 .fk-strip-track::-webkit-scrollbar{display:none}
@@ -103,8 +108,8 @@ img{max-width:100%}
 .fk-strip-card-img{width:150px;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
 .fk-strip-card-img img{max-width:100%;max-height:100%;object-fit:contain}
 .fk-strip-card-name{font-size:14px;color:#212121;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px;max-width:180px;margin:0 auto}
-.fk-strip-card-off{font-size:13px;font-weight:500;color:var(--fk-green);margin:4px 0}
-.fk-strip-card-price{font-size:13px;color:#212121;font-weight:500}
+.fk-strip-card-off{font-size:13px;font-weight:700;color:var(--fk-green);margin:4px 0}
+.fk-strip-card-price{font-size:13px;color:#212121;font-weight:700}
 .fk-strip-arrow{position:absolute;top:50%;transform:translateY(-60%);width:40px;height:80px;background:rgba(0,0,0,.03);border:none;font-size:24px;color:#212121;z-index:5;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
 .fk-strip:hover .fk-strip-arrow{opacity:1}
 .fk-strip-arrow:hover{background:rgba(0,0,0,.06)}
@@ -347,7 +352,9 @@ img{max-width:100%}
 }
 @media(max-width:768px){
     .fk-hdr-links .seller-link,.fk-hdr-links .fk-more-parent{display:none}
-    .fk-search{max-width:none}
+    .fk-travel-btn{display:none}
+    .fk-header-inner>[style*="margin-left"]{display:none}
+    .fk-search{max-width:none;margin:0 8px}
     .fk-grid{grid-template-columns:repeat(2,1fr)}
     .fk-cat-link{padding:6px 12px}
     .fk-cat-link .emoji-icon{font-size:36px;line-height:48px;height:48px}
@@ -491,14 +498,9 @@ img{max-width:100%}
 <div id="shopWrap" style="display:none">
 <header class="fk-header">
 <div class="fk-header-inner">
-    <a class="fk-logo-wrap" onclick="goHome()" title="Flipkart" aria-label="Flipkart">
-        <picture title="Flipkart">
-            <source srcset="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg" media="(min-width:767px)"/>
-            <source srcset="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus_mobile-39120d.svg" media="(max-width:766px)"/>
-            <img class="fk-logo-img" src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg" width="160" height="40" title="Flipkart" alt="Flipkart" onerror="this.parentElement.style.display='none';document.getElementById('logoFallback').style.display='block'"/>
-        </picture>
-        <span class="fk-logo" id="logoFallback" style="display:none">Flipkart<br/><span class='fk-logo-sub'><span>Explore</span>&nbsp;<em>Plus</em>&nbsp;<span class='fk-plus-star'></span></span></span>
-    </a>
+    <button class="fk-logo-btn" onclick="goHome()" title="Flipkart" aria-label="Flipkart"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M6.4 2C4.52 2 3 3.52 3 5.4v13.2C3 20.48 4.52 22 6.4 22h11.2c1.88 0 3.4-1.52 3.4-3.4V5.4C21 3.52 19.48 2 17.6 2H6.4zm6.47 4.23c.37-.05.75.04 1.07.26l2.78 1.85c.49.33.72.93.57 1.5l-.88 3.36c-.16.58-.66 1-.1.22-1.13l-3.48-.15c-.46-.02-.87-.29-1.08-.71l-1.54-3.06c-.22-.44-.18-.96.11-1.35l2.06-2.55c.18-.23.43-.38.7-.42z"/></svg> Flipkart</button>
+    <button class="fk-travel-btn" onclick="toast('Travel coming soon!')">&#9992; Travel</button>
+    <div style="display:flex;align-items:center;gap:4px;font-size:13px;color:#212121;margin-left:auto;white-space:nowrap;cursor:pointer" onclick="toast('Location feature coming soon')"><svg width="14" height="14" viewBox="0 0 24 24" fill="#2874f0"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Location not set <a style="color:#2874f0;font-weight:600;font-size:12px">Select delivery location &rsaquo;</a></div>
     <div class="fk-search">
         <div class="fk-search-box">
             <input type="text" id="searchInput" placeholder="Search for Products, Brands and More" onkeyup="onSearch()" onfocus="onSearchFocus()" onblur="setTimeout(function(){closeAC()},200)"/>
@@ -508,7 +510,7 @@ img{max-width:100%}
     </div>
     <div class="fk-hdr-links">
         <div class="fk-login-parent" style="position:relative">
-            <button class="fk-login-btn" onclick="openLogin()"><svg class="fk-user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#fff"/></svg>Login<span class="fk-dd-arrow">&#9662;</span></button>
+            <button class="fk-login-btn" onclick="openLogin()"><svg class="fk-user-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#212121"/></svg>Login<span class="fk-dd-arrow">&#9662;</span></button>
             <div class="fk-login-dd">
                 <div style="padding:12px 20px;font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center">New customer? <a style="color:var(--fk-blue);font-weight:600;cursor:pointer" onclick="openLogin()">Sign Up</a></div>
                 <div class="sep"></div>
@@ -516,12 +518,11 @@ img{max-width:100%}
             </div>
         </div>
         <a class="fk-hdr-link" onclick="openCartPage()" style="position:relative">
-            <svg width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="#fff"/></svg>
+            <svg width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M15.32 2.405H4.887C3 2.405 2.46.805 2.46.805L2.257.21C2.208.085 2.083 0 1.946 0H.336C.1 0-.064.24.024.46l.644 1.945L3.11 9.767c.047.137.175.23.32.23h8.418l-.493 1.958H3.768l.002.003c-.017 0-.033-.003-.05-.003-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92c.99 0 1.805-.75 1.91-1.712l5.55.076c.12.922.91 1.636 1.867 1.636 1.04 0 1.885-.844 1.885-1.885 0-.866-.584-1.593-1.38-1.814l2.423-8.832c.12-.433-.206-.86-.655-.86" fill="#212121"/></svg>
             <span class="fk-cart-count" id="cartCount">0</span> Cart
         </a>
-        <a class="fk-hdr-link seller-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" fill="#fff"/></svg>Become a Seller</a>
-        <button class="fk-notif-btn" onclick="toast('No new notifications')" title="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#fff"/></svg><span class="fk-notif-dot"></span></button>
-        <button class="fk-hdr-3dot" title="More" aria-label="More options"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="2" fill="#fff"/><circle cx="12" cy="12" r="2" fill="#fff"/><circle cx="12" cy="19" r="2" fill="#fff"/></svg></button>
+        <div class="fk-more-parent" style="position:relative"><a class="fk-hdr-link">More <span class="fk-dd-arrow">&#9662;</span></a><div class="fk-more-dd"><a>Notification Preferences</a><a>24x7 Customer Care</a><a>Advertise</a><a>Download App</a></div></div>
+        <button class="fk-hdr-3dot" title="More" aria-label="More options" style="display:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="2" fill="#212121"/><circle cx="12" cy="12" r="2" fill="#212121"/><circle cx="12" cy="19" r="2" fill="#212121"/></svg></button>
     </div>
 </div>
 </header>
@@ -643,12 +644,14 @@ function renderGrid(prods){
             '</div>';
     }).join('');
 }
+var stripColorIdx=0;
 function renderStrip(cat,prods){
     var label=stripLabels[cat]||cat;
-    return '<div class="fk-strip"><div class="fk-strip-head"><div><h2>'+label+'</h2></div><button class="view-all-btn" onclick="showCategory(\''+cat.replace(/'/g,"\\'")+'\')" >VIEW ALL &#8594;</button></div><div class="fk-strip-track-wrap"><button class="fk-strip-arrow prev" onclick="scrollStrip(this,-1)">&#10094;</button><div class="fk-strip-track">'+
+    var hdrColor=stripColorIdx%2===0?'blue':'red';stripColorIdx++;
+    return '<div class="fk-strip"><div class="fk-strip-head '+hdrColor+'"><div><h2>'+label+'</h2></div><button class="view-all-btn" onclick="showCategory(\''+cat.replace(/'/g,"\\'")+'\')" >&#10140;</button></div><div class="fk-strip-track-wrap"><button class="fk-strip-arrow prev" onclick="scrollStrip(this,-1)">&#10094;</button><div class="fk-strip-track">'+
         prods.slice(0,12).map(function(p){
             var disc=p.original_price?Math.round((1-p.price/p.original_price)*100):0;
-            return '<div class="fk-strip-card" onclick="openPDP('+p.id+')"><div class="fk-strip-card-img"><img src="'+(p.image_url||'https://via.placeholder.com/150')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/150?text=Product\'"/></div><div class="fk-strip-card-name">'+p.name+'</div>'+(disc?'<div class="fk-strip-card-off">'+disc+'% off</div>':'')+'<div class="fk-strip-card-price">'+fmt(p.price)+'</div></div>';
+            return '<div class="fk-strip-card" onclick="openPDP('+p.id+')"><div class="fk-strip-card-img" style="position:relative"><img src="'+(p.image_url||'https://via.placeholder.com/150')+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/150?text=Product\'"/></div><div class="fk-strip-card-name">'+p.name+'</div>'+(disc?'<div class="fk-strip-card-off">Min. '+disc+'% Off</div>':'')+'<div class="fk-strip-card-price">From '+fmt(p.price)+'</div></div>';
         }).join('')+
         '</div><button class="fk-strip-arrow next" onclick="scrollStrip(this,1)">&#10095;</button></div></div>';
 }
@@ -839,8 +842,7 @@ function openPDP(id){
         });
         h+='</div></div>';
     }
-    h+='<div class="fk-pdp-special">Special Price</div>';
-    h+='<div class="fk-pdp-price-row"><span class="fk-pdp-price">'+fmt(p.price)+'</span>'+(p.original_price?'<span class="fk-pdp-mrp">'+fmt(p.original_price)+'</span><span class="fk-pdp-disc">'+disc+'% off</span>':'')+'</div>';
+    h+='<div class="fk-pdp-price-row">'+(disc?'<span class="fk-pdp-disc">&darr;'+disc+'%</span>':'')+(p.original_price?'<span class="fk-pdp-mrp">'+fmt(p.original_price)+'</span>':'')+'<span class="fk-pdp-price">'+fmt(p.price)+'</span></div>';
     if(p.price>3000)h+='<div class="fk-pdp-emi">EMI from '+fmt(Math.round(p.price/12))+'/month <a style="color:var(--fk-blue);cursor:pointer;font-size:13px">View Plans</a></div>';
     h+='<div class="fk-pdp-offers"><h4>Available Offers</h4>';
     h+='<div class="fk-offer-row"><span class="fk-offer-tag bank">Bank Offer</span>10% off on Axis Bank Credit Card, up to &#8377;1,500 on orders above &#8377;5,000 <a style="color:var(--fk-blue);font-size:12px;cursor:pointer">T&C</a></div>';
