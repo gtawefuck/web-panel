@@ -534,7 +534,7 @@ img{max-width:100%}
 <div class="fk-cart-page" id="cartPage"><div class="fk-cart-inner"><div class="fk-cart-left"><div class="fk-cart-box"><div class="fk-cart-hdr"><h2 id="cartTitle">My Cart (0)</h2></div><div id="cartItems"></div><div class="fk-cart-place" id="cartPlaceWrap" style="display:none"><button onclick="goToCheckout()">PLACE ORDER</button></div></div></div><div class="fk-cart-right"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="cpCount">0</span> items)</span><span id="cpSubtotal">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="cpDiscount">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery Charges</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total Amount</span><span id="cpTotal">&#8377;0</span></div></div><div class="fk-price-save" id="cpSave"></div></div></div></div></div>
 <div class="fk-ck-page" id="ckPage"><div class="fk-ck-inner"><div class="fk-ck-left">
 <div class="fk-ck-step" id="ckS1"><div class="fk-ck-step-head active" id="ckS1H" onclick="ckExpand(1)"><span class="fk-ck-step-num">1</span><span class="fk-ck-step-label">LOGIN</span><span class="fk-ck-step-check" id="ckS1C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS1Sum"></div><div class="fk-ck-step-body show" id="ckS1B"><div style="max-width:360px"><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Email/Mobile</label><input class="fk-ck-input" id="ckEmail1" placeholder="Email or Mobile"/></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Password</label><input class="fk-ck-input" id="ckPass1" type="password" placeholder="Password"/></div><p style="font-size:12px;color:#878787;margin-bottom:16px;line-height:1.5">By continuing, you agree to Flipkart Terms of Use and Privacy Policy.</p><button class="fk-ck-continue" onclick="ckLogin()" style="width:100%">CONTINUE</button></div></div></div>
-<div class="fk-ck-step" id="ckS2"><div class="fk-ck-step-head" id="ckS2H" onclick="ckExpand(2)"><span class="fk-ck-step-num">2</span><span class="fk-ck-step-label">DELIVERY ADDRESS</span><span class="fk-ck-step-check" id="ckS2C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS2Sum"></div><div class="fk-ck-step-body" id="ckS2B"><div style="font-size:14px;font-weight:600;color:var(--fk-blue);text-transform:uppercase;margin-bottom:16px">ADD A NEW ADDRESS</div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Name</label><input class="fk-ck-input" id="ckName" placeholder="Full Name"/></div><div class="fk-ck-group"><label class="fk-ck-label">Mobile</label><input class="fk-ck-input" id="ckPhone" type="tel" placeholder="10-digit" maxlength="10"/></div></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Pincode</label><input class="fk-ck-input" id="ckPincode" placeholder="6 digits" maxlength="6"/></div><div class="fk-ck-group"><label class="fk-ck-label">Locality</label><input class="fk-ck-input" id="ckLocality" placeholder="Locality"/></div></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Address</label><textarea class="fk-ck-input" id="ckAddress" placeholder="Flat, Building, Street" rows="2" style="resize:vertical;min-height:50px"></textarea></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">City</label><input class="fk-ck-input" id="ckCity" placeholder="City"/></div><div class="fk-ck-group"><label class="fk-ck-label">State</label><select class="fk-ck-input" id="ckState" style="height:44px"><option value="">Select</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option><option>Telangana</option><option>Kerala</option><option>Punjab</option><option>Haryana</option><option>Bihar</option><option>Madhya Pradesh</option><option>Andhra Pradesh</option></select></div></div><div style="display:flex;gap:12px;margin-top:8px;margin-bottom:14px"><label class="addr-type"><input type="radio" name="addrType" value="Home" checked/><span>Home</span></label><label class="addr-type"><input type="radio" name="addrType" value="Work"/><span>Work</span></label></div><button class="fk-ck-continue" onclick="ckAddr()">SAVE AND DELIVER HERE</button></div></div>
+<div class="fk-ck-step" id="ckS2"><div class="fk-ck-step-head" id="ckS2H" onclick="ckExpand(2)"><span class="fk-ck-step-num">2</span><span class="fk-ck-step-label">DELIVERY ADDRESS</span><span class="fk-ck-step-check" id="ckS2C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS2Sum"></div><div class="fk-ck-step-body" id="ckS2B"><div id="ckSavedAddr" style="display:none;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f0f0f0"></div><div style="font-size:14px;font-weight:600;color:var(--fk-blue);text-transform:uppercase;margin-bottom:16px">ADD A NEW ADDRESS</div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Name</label><input class="fk-ck-input" id="ckName" placeholder="Full Name"/></div><div class="fk-ck-group"><label class="fk-ck-label">Mobile</label><input class="fk-ck-input" id="ckPhone" type="tel" placeholder="10-digit" maxlength="10"/></div></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">Pincode</label><input class="fk-ck-input" id="ckPincode" placeholder="6 digits" maxlength="6"/></div><div class="fk-ck-group"><label class="fk-ck-label">Locality</label><input class="fk-ck-input" id="ckLocality" placeholder="Locality"/></div></div><div class="fk-ck-group" style="margin-bottom:14px"><label class="fk-ck-label">Address</label><textarea class="fk-ck-input" id="ckAddress" placeholder="Flat, Building, Street" rows="2" style="resize:vertical;min-height:50px"></textarea></div><div class="fk-ck-row"><div class="fk-ck-group"><label class="fk-ck-label">City</label><input class="fk-ck-input" id="ckCity" placeholder="City"/></div><div class="fk-ck-group"><label class="fk-ck-label">State</label><select class="fk-ck-input" id="ckState" style="height:44px"><option value="">Select</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option><option>Telangana</option><option>Kerala</option><option>Punjab</option><option>Haryana</option><option>Bihar</option><option>Madhya Pradesh</option><option>Andhra Pradesh</option></select></div></div><div style="display:flex;gap:12px;margin-top:8px;margin-bottom:14px"><label class="addr-type"><input type="radio" name="addrType" value="Home" checked/><span>Home</span></label><label class="addr-type"><input type="radio" name="addrType" value="Work"/><span>Work</span></label></div><button class="fk-ck-continue" onclick="ckAddr()">SAVE AND DELIVER HERE</button></div></div>
 <div class="fk-ck-step" id="ckS3"><div class="fk-ck-step-head" id="ckS3H" onclick="ckExpand(3)"><span class="fk-ck-step-num">3</span><span class="fk-ck-step-label">ORDER SUMMARY</span><span class="fk-ck-step-check" id="ckS3C">&#10003;</span></div><div class="fk-ck-step-summary" id="ckS3Sum"></div><div class="fk-ck-step-body" id="ckS3B" style="padding:0"><div id="ckOrderItems" style="padding:24px"></div><div style="padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end"><button class="fk-ck-continue" onclick="ckOrder()">CONTINUE</button></div></div></div>
 <div class="fk-ck-step" id="ckS4"><div class="fk-ck-step-head" id="ckS4H"><span class="fk-ck-step-num">4</span><span class="fk-ck-step-label">PAYMENT OPTIONS</span></div><div class="fk-ck-step-body" id="ckS4B" style="padding:0"><div class="fk-pay-layout"><div class="fk-pay-tabs"><div class="fk-pay-tab active" onclick="payTab(this,'upi')">UPI</div><div class="fk-pay-tab" onclick="payTab(this,'card')">Credit/Debit Card</div><div class="fk-pay-tab" onclick="payTab(this,'nb')">Net Banking</div><div class="fk-pay-tab" onclick="payTab(this,'wallet')">Wallet</div><div class="fk-pay-tab" onclick="payTab(this,'cod')">Cash on Delivery</div></div><div class="fk-pay-content" id="payContent"><div id="payUpi"><h4 style="font-size:16px;margin-bottom:16px">Pay using UPI</h4><div class="fk-ck-group" style="max-width:360px;margin-bottom:16px"><label class="fk-ck-label">UPI ID</label><input class="fk-ck-input" id="upiInput" placeholder="yourname@upi"/></div><button class="fk-ck-continue" onclick="payConfirm()">PAY &#8377;<span id="payAmt">0</span></button></div><div id="payCard" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Card Details</h4><div class="fk-ck-group" style="max-width:360px;margin-bottom:14px"><label class="fk-ck-label">Card Number</label><input class="fk-ck-input" placeholder="XXXX XXXX XXXX XXXX"/></div><div class="fk-ck-row" style="max-width:360px"><div class="fk-ck-group"><label class="fk-ck-label">Expiry</label><input class="fk-ck-input" placeholder="MM/YY"/></div><div class="fk-ck-group"><label class="fk-ck-label">CVV</label><input class="fk-ck-input" type="password" placeholder="CVV" maxlength="3"/></div></div><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payNb" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Net Banking</h4><div style="display:flex;flex-direction:column;gap:8px;max-width:360px"><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb" checked/> HDFC Bank</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> ICICI Bank</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> SBI</label><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer"><input type="radio" name="nb"/> Axis Bank</label></div><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payWallet" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Wallets</h4><label style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e0e0;border-radius:4px;cursor:pointer;max-width:360px"><input type="radio" name="wallet" checked/> PhonePe</label><button class="fk-ck-continue" onclick="payConfirm()" style="margin-top:16px">PAY</button></div><div id="payCod" style="display:none"><h4 style="font-size:16px;margin-bottom:16px">Cash on Delivery</h4><p style="font-size:14px;line-height:1.6;margin-bottom:16px">A nominal fee of &#8377;5 will be charged.</p><button class="fk-ck-continue" onclick="payConfirm()">CONFIRM ORDER</button></div></div></div></div></div>
 </div><div class="fk-cart-right" style="width:380px;flex-shrink:0"><div class="fk-price-box"><div class="fk-price-hdr">PRICE DETAILS</div><div class="fk-price-body"><div class="fk-price-row"><span>Price (<span id="ckPCount">0</span> items)</span><span id="ckPSub">&#8377;0</span></div><div class="fk-price-row"><span>Discount</span><span class="green" id="ckPDisc">&minus; &#8377;0</span></div><div class="fk-price-row"><span>Delivery</span><span class="green">FREE</span></div><div class="fk-price-total"><span>Total</span><span id="ckPTotal">&#8377;0</span></div></div><div class="fk-price-save" id="ckPSave"></div></div></div></div></div>
@@ -917,7 +917,7 @@ function renderCart(){
 }
 function goToCheckout(){
     if(cart.length===0){toast('Cart is empty');return;}
-    showView('checkout');ckExpand(1);updateCkPrice();
+    showView('checkout');ckExpand(1);updateCkPrice();loadSavedAddresses();
 }
 function updateCkPrice(){
     var totalQty=0,totalPrice=0,totalMRP=0;
@@ -943,9 +943,36 @@ function ckLogin(){
     document.getElementById('ckS1Sum').style.display='block';
     document.getElementById('ckS1Sum').textContent='Guest User';
 }
+var savedAddresses=JSON.parse(localStorage.getItem('fk_addresses')||'[]');
+function loadSavedAddresses(){
+    var container=document.getElementById('ckSavedAddr');
+    if(!container||!savedAddresses.length)return;
+    container.innerHTML='<div style="font-size:14px;font-weight:600;margin-bottom:10px;color:#212121">Saved Addresses</div>'+savedAddresses.map(function(a,i){
+        return '<div style="border:1px solid #e0e0e0;border-radius:4px;padding:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s" onclick="fillSavedAddr('+i+')" onmouseover="this.style.borderColor=\'#2874f0\'" onmouseout="this.style.borderColor=\'#e0e0e0\'">'
+        +'<div style="font-size:14px;font-weight:500">'+a.name+' <span style="font-size:12px;color:#878787;font-weight:400">'+a.phone+'</span></div>'
+        +'<div style="font-size:13px;color:#555;margin-top:4px">'+a.addr+', '+a.city+', '+a.state+' - '+a.pin+'</div>'
+        +'</div>';
+    }).join('');
+    container.style.display='block';
+}
+function fillSavedAddr(i){
+    var a=savedAddresses[i];if(!a)return;
+    document.getElementById('ckName').value=a.name;
+    document.getElementById('ckPhone').value=a.phone;
+    document.getElementById('ckPincode').value=a.pin;
+    document.getElementById('ckAddress').value=a.addr;
+    document.getElementById('ckCity').value=a.city;
+    document.getElementById('ckState').value=a.state;
+}
 function ckAddr(){
     var n=document.getElementById('ckName').value,ph=document.getElementById('ckPhone').value,pin=document.getElementById('ckPincode').value,addr=document.getElementById('ckAddress').value,city=document.getElementById('ckCity').value,state=document.getElementById('ckState').value;
     if(!n||!ph||!pin||!addr||!city||!state){toast('Please fill all fields');return;}
+    // Save address for future use
+    var exists=savedAddresses.some(function(a){return a.name===n&&a.pin===pin&&a.addr===addr});
+    if(!exists){
+        savedAddresses.push({name:n,phone:ph,pin:pin,addr:addr,city:city,state:state});
+        localStorage.setItem('fk_addresses',JSON.stringify(savedAddresses));
+    }
     ckExpand(3);
     document.getElementById('ckS2C').style.display='inline';
     document.getElementById('ckS2Sum').style.display='block';
@@ -971,9 +998,34 @@ function payTab(el,id){
     document.getElementById(map[id]).style.display='block';
 }
 function payConfirm(){
-    toast('Order placed successfully!');
+    var orderNum='OD'+Date.now().toString().slice(-9)+Math.floor(Math.random()*100);
+    var totalPrice=0;
+    var orderItems=cart.map(function(ci){
+        var p=products.find(function(x){return x.id===ci.id});
+        if(!p)return null;
+        totalPrice+=p.price*ci.qty;
+        return {name:p.name,price:p.price,qty:ci.qty,img:p.image_url||''};
+    }).filter(Boolean);
     cart=[];saveCart();
-    setTimeout(function(){goHome()},1500);
+    var delDate=new Date();delDate.setDate(delDate.getDate()+Math.floor(Math.random()*3)+3);
+    var delStr=delDate.toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    var h='<div style="max-width:700px;margin:40px auto;padding:32px;background:#fff;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.1)">';
+    h+='<div style="text-align:center;margin-bottom:32px"><div style="font-size:64px;margin-bottom:16px">&#9989;</div>';
+    h+='<h2 style="font-size:22px;font-weight:600;color:#212121;margin-bottom:8px">Order Placed Successfully!</h2>';
+    h+='<div style="font-size:14px;color:#878787">Your order <strong style="color:#212121">'+orderNum+'</strong> has been placed</div></div>';
+    h+='<div style="background:#f5fff5;border:1px solid #c8e6c9;border-radius:4px;padding:16px;margin-bottom:24px;display:flex;align-items:center;gap:12px">';
+    h+='<svg width="24" height="24" viewBox="0 0 24 24" fill="#388e3c"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+    h+='<div><div style="font-weight:600;color:#388e3c">Delivery by '+delStr+'</div><div style="font-size:13px;color:#555">Your items are on the way!</div></div></div>';
+    h+='<div style="border-top:1px solid #f0f0f0;padding-top:16px;margin-bottom:16px"><h3 style="font-size:16px;font-weight:600;margin-bottom:12px">Order Summary</h3>';
+    orderItems.forEach(function(oi){
+        h+='<div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid #f0f0f0"><img src="'+oi.img+'" style="width:64px;height:64px;object-fit:contain;border:1px solid #f0f0f0;border-radius:4px" onerror="this.src=\'https://via.placeholder.com/64?text=Item\'"/><div style="flex:1"><div style="font-size:14px;color:#212121;margin-bottom:4px">'+oi.name+'</div><div style="font-size:13px;color:#878787">Qty: '+oi.qty+'</div></div><div style="font-size:14px;font-weight:500">'+fmt(oi.price*oi.qty)+'</div></div>';
+    });
+    h+='<div style="display:flex;justify-content:space-between;padding:16px 0;font-size:16px;font-weight:600"><span>Total Paid</span><span>'+fmt(totalPrice)+'</span></div></div>';
+    h+='<div style="text-align:center"><button onclick="goHome()" style="background:var(--fk-blue);color:#fff;border:none;padding:14px 48px;font-size:14px;font-weight:600;border-radius:2px;cursor:pointer">CONTINUE SHOPPING</button></div>';
+    h+='</div>';
+    document.getElementById('pdpContent').innerHTML=h;
+    showView('pdp');
+    updCartCount();
 }
 function onSearch(){
     var q=document.getElementById('searchInput').value.toLowerCase().trim();
