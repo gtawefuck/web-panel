@@ -106,7 +106,8 @@ router.post('/products', requireAuth, (req, res) => {
     const shop = db.prepare('SELECT * FROM shops WHERE tg_id = ?').get(tgId);
     if (!shop) return res.status(404).json({ error: 'No shop found.' });
 
-    const { name, category, image_url, price, original_price, description, rating, review_count } = req.body;
+    const { name, category, image_url, price, original_price, description, rating, review_count,
+            images, highlights, specifications, reviews: reviewsData, ratings_breakdown, brand } = req.body;
     if (!name || !category || !image_url || price == null || original_price == null) {
         return res.status(400).json({ error: 'name, category, image_url, price, and original_price are required.' });
     }
@@ -116,7 +117,17 @@ router.post('/products', requireAuth, (req, res) => {
     const discount = op > 0 ? Math.max(0, Math.round(((op - p) / op) * 100)) : 0;
     const r = parseFloat(rating) || 4.5;
     const rc = parseInt(review_count) || 0;
-    const reviews = JSON.stringify([]);
+
+    // Build rich reviews JSON envelope (same structure as seed data)
+    const reviewsEnvelope = {
+        reviews: Array.isArray(reviewsData) ? reviewsData : [],
+        images: Array.isArray(images) ? images : [],
+        highlights: Array.isArray(highlights) ? highlights : [],
+        specifications: Array.isArray(specifications) ? specifications : [],
+        ratings_breakdown: ratings_breakdown || {},
+        brand: brand || '',
+    };
+    const reviews = JSON.stringify(reviewsEnvelope);
 
     const result = db.prepare(
         'INSERT INTO products (shop_id, name, category, image_url, price, original_price, discount, description, rating, review_count, reviews) VALUES (?,?,?,?,?,?,?,?,?,?,?)'
@@ -278,6 +289,16 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         console.log('Resolved Flipkart URL:', resolvedUrl);
     }
 
+    // Helper: normalize image URL
+    function fixImgUrl(url) {
+        if (!url) return '';
+        if (url.startsWith('//')) url = 'https:' + url;
+        // Upscale small Flipkart thumbnails
+        url = url.replace(/\/\d+\/\d+\?/, '/416/416?');
+        url = url.replace(/\/128\//, '/416/');
+        return url;
+    }
+
     // Helper: extract product data from cheerio-loaded HTML
     function extractProduct($) {
         const pageText = $('body').text();
@@ -291,15 +312,25 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         }
         if (!name) name = ($('meta[property="og:title"]').attr('content') || '').trim();
 
-        // Image
+        // Main image
         let imageUrl = '';
         for (const sel of ['img.DByuf4', 'img._396cs4', 'img.v2bfbI', 'img._2r_T1I', 'div._4WELSP img', 'img[loading="eager"]']) {
             imageUrl = $(sel).first().attr('src') || '';
             if (imageUrl) break;
         }
         if (!imageUrl) imageUrl = $('meta[property="og:image"]').attr('content') || '';
-        if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
-        if (imageUrl && imageUrl.includes('/128/')) imageUrl = imageUrl.replace('/128/', '/416/');
+        imageUrl = fixImgUrl(imageUrl);
+
+        // All gallery images
+        const images = [];
+        const seenImgs = new Set();
+        $('div._4WELSP img, ul.ZqtVYK img, div.q6DClP img, li.Gy4kBe img, div._3kidJX img').each((i, el) => {
+            let src = $(el).attr('src') || '';
+            src = fixImgUrl(src);
+            if (src && !seenImgs.has(src)) { seenImgs.add(src); images.push(src); }
+        });
+        if (imageUrl && !seenImgs.has(imageUrl)) images.unshift(imageUrl);
+        if (!images.length && imageUrl) images.push(imageUrl);
 
         // Price
         let priceStr = '';
@@ -318,16 +349,23 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         const price = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
         const original_price = parseInt(origPriceStr.replace(/[^0-9]/g, '')) || price;
 
+        // Highlights
+        const highlights = [];
+        $('li._7eSDEz, li.rgWa7D, ul._2418kt li, div._2cM9lP li').each((i, el) => {
+            const t = $(el).text().trim();
+            if (t && t.length > 3) highlights.push(t);
+        });
+
         // Description
         let description = '';
-        for (const sel of ['div.Rwb9CE', 'div._1mXcCf', 'div.xFVion']) {
-            description = $(sel).first().text().trim();
-            if (description && description.length > 10) break;
+        if (highlights.length) {
+            description = highlights.slice(0, 5).join(' | ');
         }
         if (!description || description.length < 10) {
-            const items = [];
-            $('ul._2418kt li').each((i, el) => items.push($(el).text().trim()));
-            if (items.length) description = items.slice(0, 5).join(' | ');
+            for (const sel of ['div.Rwb9CE', 'div._1mXcCf', 'div.xFVion']) {
+                description = $(sel).first().text().trim();
+                if (description && description.length > 10) break;
+            }
         }
         if (!description) description = $('meta[name="description"]').attr('content') || $('meta[property="og:description"]').attr('content') || '';
 
@@ -339,13 +377,94 @@ router.post('/fetch-flipkart', requireAuth, async (req, res) => {
         }
         const rating = parseFloat(ratingStr) || 4.5;
 
+        // Rating & review count
+        let review_count = 0;
+        for (const sel of ['span.Wphh3N', 'span._2_R_DZ', 'div.row span:contains("Ratings")']) {
+            const text = $(sel).first().text().trim();
+            const m = text.match(/([\d,]+)\s*(Ratings|Reviews)/i);
+            if (m) { review_count = parseInt(m[1].replace(/,/g, '')) || 0; break; }
+        }
+
+        // Brand
+        let brand = '';
+        $('td, span').each((i, el) => {
+            const t = $(el).text().trim();
+            if (t === 'Brand') {
+                const next = $(el).next('td, span').text().trim();
+                if (next) brand = next;
+            }
+        });
+        if (!brand && name) {
+            const firstWord = name.split(/\s+/)[0];
+            if (firstWord && firstWord.length > 1) brand = firstWord;
+        }
+
+        // Category from breadcrumb
+        let category = '';
+        $('a._2whKao, a.R0cyWM, div._1MR4o5 a').each((i, el) => {
+            const t = $(el).text().trim();
+            if (t && t !== 'Home' && !t.includes('flipkart') && t.length > 1) category = t;
+        });
+        if (!category) category = $('meta[property="og:category"]').attr('content') || '';
+
+        // Specifications (grouped)
+        const specifications = [];
+        $('div._4BJ2V\\+, div.GNDEQ-, div._3dtsli, div.X3BRps').each((i, groupEl) => {
+            const groupTitle = $(groupEl).find('div._4BJ2V\\+ div, div.GNDEQ- div, p._7xINBo, div._2UDBK0').first().text().trim() ||
+                               $(groupEl).prev('div').text().trim() || 'General';
+            const items = [];
+            $(groupEl).find('tr._1s_Smc, tr.WJdYP6, tr.s-zhNu, tr').each((j, row) => {
+                const cols = $(row).find('td');
+                if (cols.length >= 2) {
+                    const label = $(cols[0]).text().trim();
+                    const value = $(cols[1]).text().trim();
+                    if (label && value) items.push({ label, value });
+                }
+            });
+            if (items.length) specifications.push({ group: groupTitle, items });
+        });
+
+        // Reviews
+        const reviews = [];
+        $('div._27M-vq, div.col._2wzgFH, div._1AtVbE').each((i, el) => {
+            if (i >= 10) return false;
+            const rEl = $(el).find('div._3LWZlK, div.XQDdHH').first();
+            const rVal = parseFloat(rEl.text().trim()) || 5;
+            const title = $(el).find('p._2-N8zT, p.z9E0IG').first().text().trim();
+            const text = $(el).find('div.t-ZTKy, div.ZmyHeo, div:not(._3LWZlK):not(.XQDdHH)').filter(function() {
+                return $(this).children().length === 0 && $(this).text().trim().length > 20;
+            }).first().text().trim();
+            const user = $(el).find('p._2sc7ZR, p._2NsDsF').first().text().trim();
+            if (title || text) {
+                reviews.push({ rating: rVal, title, text, user: user || 'Flipkart Customer' });
+            }
+        });
+
+        // Ratings breakdown (5★ to 1★ counts)
+        const ratings_breakdown = {};
+        $('div._1BmBKS, div._5lw2by, li._1jcMtp, div._6RQhp0').each((i, el) => {
+            const star = 5 - i;
+            if (star < 1) return false;
+            const countText = $(el).find('div.Wksx1e, div._3LWZlK, span').last().text().trim().replace(/,/g, '');
+            const count = parseInt(countText) || 0;
+            ratings_breakdown[star] = count;
+        });
+
         return {
             name: name || 'Product',
             image_url: imageUrl,
+            images,
             price: price > 0 ? price : undefined,
             original_price: original_price > 0 ? original_price : undefined,
             description: description.trim(),
-            rating
+            rating,
+            review_count,
+            brand,
+            category,
+            highlights,
+            specifications,
+            reviews,
+            ratings_breakdown
         };
     }
 
